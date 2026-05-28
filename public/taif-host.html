@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>طيف — شاشة المضيف</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+  <style>
+    .host { min-height:100vh; background:#181522; color:#f1ecf6; padding:1.4rem; }
+    .wrap { max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:1.2rem; }
+    .panel { background:#221c30; border:1px solid #322843; border-radius:var(--radius); padding:1.3rem; }
+    .panel h4 { color:#FFAAB8; font-family:var(--font-display); margin-bottom:.8rem; }
+    .ctrl { padding:1rem; border-radius:14px; font-weight:800; width:100%; }
+    .ctrl.start{background:#A8DF8E;color:#1d3b15} .ctrl.reveal{background:#FFAAB8;color:#5a1f2a} .ctrl.timer{background:#322843;color:#f1ecf6} .ctrl.add{background:#1f9d6b;color:#fff}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+    .reveal-box{background:linear-gradient(135deg,#FFAAB8,#A8DF8E);color:#3a1320;border-radius:14px;padding:1rem 1.2rem;font-weight:800}
+  </style>
+</head>
+<body>
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> طيف</div>
+    <div class="demo-tabs">
+      <a href="taif-tv.html">📺 التلفزيون</a>
+      <a class="active" href="taif-host.html">🎛️ المضيف</a>
+      <a href="taif-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge host">سري — المضيف فقط</span>
+  </div>
+
+  <main class="host">
+    <div class="wrap">
+      <div class="panel">
+        <div class="row between" style="margin-bottom:.8rem">
+          <span class="tag" style="background:rgba(255,170,184,.18);color:#FFAAB8">الجولة ٣ · دور الأخضر</span>
+        </div>
+        <div class="reveal-box">🎯 الهدف الحقيقي (سري): يقع عند <b>72%</b> ناحية «حار جداً» — تلميح الوسيط: «قهوة الصباح»</div>
+        <div class="grid2" style="margin-top:1rem">
+          <button class="ctrl start">▶ بدء الجولة</button>
+          <button class="ctrl timer">⏱ مؤقّت النقاش</button>
+          <button class="ctrl reveal">👁 كشف الهدف وإعلان النتيجة</button>
+          <button class="ctrl add">➕ إضافة النقاط للفائز</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h4>كيف توزّع النقاط</h4>
+        <div class="row between" style="padding:.4rem 0;border-bottom:1px solid #322843"><span>الفريق الأساسي — أصاب المركز</span><b style="color:#A8DF8E">٤ نقاط</b></div>
+        <div class="row between" style="padding:.4rem 0;border-bottom:1px solid #322843"><span>الفريق الأساسي — قريب من الأطراف</span><b style="color:#A8DF8E">٣ أو ٢</b></div>
+        <div class="row between" style="padding:.4rem 0"><span>الفريق الخصم — خمّن الاتجاه صح</span><b style="color:#FFAAB8">نقطة اعتراض ١</b></div>
+      </div>
+
+      <div class="panel">
+        <h4>حالة الأجهزة</h4>
+        <div class="row between" style="padding:.4rem 0"><span>📱 الوسيط (أخضر)</span><b>أرسل التلميح ✓</b></div>
+        <div class="row between" style="padding:.4rem 0"><span>📱 قائد الأخضر</span><b>ثبّت المؤشر ✓</b></div>
+        <div class="row between" style="padding:.4rem 0"><span>📱 الفريق الأحمر</span><b>بانتظار التخمين…</b></div>
+      </div>
+    </div>
+  </main>
+  <script src="js/demo.js"></script>
+</body>
+</html>

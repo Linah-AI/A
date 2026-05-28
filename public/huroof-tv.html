@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حروف — شاشة التلفزيون</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+</head>
+<body class="game-huroof">
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> حروف</div>
+    <div class="demo-tabs">
+      <a class="active" href="huroof-tv.html">📺 التلفزيون</a>
+      <a href="huroof-host.html">🎛️ المضيف</a>
+      <a href="huroof-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge tv">شاشة عامة</span>
+  </div>
+
+  <main class="tv-stage game-stage">
+    <div class="tv-topbar">
+      <div class="logo"><span class="mark">A</span><span class="word"><span class="ar">أركيدو</span></span></div>
+      <div class="tv-title">حروف</div>
+      <span class="tag" style="background:rgba(66,122,181,.18);color:#2f5688">الأخضر: يمين ← يسار · الأحمر: أعلى ← أسفل</span>
+    </div>
+
+    <div class="scorebars" style="margin-bottom:.5rem">
+      <div class="scorebar green"><span class="name">الفريق الأخضر</span><span class="pts">٧</span></div>
+      <div class="tag" style="background:rgba(247,221,125,.5);color:#6b5800">دور الأخضر — الحرف «ق»</div>
+      <div class="scorebar red"><span class="name">الفريق الأحمر</span><span class="pts">٥</span></div>
+    </div>
+
+    <div class="grow center" style="display:flex">
+      <div class="hex-board" id="board"></div>
+    </div>
+
+    <div class="row center gap" style="margin-top:.5rem">
+      <span class="tag">🟩 خلية الأخضر</span>
+      <span class="tag" style="background:rgba(226,59,50,.12);color:#b22a23">🟥 خلية الأحمر</span>
+      <span class="tag" style="background:#1b1f22;color:#8b939a">⬛ خلية محترقة (عائق)</span>
+    </div>
+  </main>
+
+  <script src="js/demo.js"></script>
+  <script>
+    // لوحة سداسية بحروف عربية — صف الأطوال 4-5-6-5-4 (شكل معيّن)
+    const rows = [
+      ['أ','ب','ت','ث'],
+      ['ج','ح','خ','د','ذ'],
+      ['ر','ز','س','ش','ص','ض'],
+      ['ط','ظ','ع','غ','ف'],
+      ['ق','ك','ل','م']
+    ];
+    // حالات تجريبية: green/red/dead/active
+    const states = {
+      'ب':'green','ت':'green','ح':'red','س':'green','ش':'dead',
+      'ظ':'red','ع':'red','ك':'active','ل':'green','م':'dead','ز':'red'
+    };
+    const board = document.getElementById('board');
+    rows.forEach(r=>{
+      const row = document.createElement('div'); row.className='hex-row';
+      r.forEach(ch=>{
+        const h = document.createElement('div');
+        h.className = 'hex' + (states[ch] ? ' '+states[ch] : '');
+        h.textContent = ch;
+        row.appendChild(h);
+      });
+      board.appendChild(row);
+    });
+  </script>
+</body>
+</html>

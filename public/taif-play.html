@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>طيف — أجهزة اللاعبين</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+  <style>
+    .mini-tabs { display:flex; gap:.4rem; padding:.8rem 1rem; flex-wrap:wrap; border-bottom:1px solid var(--line); justify-content:center; }
+    .mini-tabs button { padding:.5rem .9rem; border-radius:var(--radius-pill); background:#fdeef1; font-weight:800; font-size:.82rem; color:#a83a4c; }
+    .mini-tabs button.on { background:#FFAAB8; color:#fff; }
+    .team-head { padding:1.1rem 1.4rem; color:#fff; display:flex; align-items:center; justify-content:space-between; background:#1f9d6b; }
+    .team-head.opp { background:#e23b32; }
+    .team-head .who { font-family:var(--font-display); font-weight:900; }
+    .play-pad { padding:1.4rem; display:flex; flex-direction:column; gap:1rem; height:100%; }
+    .state { display:none; flex:1; flex-direction:column; } .state.show{ display:flex; }
+    .hint-input { width:100%; padding:.9rem 1rem; border:2px solid var(--line); border-radius:14px; font-family:inherit; font-size:1rem; }
+    .lr { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+    .lr button { padding:1.4rem; border-radius:16px; font-weight:900; font-family:var(--font-display); font-size:1.2rem; }
+    .lr .left{background:#A8DF8E;color:#1d3b15} .lr .right{background:#FFAAB8;color:#5a1f2a}
+    .slider { width:100%; }
+    .pin { width:100%; padding:1rem; border-radius:14px; background:#1f9d6b; color:#fff; font-weight:800; }
+    .mini-spectrum { transform:scale(.85); transform-origin:top center; }
+  </style>
+</head>
+<body class="game-taif">
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> طيف</div>
+    <div class="demo-tabs">
+      <a href="taif-tv.html">📺 التلفزيون</a>
+      <a href="taif-host.html">🎛️ المضيف</a>
+      <a class="active" href="taif-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge play">أجهزة اللاعبين</span>
+  </div>
+
+  <div class="mini-tabs">
+    <button class="on" onclick="show('s-med',this)">🤫 الوسيط</button>
+    <button onclick="show('s-cap',this)">🎮 قائد الفريق</button>
+    <button onclick="show('s-opp',this)">⚔️ الفريق الخصم</button>
+  </div>
+
+  <div class="phone-wrap" style="background:linear-gradient(160deg,#f0ffdf,#ffd8df)">
+    <div class="phone">
+      <div class="phone-screen game-taif" style="--bg:#fff">
+
+        <div class="phone-notch"></div>
+
+        <!-- الوسيط -->
+        <div class="state show" id="s-med">
+          <div class="team-head"><span class="who">الوسيط — سري</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">الأخضر</span></div>
+          <div class="play-pad">
+            <p class="muted" style="text-align:center">ترى الهدف والعجلة كاملة — أعطِ تلميحاً واحداً.</p>
+            <div class="spectrum mini-spectrum" style="height:130px">
+              <div class="spectrum-arc"><div class="spectrum-mask" style="background:#fff"></div></div>
+              <div class="spectrum-needle" style="transform:rotate(42deg);background:#FFAAB8"></div>
+            </div>
+            <div class="poles" style="font-size:.8rem"><span class="pole">❄️ بارد</span><span class="pole">🔥 حار</span></div>
+            <input class="hint-input" placeholder="اكتب تلميحك…" value="قهوة الصباح" />
+            <button class="pin" style="background:#FFAAB8;color:#5a1f2a">إرسال التلميح ←</button>
+          </div>
+        </div>
+
+        <!-- القائد -->
+        <div class="state" id="s-cap">
+          <div class="team-head"><span class="who">قائد الأخضر</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">يحرّك المؤشر</span></div>
+          <div class="play-pad">
+            <div class="question-box" style="padding:1rem"><div class="cat">التلميح</div><div style="font-weight:800;font-size:1.2rem">«قهوة الصباح»</div></div>
+            <p class="muted" style="text-align:center">حرّك المؤشر حسب اتفاق الفريق.</p>
+            <input class="slider" type="range" min="0" max="100" value="65" data-spectrum="#capNeedle" />
+            <div class="spectrum mini-spectrum" style="height:120px">
+              <div class="spectrum-arc"><div class="spectrum-mask" style="background:#fff"></div></div>
+              <div class="spectrum-needle" id="capNeedle"></div>
+            </div>
+            <button class="pin">📌 تثبيت الإجابة</button>
+          </div>
+        </div>
+
+        <!-- الخصم -->
+        <div class="state" id="s-opp">
+          <div class="team-head opp"><span class="who">الفريق الأحمر</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">اعتراض</span></div>
+          <div class="play-pad center" style="text-align:center">
+            <p class="muted">ثبّت الأخضر إجابته — خمّنوا: الهدف الحقيقي يمين أم يسار المؤشر؟</p>
+            <div class="lr" style="width:100%;margin-top:1rem">
+              <button class="left">يسار ◀</button>
+              <button class="right">▶ يمين</button>
+            </div>
+            <p class="muted" style="font-size:.85rem;margin-top:1rem">تخمين صحيح = نقطة اعتراض لفريقكم.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/demo.js"></script>
+  <script>
+    function show(id,btn){document.querySelectorAll('.state').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');document.querySelectorAll('.mini-tabs button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+  </script>
+</body>
+</html>

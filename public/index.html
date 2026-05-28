@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>أركيدو — منصة الألعاب الاجتماعية</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <style>
+    .hero {
+      min-height: 92vh; display: grid; place-items: center; padding: 2rem 1.2rem;
+      background:
+        radial-gradient(900px 500px at 85% 0%, rgba(255,63,51,.16), transparent 60%),
+        radial-gradient(900px 600px at 0% 100%, rgba(7,91,94,.14), transparent 55%),
+        var(--brand-pink);
+    }
+    .hero-inner { width: min(1080px, 100%); display: grid; grid-template-columns: 1.1fr .9fr; gap: 2.5rem; align-items: center; }
+    .hero h1 { font-family: var(--font-display); font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1.15; color: var(--brand-green-dark); }
+    .hero h1 b { color: var(--brand-red); }
+    .hero p.lead { font-size: 1.2rem; color: #3c5054; margin: 1.1rem 0 1.8rem; max-width: 40ch; }
+    .hero-cta { display: flex; gap: .8rem; flex-wrap: wrap; }
+
+    /* بطاقة الترخيص */
+    .license-card { padding: 2rem; }
+    .license-card h3 { font-family: var(--font-display); color: var(--brand-green-dark); margin-bottom: .3rem; }
+    .license-card .sub { color: var(--muted); font-size: .92rem; margin-bottom: 1.2rem; }
+    .key-input {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin-bottom: 1rem;
+    }
+    .key-input input {
+      text-align: center; font-family: var(--font-display); font-weight: 900; font-size: 1.3rem;
+      letter-spacing: 3px; padding: .8rem .4rem; border: 2px solid var(--line); border-radius: 14px;
+      background: var(--paper); color: var(--brand-green-dark); text-transform: uppercase;
+      direction: ltr;
+    }
+    .key-input input:focus { outline: none; border-color: var(--brand-red); }
+    .sessions-note { display:flex; align-items:center; gap:.5rem; font-size:.85rem; color:var(--muted); margin-top:.8rem; }
+
+    /* الألعاب */
+    .games { width: min(1080px, 100%); margin: 0 auto; padding: 4rem 1.2rem; }
+    .section-title { text-align: center; font-family: var(--font-display); font-size: 2rem; color: var(--brand-green-dark); margin-bottom: .4rem; }
+    .section-sub { text-align: center; color: var(--muted); margin-bottom: 2.4rem; }
+    .game-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+    .game-tile {
+      border-radius: var(--radius-lg); padding: 1.6rem; color: #fff;
+      position: relative; overflow: hidden; min-height: 200px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: var(--shadow-md); transition: transform .25s var(--ease), box-shadow .25s;
+    }
+    .game-tile:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .game-tile .gt-name { font-family: var(--font-display); font-size: 1.7rem; font-weight: 900; }
+    .game-tile .gt-desc { opacity: .92; font-size: .95rem; max-width: 30ch; }
+    .game-tile .gt-screens { display: flex; gap: .5rem; margin-top: 1rem; flex-wrap: wrap; }
+    .game-tile .gt-screens a {
+      background: rgba(255,255,255,.22); padding: .4rem .9rem; border-radius: var(--radius-pill);
+      font-weight: 800; font-size: .82rem; backdrop-filter: blur(4px);
+    }
+    .game-tile .gt-screens a:hover { background: rgba(255,255,255,.38); }
+    .game-tile .bubble { position:absolute; border-radius:50%; opacity:.35; }
+
+    .gt-millionaire { background: linear-gradient(140deg, #59B292, #3a8f72); }
+    .gt-millionaire .b1 { width:160px;height:160px;background:#FFC94D;top:-40px;left:-30px; }
+    .gt-millionaire .b2 { width:90px;height:90px;background:#FA6781;bottom:-20px;left:40px; }
+    .gt-huroof { background: linear-gradient(140deg, #427AB5, #2f5688); }
+    .gt-huroof .b1 { width:150px;height:150px;background:#F7DD7D;top:-30px;left:-20px; }
+    .gt-taif { background: linear-gradient(140deg, #FFAAB8, #f07e92); }
+    .gt-taif .b1 { width:150px;height:150px;background:#A8DF8E;top:-40px;left:-20px; }
+    .gt-decrypto { background: linear-gradient(140deg, #9929EA, #5e13a0); }
+    .gt-decrypto .b1 { width:140px;height:140px;background:#FF5FCF;bottom:-30px;left:-10px; }
+    .gt-decrypto .b2 { width:80px;height:80px;background:#FAEB92;top:-10px;left:60px; }
+
+    /* تذييل */
+    .platform-foot { background: var(--brand-green-dark); color: #dff0ef; padding: 3rem 1.2rem; }
+    .platform-foot .inner { width:min(1080px,100%); margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:1.5rem; }
+    .platform-foot .logo .word { color:#fff; } .platform-foot .logo .word .ar{ color:#FFC94D; }
+    .feat { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; width:min(1080px,100%); margin:0 auto 1rem; }
+    .feat .f { background: rgba(255,255,255,.06); border-radius: var(--radius); padding:1.2rem; }
+    .feat .f b { display:block; font-size:1.05rem; margin-bottom:.3rem; }
+    .feat .f span { font-size:.88rem; color:#bcdad9; }
+
+    @media (max-width: 860px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .game-grid { grid-template-columns: 1fr; }
+      .feat { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO + الترخيص -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div>
+        <div class="logo" style="margin-bottom:1.6rem">
+          <span class="mark">A</span>
+          <span class="word"><span class="ar">أركيدو</span></span>
+        </div>
+        <h1>سهرتكم تتحوّل إلى <b>برنامج مسابقات</b> داخل بيتكم</h1>
+        <p class="lead">منصة ألعاب اجتماعية عربية. اشترِ، افتح، والعب فوراً — بدون تحميل ولا شحن. أربع ألعاب، شاشة تلفزيون واحدة، وكل جوال يصير وحدة تحكّم.</p>
+        <div class="hero-cta">
+          <a class="btn btn-primary btn-lg" href="#games">استعرض الألعاب</a>
+          <a class="btn btn-ghost btn-lg" href="#how">كيف تعمل؟</a>
+        </div>
+      </div>
+
+      <div class="card license-card">
+        <h3>عندك كود تفعيل؟</h3>
+        <p class="sub">أدخل الـ License Key لفتح جلساتك والبدء فوراً.</p>
+        <div class="key-input">
+          <input maxlength="4" value="ARC" placeholder="••••" />
+          <input maxlength="4" value="7K2" placeholder="••••" />
+          <input maxlength="4" value="9QX" placeholder="••••" />
+          <input maxlength="4" value="L4M" placeholder="••••" />
+        </div>
+        <button class="btn btn-primary btn-block btn-lg">تفعيل والبدء</button>
+        <div class="sessions-note">
+          <span class="tag">٣ جلسات متبقية</span>
+          <span>يتجدد الرصيد بشراء كود جديد من سلة.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- كيف تعمل -->
+  <section id="how" style="padding:3rem 1.2rem; background:#fff;">
+    <h2 class="section-title">ثلاث شاشات تشتغل سوا</h2>
+    <p class="section-sub">كل لعبة توزّع نفسها على ثلاثة أجهزة في نفس اللحظة</p>
+    <div class="feat" style="--c:1">
+      <div class="f" style="background:rgba(7,91,94,.06);color:var(--ink)">
+        <b style="color:var(--brand-green-dark)">📺 شاشة التلفزيون</b>
+        <span style="color:var(--muted)">يشوفها الجميع — السؤال، رصيد الفريقين، العدّاد، والاحتفالات.</span>
+      </div>
+      <div class="f" style="background:#1c1d22;color:#f7dd7d">
+        <b>🎛️ شاشة المضيف</b>
+        <span style="color:#cfcfd6">سرية — الإجابات الصحيحة، أزرار التحكم، وإدارة الجولات.</span>
+      </div>
+      <div class="f" style="background:rgba(255,63,51,.07);color:var(--ink)">
+        <b style="color:var(--brand-red)">📱 جوال اللاعب</b>
+        <span style="color:var(--muted)">يسكن الباركود، يدخل فريقه، ويصير زر الـ Buzz بيده.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- الألعاب -->
+  <section id="games" class="games">
+    <h2 class="section-title">الألعاب الأربع</h2>
+    <p class="section-sub">اختر اللعبة لتستعرض شاشاتها الثلاث</p>
+    <div class="game-grid">
+
+      <div class="game-tile gt-millionaire">
+        <span class="bubble b1"></span><span class="bubble b2"></span>
+        <div style="position:relative">
+          <div class="gt-name">من سيربح الجائزة</div>
+          <div class="gt-desc">فريقان، أسئلة خيارات، وأسرع من يضغط Buzz يجاوب. جوائز عيدية أو صناديق مفاجأة.</div>
+        </div>
+        <div class="gt-screens" style="position:relative">
+          <a href="millionaire-tv.html">📺 التلفزيون</a>
+          <a href="millionaire-host.html">🎛️ المضيف</a>
+          <a href="millionaire-play.html">📱 الجوال</a>
+        </div>
+      </div>
+
+      <div class="game-tile gt-huroof">
+        <span class="bubble b1"></span>
+        <div style="position:relative">
+          <div class="gt-name">حروف</div>
+          <div class="gt-desc">لوحة سداسية بحروف عربية. فريق يوصل عمودياً وآخر أفقياً، والإجابة تلوّن الخلية.</div>
+        </div>
+        <div class="gt-screens" style="position:relative">
+          <a href="huroof-tv.html">📺 التلفزيون</a>
+          <a href="huroof-host.html">🎛️ المضيف</a>
+          <a href="huroof-play.html">📱 الجوال</a>
+        </div>
+      </div>
+
+      <div class="game-tile gt-taif">
+        <span class="bubble b1"></span>
+        <div style="position:relative">
+          <div class="gt-name">طيف</div>
+          <div class="gt-desc">مقياس بين نقيضين. الوسيط يعطي تلميحاً، والفريق يحرّك المؤشر، والخصم يخمّن الاتجاه.</div>
+        </div>
+        <div class="gt-screens" style="position:relative">
+          <a href="taif-tv.html">📺 التلفزيون</a>
+          <a href="taif-host.html">🎛️ المضيف</a>
+          <a href="taif-play.html">📱 الجوال</a>
+        </div>
+      </div>
+
+      <div class="game-tile gt-decrypto">
+        <span class="bubble b1"></span><span class="bubble b2"></span>
+        <div style="position:relative">
+          <div class="gt-name">ديكربتو</div>
+          <div class="gt-desc">كلمات سرية مرقّمة، تلميحات مشفّرة، وفريق خصم يحاول يخترق الشفرة.</div>
+        </div>
+        <div class="gt-screens" style="position:relative">
+          <a href="decrypto-tv.html">📺 التلفزيون</a>
+          <a href="decrypto-host.html">🎛️ المضيف</a>
+          <a href="decrypto-play.html">📱 الجوال</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- تذييل -->
+  <footer class="platform-foot">
+    <div class="feat">
+      <div class="f"><b>منتج رقمي 100%</b><span>تشتري، تفتح، وتلعب — بدون تطبيق ولا تحميل.</span></div>
+      <div class="f"><b>License Key لكل شراء</b><span>كود فريد يفعّل عدداً محدداً من الجلسات.</span></div>
+      <div class="f"><b>500 سؤال لكل لعبة</b><span>تاريخ، علوم، ثقافة، تقنية، وفن وترفيه.</span></div>
+    </div>
+    <div class="inner">
+      <div class="logo"><span class="mark">A</span><span class="word"><span class="ar">أركيدو</span></span></div>
+      <div class="muted" style="color:#bcdad9">© 2026 أركيدو — منصة الألعاب الاجتماعية العربية</div>
+    </div>
+  </footer>
+
+  <script src="js/demo.js"></script>
+</body>
+</html>

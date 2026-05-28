@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>من سيربح الجائزة — شاشة التلفزيون</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+</head>
+<body class="game-millionaire">
+
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> من سيربح الجائزة</div>
+    <div class="demo-tabs">
+      <a class="active" href="millionaire-tv.html">📺 التلفزيون</a>
+      <a href="millionaire-host.html">🎛️ المضيف</a>
+      <a href="millionaire-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge tv">شاشة عامة</span>
+  </div>
+
+  <main class="tv-stage game-stage">
+    <div class="tv-topbar">
+      <div class="logo"><span class="mark">A</span><span class="word"><span class="ar">أركيدو</span></span></div>
+      <div class="tv-title">من سيربح الجائزة</div>
+      <div class="timer-ring" data-timer="12"><span>12</span></div>
+    </div>
+
+    <!-- رصيد الفريقين -->
+    <div class="scorebars" style="margin-bottom:1.6rem">
+      <div class="scorebar green">
+        <span class="name">الفريق الأخضر</span>
+        <span class="pts">٤٢ <small style="font-size:1rem">ريال</small></span>
+      </div>
+      <div class="tag" style="background:rgba(255,201,77,.25);color:#7a5a00">السؤال ٤ من ٧</div>
+      <div class="scorebar red">
+        <span class="name">الفريق الأحمر</span>
+        <span class="pts">٢٥ <small style="font-size:1rem">ريال</small></span>
+      </div>
+    </div>
+
+    <!-- السؤال -->
+    <div class="grow" style="display:flex;flex-direction:column;justify-content:center;max-width:980px;margin:0 auto;width:100%">
+      <div class="question-box">
+        <div class="cat">🧪 علوم</div>
+        <div class="q">كم عظمة في جسم الإنسان البالغ؟</div>
+      </div>
+
+      <div class="options">
+        <div class="option"><span class="key">أ</span> 198 عظمة</div>
+        <div class="option correct"><span class="key">ب</span> 206 عظمة</div>
+        <div class="option"><span class="key">ج</span> 215 عظمة</div>
+        <div class="option"><span class="key">د</span> 187 عظمة</div>
+      </div>
+
+      <div class="row center gap" style="margin-top:1.6rem">
+        <button class="btn btn-dark" onclick="flashBuzz('green')">تجربة وميض الأخضر</button>
+        <button class="btn btn-primary" onclick="flashBuzz('red')">تجربة وميض الأحمر</button>
+        <span class="muted" style="font-size:.85rem">عند الـ Buzz: الشاشة تومض بلون الفريق ويتجمّد العدّاد</span>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/demo.js"></script>
+</body>
+</html>

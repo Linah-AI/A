@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ديكربتو — شاشة المضيف</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+  <style>
+    .host { min-height:100vh; background:#0c0712; color:#f3eef8; padding:1.4rem; }
+    .wrap { max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:1.2rem; }
+    .panel { background:#160d22; border:1px solid #2a1640; border-radius:var(--radius); padding:1.3rem; }
+    .panel h4 { color:#FF5FCF; font-family:var(--font-display); margin-bottom:.8rem; }
+    .seq { display:flex; gap:1rem; align-items:center; }
+    .step { flex:1; background:#0c0712; border:1px solid #2a1640; border-radius:14px; padding:.9rem; text-align:center; font-weight:700; font-size:.9rem; }
+    .step b{display:block;color:#FAEB92;font-family:var(--font-display);font-size:1.2rem;margin-bottom:.2rem}
+    .step.now{border-color:#9929EA;background:rgba(153,41,234,.15)}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+    .ctrl{padding:.9rem;border-radius:14px;font-weight:800}
+    .ctrl.open{background:#9929EA;color:#fff} .ctrl.reveal{background:#FF5FCF;color:#3a0030} .ctrl.score{background:#FAEB92;color:#4a4200}
+  </style>
+</head>
+<body>
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> ديكربتو</div>
+    <div class="demo-tabs">
+      <a href="decrypto-tv.html">📺 التلفزيون</a>
+      <a class="active" href="decrypto-host.html">🎛️ المضيف</a>
+      <a href="decrypto-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge host">سري — المضيف فقط</span>
+  </div>
+
+  <main class="host">
+    <div class="wrap">
+      <div class="panel">
+        <h4>تسلسل الجولة ٤</h4>
+        <div class="seq">
+          <div class="step"><b>١</b> المشفّر يرسل التلميحات</div>
+          <div class="step now"><b>٢</b> فتح إدخال الخصم (سري)</div>
+          <div class="step"><b>٣</b> فتح إدخال الفريق</div>
+          <div class="step"><b>٤</b> الكشف بالأنيميشن</div>
+        </div>
+        <div class="grid2" style="margin-top:1.2rem">
+          <button class="ctrl open">🔓 افتح إدخال الخصم</button>
+          <button class="ctrl open">🔓 افتح إدخال الفريق</button>
+          <button class="ctrl reveal">🎬 كشف: خصم ← فريق ← الرمز</button>
+          <button class="ctrl score">⚖️ توزيع النقاط آلياً</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h4>الرمز السري لهذه الجولة (المضيف للمتابعة فقط)</h4>
+        <div class="secret-card" style="background:linear-gradient(135deg,#9929EA,#FF5FCF)">
+          <span>الرمز الحقيقي للفريق الأخضر</span><b style="font-family:var(--font-display);font-size:1.4rem">٣ — ١ — ٤</b>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h4>قواعد النقاط</h4>
+        <div class="row between" style="padding:.4rem 0;border-bottom:1px solid #2a1640"><span>الخصم اخترق الشفرة</span><b style="color:#fff">⬜ رمز اعتراض</b></div>
+        <div class="row between" style="padding:.4rem 0;border-bottom:1px solid #2a1640"><span>الفريق لم يفهم مشفّره</span><b style="color:#FF5FCF">⬛ رمز سوء فهم</b></div>
+        <div class="row between" style="padding:.4rem 0"><span>رمزا اعتراض = فوز فوري · رمزا سوء فهم = خسارة فورية</span></div>
+      </div>
+    </div>
+  </main>
+  <script src="js/demo.js"></script>
+</body>
+</html>

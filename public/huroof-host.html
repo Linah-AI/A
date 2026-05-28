@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حروف — شاشة المضيف</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+  <style>
+    .host { min-height:100vh; background:#12161c; color:#e9e9ef; padding:1.4rem; }
+    .host-grid { display:grid; grid-template-columns: 1fr 340px; gap:1.2rem; max-width:1100px; margin:0 auto; }
+    .panel { background:#1c2128; border:1px solid #2a313b; border-radius:var(--radius); padding:1.3rem; }
+    .panel h4 { color:#F7DD7D; font-family:var(--font-display); margin-bottom:.8rem; }
+    .ctrl-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; }
+    .ctrl { padding:.9rem; border-radius:14px; font-weight:800; }
+    .ctrl.ok{background:#1f9d6b;color:#fff} .ctrl.no{background:#e23b32;color:#fff}
+    .ctrl.burn{background:#1b1f22;color:#cfcfd6;grid-column:1/-1} .ctrl.alt{background:#2a313b;color:#e9e9ef;grid-column:1/-1}
+    .qbank { background:#12161c; border-radius:12px; padding:.9rem 1rem; margin-bottom:.6rem; }
+    .qbank .a { color:#59B292; font-weight:800; }
+    .hex-mini { transform:scale(.7); transform-origin:top center; }
+  </style>
+</head>
+<body class="game-huroof">
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> حروف</div>
+    <div class="demo-tabs">
+      <a href="huroof-tv.html">📺 التلفزيون</a>
+      <a class="active" href="huroof-host.html">🎛️ المضيف</a>
+      <a href="huroof-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge host">سري — المضيف فقط</span>
+  </div>
+
+  <main class="host">
+    <div class="host-grid">
+      <div class="stack gap">
+        <div class="panel">
+          <div class="row between" style="margin-bottom:.8rem">
+            <span class="tag" style="background:rgba(247,221,125,.15);color:#F7DD7D">دور الأخضر · الحرف المطلوب «ق»</span>
+            <span class="muted" style="color:#9a9aa6">ضغط الـ Buzz: الأخضر</span>
+          </div>
+          <h4>بنك أسئلة الحرف «ق»</h4>
+          <div class="qbank">سؤال: عاصمة دولة قطر؟ <span class="a">الإجابة: الدوحة (تبدأ بـ… اختر سؤالاً بحرف ق)</span></div>
+          <div class="qbank">سؤال: ما اسم القارة المتجمدة الجنوبية؟ <span class="a">قطب — القطب الجنوبي</span></div>
+          <div class="qbank">سؤال: ما الكوكب الأحمر؟ <span class="a">يبدأ بحرف آخر → استخدم «سؤال بديل»</span></div>
+          <div class="ctrl-grid" style="margin-top:1rem">
+            <button class="ctrl ok">صح ✓ (لوّن الخلية)</button>
+            <button class="ctrl no">خطأ ✕ (الخصم يسرق)</button>
+            <button class="ctrl burn">🔥 احرق الخلية (ما أحد عرف)</button>
+            <button class="ctrl alt">🔁 سؤال بديل لنفس الحرف</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="stack gap">
+        <div class="panel">
+          <h4>اللوحة — اضغط الحرف المطلوب</h4>
+          <div class="hex-board hex-mini" id="board"></div>
+        </div>
+        <div class="panel">
+          <h4>مسار الفريقين</h4>
+          <div class="row between" style="padding:.4rem 0"><span><span style="color:#1f9d6b">●</span> الأخضر</span><b>٣ خلايا متصلة</b></div>
+          <div class="row between" style="padding:.4rem 0"><span><span style="color:#e23b32">●</span> الأحمر</span><b>خليتان متصلتان</b></div>
+          <p class="muted" style="color:#9a9aa6;font-size:.82rem;margin-top:.5rem">تابع الخلايا السوداء — قد تقطع طريق فريق وترفع الحماس.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/demo.js"></script>
+  <script>
+    const rows=[['أ','ب','ت','ث'],['ج','ح','خ','د','ذ'],['ر','ز','س','ش','ص','ض'],['ط','ظ','ع','غ','ف'],['ق','ك','ل','م']];
+    const states={'ب':'green','ت':'green','ح':'red','س':'green','ش':'dead','ظ':'red','ع':'red','ق':'active','ل':'green','م':'dead','ز':'red'};
+    const board=document.getElementById('board');
+    rows.forEach(r=>{const row=document.createElement('div');row.className='hex-row';r.forEach(ch=>{const h=document.createElement('div');h.className='hex'+(states[ch]?' '+states[ch]:'');h.textContent=ch;row.appendChild(h);});board.appendChild(row);});
+  </script>
+</body>
+</html>

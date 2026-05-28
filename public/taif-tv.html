@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>طيف — شاشة التلفزيون</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+</head>
+<body class="game-taif">
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> طيف</div>
+    <div class="demo-tabs">
+      <a class="active" href="taif-tv.html">📺 التلفزيون</a>
+      <a href="taif-host.html">🎛️ المضيف</a>
+      <a href="taif-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge tv">شاشة عامة</span>
+  </div>
+
+  <main class="tv-stage game-stage">
+    <div class="tv-topbar">
+      <div class="logo"><span class="mark">A</span><span class="word"><span class="ar">أركيدو</span></span></div>
+      <div class="tv-title">طيف</div>
+      <span class="tag" style="background:rgba(255,170,184,.4);color:#a83a4c">الجولة ٣</span>
+    </div>
+
+    <div class="scorebars" style="margin-bottom:1rem">
+      <div class="scorebar green"><span class="name">الفريق الأخضر</span><span class="pts">٦</span></div>
+      <div class="tag" style="background:#fff;color:#a83a4c">دور الأخضر — الخصم يخمّن الاتجاه</div>
+      <div class="scorebar red"><span class="name">الفريق الأحمر</span><span class="pts">٤</span></div>
+    </div>
+
+    <div class="grow center" style="display:flex;flex-direction:column;justify-content:center">
+      <!-- التلميح -->
+      <div class="question-box" style="max-width:680px;margin:0 auto 1.4rem">
+        <div class="cat" style="color:#a83a4c">💬 تلميح الوسيط</div>
+        <div class="q">«قهوة الصباح»</div>
+      </div>
+
+      <!-- المقياس -->
+      <div class="spectrum">
+        <div class="spectrum-arc">
+          <div class="spectrum-mask" style="background:var(--bg, #fff)"></div>
+        </div>
+        <div class="spectrum-needle" id="needle"></div>
+      </div>
+      <div class="poles">
+        <span class="pole">❄️ بارد جداً</span>
+        <span class="pole">🔥 حار جداً</span>
+      </div>
+
+      <div class="row center gap" style="margin-top:1.4rem">
+        <span class="tag" style="background:#fff;color:#16242a">المؤشر يتحرك مباشرة أثناء نقاش الفريق · العجلة مغلقة لا تكشف الهدف</span>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/demo.js"></script>
+  <script>
+    // حركة المؤشر التلقائية للعرض
+    let dir=1, deg=10; const n=document.getElementById('needle');
+    setInterval(()=>{ deg+=dir*4; if(deg>55||deg<-55) dir*=-1; n.style.transform=`rotate(${deg}deg)`; },500);
+  </script>
+</body>
+</html>

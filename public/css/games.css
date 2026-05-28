@@ -1,0 +1,145 @@
+/* ==========================================================================
+   أركيدو — لوحات ألوان الألعاب الأربع + مكوّناتها الخاصة
+   تُطبّق عبر كلاس على <body>:  game-millionaire / game-huroof / game-taif / game-decrypto
+   ========================================================================== */
+
+/* ===== من سيربح الجائزة ===== */
+.game-millionaire {
+  --g1: #59B292;  /* أخضر */
+  --g2: #FFC94D;  /* أصفر */
+  --g3: #FAE7CB;  /* كريمي */
+  --g4: #FA6781;  /* وردي */
+  --bg: radial-gradient(1200px 700px at 80% -10%, rgba(89,178,146,.35), transparent 60%), #fff6ea;
+  --accent: #59B292;
+}
+
+/* ===== حروف ===== */
+.game-huroof {
+  --g1: #427AB5;  /* أزرق */
+  --g2: #406AAF;  /* أزرق داكن */
+  --g3: #F7DD7D;  /* أصفر فاتح */
+  --g4: #FFE8BE;  /* كريمي */
+  --bg: radial-gradient(1100px 700px at 15% -10%, rgba(66,122,181,.28), transparent 55%), #f3f7fc;
+  --accent: #427AB5;
+}
+
+/* ===== طيف ===== */
+.game-taif {
+  --g1: #A8DF8E;  /* أخضر فاتح */
+  --g2: #F0FFDF;  /* أخضر شفاف */
+  --g3: #FFD8DF;  /* وردي فاتح */
+  --g4: #FFAAB8;  /* وردي */
+  --bg: linear-gradient(160deg, #f0ffdf, #ffd8df 120%);
+  --accent: #FFAAB8;
+}
+
+/* ===== ديكربتو ===== */
+.game-decrypto {
+  --g1: #000000;
+  --g2: #9929EA;  /* بنفسجي */
+  --g3: #FF5FCF;  /* وردي صارخ */
+  --g4: #FAEB92;  /* أصفر */
+  --bg: radial-gradient(900px 600px at 85% -10%, rgba(153,41,234,.5), transparent 55%), #0a0710;
+  --accent: #9929EA;
+  color: #f3eef8;
+}
+
+.game-stage { background: var(--bg); }
+
+/* ===== خيارات السؤال (من سيربح الجائزة) ===== */
+.options { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.4rem; }
+.option {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.1rem 1.4rem; border-radius: var(--radius);
+  background: #fff; box-shadow: var(--shadow-sm);
+  border: 2px solid transparent; font-weight: 700; font-size: 1.2rem;
+  transition: all .2s var(--ease);
+}
+.option .key {
+  width: 2.6rem; height: 2.6rem; flex: none; border-radius: 12px;
+  display: grid; place-items: center; font-family: var(--font-display);
+  font-weight: 900; background: var(--g3); color: var(--brand-green-dark);
+}
+.option.correct { border-color: var(--g1); background: rgba(89,178,146,.12); }
+.option.correct .key { background: var(--g1); color: #fff; }
+.option.wrong { border-color: var(--g4); background: rgba(250,103,129,.1); opacity:.85; }
+.question-box {
+  background: #fff; border-radius: var(--radius-lg); padding: 1.8rem 2rem;
+  box-shadow: var(--shadow-md); text-align: center;
+}
+.question-box .cat { color: var(--g1); font-weight: 800; margin-bottom: .6rem; }
+.question-box .q { font-family: var(--font-display); font-size: 2rem; line-height: 1.4; }
+
+/* وميض الشاشة عند الـ Buzz */
+.buzz-flash { position: fixed; inset: 0; pointer-events: none; opacity: 0; z-index: 5; }
+.buzz-flash.green { background: radial-gradient(circle, rgba(31,157,107,.35), transparent 70%); }
+.buzz-flash.red   { background: radial-gradient(circle, rgba(226,59,50,.35), transparent 70%); }
+
+/* ===== لوحة حروف السداسية ===== */
+.hex-board { display: flex; flex-direction: column; align-items: center; gap: 0; padding: 1rem; }
+.hex-row { display: flex; }
+.hex-row:not(:first-child) { margin-top: -16px; }
+.hex-row:nth-child(even) { margin-right: 38px; }
+.hex {
+  width: 74px; height: 84px; margin: 0 3px;
+  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  background: var(--g4);
+  display: grid; place-items: center;
+  font-family: var(--font-display); font-weight: 900; font-size: 1.8rem;
+  color: var(--brand-green-dark);
+  transition: all .25s var(--ease);
+  position: relative;
+}
+.hex.green { background: var(--team-green); color: #fff; }
+.hex.red   { background: var(--team-red);   color: #fff; }
+.hex.dead  { background: #1b1f22; color: #4a5258; }
+.hex.active { outline: 3px solid #fff; box-shadow: 0 0 0 6px rgba(255,201,77,.6); z-index: 2; }
+.hex-edge-top, .hex-edge-bottom { height: 8px; border-radius: 4px; }
+.hex-edge-top { background: var(--team-red); }
+.hex-edge-bottom { background: var(--team-red); }
+.hex-edge-side { width: 8px; border-radius: 4px; background: var(--team-green); }
+
+/* ===== مقياس طيف ===== */
+.spectrum {
+  position: relative; width: 100%; max-width: 720px; margin: 0 auto;
+  height: 200px;
+}
+.spectrum-arc {
+  width: 100%; height: 100%;
+  border-radius: 360px 360px 0 0;
+  background: conic-gradient(from -90deg at 50% 100%,
+    var(--g1) 0deg, var(--g2) 90deg, var(--g3) 135deg, var(--g4) 180deg);
+  position: relative; overflow: hidden;
+}
+.spectrum-mask { position:absolute; inset: 40px 40px 0; border-radius: 320px 320px 0 0; background: var(--bg, #fff); }
+.spectrum-needle {
+  position: absolute; bottom: 0; right: 50%; transform-origin: bottom center;
+  width: 6px; height: 150px; background: #16242a; border-radius: 4px;
+  transform: rotate(20deg); transition: transform .4s var(--ease);
+}
+.spectrum-needle::after { content:""; position:absolute; top:-10px; right:-7px; width:20px; height:20px; border-radius:50%; background:#16242a; }
+.spectrum-target {
+  position:absolute; bottom:0; right:50%; transform-origin:bottom center;
+  width: 70px; height: 150px; transform: rotate(-30deg);
+  background: linear-gradient(rgba(255,201,77,.55), transparent);
+}
+.poles { display:flex; justify-content:space-between; max-width:720px; margin:.6rem auto 0; font-weight:800; }
+.poles .pole { padding:.5rem 1rem; border-radius: var(--radius-pill); background:#fff; box-shadow: var(--shadow-sm); }
+
+/* ===== ديكربتو: جدول التلميحات ===== */
+.clue-table { width: 100%; border-collapse: separate; border-spacing: 0 .5rem; }
+.clue-table th { color: var(--g3); font-weight: 800; padding: .4rem .8rem; text-align: right; font-size: .85rem; }
+.clue-table td { background: rgba(255,255,255,.06); padding: .8rem 1rem; font-weight: 700; }
+.clue-table td:first-child { border-radius: 0 12px 12px 0; }
+.clue-table td:last-child  { border-radius: 12px 0 0 12px; }
+.clue-table .num { color: var(--g4); font-family: var(--font-display); font-weight:900; }
+.token-row { display:flex; gap:.4rem; }
+.token { width: 1.6rem; height: 1.6rem; border-radius: 50%; }
+.token.white { background:#fff; box-shadow: inset 0 0 0 2px rgba(0,0,0,.1); }
+.token.black { background:#000; box-shadow: inset 0 0 0 2px #9929EA; }
+.token.empty { background: transparent; box-shadow: inset 0 0 0 2px rgba(255,255,255,.25); }
+.secret-card {
+  background: linear-gradient(135deg, var(--g2), var(--g3));
+  color:#fff; border-radius: var(--radius); padding: 1rem 1.2rem; font-weight:800;
+  display:flex; justify-content:space-between; align-items:center;
+}
