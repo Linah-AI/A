@@ -28,20 +28,23 @@ body{ background-color:#2F5E96;
   border:var(--bw) solid var(--ink); border-radius:10px; padding:0 .6rem; box-shadow:var(--shadow-sm) }
 .turn{ text-align:center }
 
-/* اللوحة السداسية */
+/* اللوحة السداسية — خلية نحل منتظمة */
 .board-wrap{ flex:1; display:flex; align-items:center; justify-content:center }
 .board{ display:flex; flex-direction:column; align-items:center }
-.hrow{ display:flex; margin-top:-14px }
+.hrow{ display:flex; margin-top:-22px }
 .hrow:first-child{ margin-top:0 }
-.hrow:nth-child(even){ margin-right:42px }
-.hcell{ position:relative; margin:0 5px; filter:drop-shadow(3px 0 0 var(--ink)) drop-shadow(-3px 0 0 var(--ink)) drop-shadow(0 3px 0 var(--ink)) drop-shadow(0 -3px 0 var(--ink)); transition:transform .15s }
-.hex{ width:82px;height:92px;
+.hrow:nth-child(even){ transform:translateX(-43px) }   /* إزاحة نصف خلية لتعشيق خلية النحل */
+.hcell{ position:relative; margin:0 3px;
+  filter:drop-shadow(3px 0 0 var(--ink)) drop-shadow(-3px 0 0 var(--ink)) drop-shadow(0 3px 0 var(--ink)) drop-shadow(0 -3px 0 var(--ink));
+  transition:transform .15s }
+.hex{ width:80px;height:90px;
   clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
   background:var(--cream); display:grid; place-items:center;
-  font-family:var(--bubble); font-size:2.2rem; color:var(--ink) }
+  font-family:var(--bubble); font-size:2.6rem; color:var(--ink);
+  -webkit-text-stroke:1.5px var(--ink); paint-order:stroke fill }   /* حرف سميك بحدّ */
 .hex.green{ background:var(--teal); color:var(--cream) }
 .hex.red{ background:var(--coral); color:var(--cream) }
-.hex.dead{ background:#1a1410; color:#5a5048 }
+.hex.dead{ background:#1a1410; color:#5a5048; -webkit-text-stroke-color:#3a3028 }
 .hcell.active{ transform:scale(1.12); z-index:3 }
 .hcell.active .hex{ background:var(--hu-yellow) }
 
@@ -49,7 +52,7 @@ body{ background-color:#2F5E96;
 .lg{ display:inline-flex; align-items:center; gap:.4rem; background:rgba(0,0,0,.25); border:3px solid var(--ink);
   border-radius:99px; padding:.3rem .9rem; font-weight:800; font-size:.85rem }
 .lg .sw{ width:1rem;height:1rem;border-radius:4px;border:2px solid var(--ink) }
-@media(max-width:760px){ .hex{ width:56px;height:64px;font-size:1.5rem } .hrow:nth-child(even){ margin-right:30px } .bar{ grid-template-columns:1fr } }
+@media(max-width:760px){ .hex{ width:56px;height:64px;font-size:1.9rem } .hrow:nth-child(even){ transform:translateX(-30px) } .bar{ grid-template-columns:1fr } }
 </style>
 </head>
 <body>
@@ -76,8 +79,15 @@ body{ background-color:#2F5E96;
 </main>
 
 <script>
-const rows=[['أ','ب','ت','ث'],['ج','ح','خ','د','ذ'],['ر','ز','س','ش','ص','ض'],['ط','ظ','ع','غ','ف'],['ق','ك','ل','م']];
-const states={'ب':'green','ت':'green','ح':'red','س':'green','ش':'dead','ظ':'red','ع':'red','ق':'active','ل':'green','م':'dead','ز':'red'};
+// كل الحروف الـ28 في خلية نحل منتظمة (5 صفوف × 6 = 30 خلية، آخر صف ناقص خليتين)
+const rows=[
+  ['أ','ب','ت','ث','ج','ح'],
+  ['خ','د','ذ','ر','ز','س'],
+  ['ش','ص','ض','ط','ظ','ع'],
+  ['غ','ف','ق','ك','ل','م'],
+  ['ن','ه','و','ي']
+];
+const states={'ب':'green','ت':'green','ح':'red','ذ':'green','ز':'red','س':'green','ش':'dead','ظ':'red','ع':'red','ق':'active','ل':'green','م':'dead','ن':'green','و':'red'};
 const board=document.getElementById('board');
 rows.forEach(r=>{const row=document.createElement('div');row.className='hrow';
   r.forEach(ch=>{

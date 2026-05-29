@@ -1,102 +1,97 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>طيف — أجهزة اللاعبين</title>
-  <link rel="stylesheet" href="css/theme.css" />
-  <link rel="stylesheet" href="css/games.css" />
-  <style>
-    .mini-tabs { display:flex; gap:.4rem; padding:.8rem 1rem; flex-wrap:wrap; border-bottom:1px solid var(--line); justify-content:center; }
-    .mini-tabs button { padding:.5rem .9rem; border-radius:var(--radius-pill); background:#fdeef1; font-weight:800; font-size:.82rem; color:#a83a4c; }
-    .mini-tabs button.on { background:#FFAAB8; color:#fff; }
-    .team-head { padding:1.1rem 1.4rem; color:#fff; display:flex; align-items:center; justify-content:space-between; background:#1f9d6b; }
-    .team-head.opp { background:#e23b32; }
-    .team-head .who { font-family:var(--font-display); font-weight:900; }
-    .play-pad { padding:1.4rem; display:flex; flex-direction:column; gap:1rem; height:100%; }
-    .state { display:none; flex:1; flex-direction:column; } .state.show{ display:flex; }
-    .hint-input { width:100%; padding:.9rem 1rem; border:2px solid var(--line); border-radius:14px; font-family:inherit; font-size:1rem; }
-    .lr { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
-    .lr button { padding:1.4rem; border-radius:16px; font-weight:900; font-family:var(--font-display); font-size:1.2rem; }
-    .lr .left{background:#A8DF8E;color:#1d3b15} .lr .right{background:#FFAAB8;color:#5a1f2a}
-    .slider { width:100%; }
-    .pin { width:100%; padding:1rem; border-radius:14px; background:#1f9d6b; color:#fff; font-weight:800; }
-    .mini-spectrum { transform:scale(.85); transform-origin:top center; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>طيف — أجهزة اللاعبين</title>
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+/* طيف — أجهزة اللاعبين الثلاثة منفصلة جنب بعض (كل جوال جهاز شخص مختلف) */
+body{ background-color:#F7E9EC;
+  background-image:radial-gradient(rgba(180,90,120,.10) 2px,transparent 2.5px); background-size:28px 28px; padding:1.6rem 1rem }
+:root{ --tf-pink:#E58BA6; --tf-green:#9FCB7E }
+.head-note{ text-align:center; margin-bottom:1.4rem }
+.head-note .t{ font-family:var(--display); font-size:2rem; color:var(--tf-pink); -webkit-text-stroke:2px var(--ink); paint-order:stroke fill; text-shadow:2px 2px 0 var(--ink) }
+.head-note p{ font-weight:700; color:var(--ink-soft); margin-top:.3rem }
+.phones{ display:flex; gap:1.4rem; justify-content:center; flex-wrap:wrap; align-items:flex-start }
+.phone{ width:300px; background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:26px;
+  box-shadow:var(--shadow-lg); overflow:hidden; display:flex; flex-direction:column }
+.ph-head{ padding:1rem 1.2rem; color:var(--cream); border-bottom:var(--bw) solid var(--ink); display:flex; align-items:center; justify-content:space-between }
+.ph-head.med{ background:var(--tf-green); color:var(--ink) } .ph-head.cap{ background:var(--teal) } .ph-head.opp{ background:var(--coral) }
+.ph-head .who{ font-family:var(--bubble); font-size:1.25rem }
+.ph-head .rl{ background:rgba(0,0,0,.18); border:2px solid currentColor; border-radius:99px; padding:.15rem .6rem; font-weight:800; font-size:.72rem }
+.ph-body{ padding:1.1rem; display:flex; flex-direction:column; gap:.8rem; flex:1 }
+.ph-body .lead{ font-weight:700; font-size:.85rem; color:var(--ink-soft); text-align:center }
+.cluebox{ background:var(--paper); border:3px solid var(--ink); border-radius:12px; padding:.7rem; text-align:center; box-shadow:var(--shadow-sm) }
+.cluebox .lbl{ font-size:.72rem; color:var(--ink-soft); font-weight:700 }
+.cluebox .v{ font-family:var(--bubble); font-size:1.3rem }
+/* مقياس مصغّر */
+.mini-gauge{ width:100%; aspect-ratio:2/1; position:relative; overflow:hidden; margin:.2rem 0 }
+.mini-gauge .arc{ position:absolute; inset:0 0 auto; width:100%; aspect-ratio:1/1; border-radius:50%;
+  background:conic-gradient(from -90deg, var(--tf-green) 0deg, #EBD96A 60deg, #EFA85C 120deg, var(--tf-pink) 180deg, transparent 180deg);
+  border:3px solid var(--ink) }
+.mini-gauge .mask{ position:absolute; left:50%; bottom:0; transform:translateX(-50%); width:55%; aspect-ratio:1/1; background:var(--cream); border-radius:50%; border:3px solid var(--ink); z-index:2 }
+.mini-gauge .ndl{ position:absolute; left:50%; bottom:2px; width:6px; height:46%; background:var(--ink); border-radius:5px; transform-origin:bottom center; z-index:3 }
+.mini-gauge .ndl::after{ content:""; position:absolute; bottom:-7px; left:50%; transform:translateX(-50%); width:18px;height:18px;border-radius:50%; background:var(--mustard); border:3px solid var(--ink) }
+.poles{ display:flex; justify-content:space-between; font-weight:800; font-size:.75rem }
+.field{ width:100%; padding:.7rem .9rem; border:3px solid var(--ink); border-radius:10px; font-family:inherit; font-weight:700; background:var(--paper) }
+.slider{ width:100%; accent-color:var(--tf-pink); height:8px }
+.lr{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem }
+.lr button{ padding:1.1rem; border-radius:12px; font-family:var(--bubble); font-size:1.1rem; border:var(--bw) solid var(--ink); box-shadow:var(--shadow-sm) }
+.lr .l{ background:var(--tf-green); color:var(--ink) } .lr .r{ background:var(--tf-pink); color:var(--cream) }
+.wait{ text-align:center; font-weight:800; color:var(--ink-soft); padding:1rem 0 }
+</style>
 </head>
-<body class="game-taif">
-  <div class="demo-bar">
-    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> طيف</div>
-    <div class="demo-tabs">
-      <a href="taif-tv.html">📺 التلفزيون</a>
-      <a href="taif-host.html">🎛️ المضيف</a>
-      <a class="active" href="taif-play.html">📱 الجوال</a>
+<body>
+<div class="head-note">
+  <div class="t">طيف · أجهزة اللاعبين</div>
+  <p>كل دور على جوال شخص مختلف — هذي الأجهزة الثلاثة منفصلة فعلياً</p>
+</div>
+
+<div class="phones">
+
+  <!-- الوسيط -->
+  <div class="phone">
+    <div class="ph-head med"><span class="who">الوسيط</span><span class="rl">سري · أخضر</span></div>
+    <div class="ph-body">
+      <p class="lead">ترى الهدف والعجلة كاملة — أعطِ تلميحاً واحداً.</p>
+      <div class="mini-gauge"><div class="arc"></div><div class="mask"></div><div class="ndl" style="transform:translateX(-50%) rotate(48deg)"></div></div>
+      <div class="poles"><span>❄️ بارد</span><span>🔥 حار</span></div>
+      <input class="field" value="قهوة الصباح" />
+      <button class="pop-btn" style="background:var(--tf-pink);color:var(--cream);width:100%">إرسال التلميح ←</button>
     </div>
-    <span class="device-badge play">أجهزة اللاعبين</span>
   </div>
 
-  <div class="mini-tabs">
-    <button class="on" onclick="show('s-med',this)">🤫 الوسيط</button>
-    <button onclick="show('s-cap',this)">🎮 قائد الفريق</button>
-    <button onclick="show('s-opp',this)">⚔️ الفريق الخصم</button>
+  <!-- القائد -->
+  <div class="phone">
+    <div class="ph-head cap"><span class="who">قائد الفريق</span><span class="rl">يحرّك المؤشر</span></div>
+    <div class="ph-body">
+      <div class="cluebox"><div class="lbl">التلميح</div><div class="v">«قهوة الصباح»</div></div>
+      <p class="lead">حرّك المؤشر حسب اتفاق الفريق.</p>
+      <input class="slider" type="range" min="0" max="100" value="65" oninput="moveNeedle(this.value)" />
+      <div class="mini-gauge"><div class="arc"></div><div class="mask"></div><div class="ndl" id="capNdl" style="transform:translateX(-50%) rotate(18deg)"></div></div>
+      <button class="pop-btn teal" style="width:100%">📌 تثبيت الإجابة</button>
+    </div>
   </div>
 
-  <div class="phone-wrap" style="background:linear-gradient(160deg,#f0ffdf,#ffd8df)">
-    <div class="phone">
-      <div class="phone-screen game-taif" style="--bg:#fff">
-
-        <div class="phone-notch"></div>
-
-        <!-- الوسيط -->
-        <div class="state show" id="s-med">
-          <div class="team-head"><span class="who">الوسيط — سري</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">الأخضر</span></div>
-          <div class="play-pad">
-            <p class="muted" style="text-align:center">ترى الهدف والعجلة كاملة — أعطِ تلميحاً واحداً.</p>
-            <div class="spectrum mini-spectrum" style="height:130px">
-              <div class="spectrum-arc"><div class="spectrum-mask" style="background:#fff"></div></div>
-              <div class="spectrum-needle" style="transform:rotate(42deg);background:#FFAAB8"></div>
-            </div>
-            <div class="poles" style="font-size:.8rem"><span class="pole">❄️ بارد</span><span class="pole">🔥 حار</span></div>
-            <input class="hint-input" placeholder="اكتب تلميحك…" value="قهوة الصباح" />
-            <button class="pin" style="background:#FFAAB8;color:#5a1f2a">إرسال التلميح ←</button>
-          </div>
-        </div>
-
-        <!-- القائد -->
-        <div class="state" id="s-cap">
-          <div class="team-head"><span class="who">قائد الأخضر</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">يحرّك المؤشر</span></div>
-          <div class="play-pad">
-            <div class="question-box" style="padding:1rem"><div class="cat">التلميح</div><div style="font-weight:800;font-size:1.2rem">«قهوة الصباح»</div></div>
-            <p class="muted" style="text-align:center">حرّك المؤشر حسب اتفاق الفريق.</p>
-            <input class="slider" type="range" min="0" max="100" value="65" data-spectrum="#capNeedle" />
-            <div class="spectrum mini-spectrum" style="height:120px">
-              <div class="spectrum-arc"><div class="spectrum-mask" style="background:#fff"></div></div>
-              <div class="spectrum-needle" id="capNeedle"></div>
-            </div>
-            <button class="pin">📌 تثبيت الإجابة</button>
-          </div>
-        </div>
-
-        <!-- الخصم -->
-        <div class="state" id="s-opp">
-          <div class="team-head opp"><span class="who">الفريق الأحمر</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">اعتراض</span></div>
-          <div class="play-pad center" style="text-align:center">
-            <p class="muted">ثبّت الأخضر إجابته — خمّنوا: الهدف الحقيقي يمين أم يسار المؤشر؟</p>
-            <div class="lr" style="width:100%;margin-top:1rem">
-              <button class="left">يسار ◀</button>
-              <button class="right">▶ يمين</button>
-            </div>
-            <p class="muted" style="font-size:.85rem;margin-top:1rem">تخمين صحيح = نقطة اعتراض لفريقكم.</p>
-          </div>
-        </div>
-
+  <!-- الخصم -->
+  <div class="phone">
+    <div class="ph-head opp"><span class="who">الفريق الخصم</span><span class="rl">اعتراض</span></div>
+    <div class="ph-body">
+      <p class="lead">ثبّت الأخضر إجابته — خمّنوا: الهدف الحقيقي يمين أم يسار المؤشر؟</p>
+      <div class="wait">⏳ المؤشر مثبّت عند…</div>
+      <div class="lr">
+        <button class="l">يسار ◀</button>
+        <button class="r">▶ يمين</button>
       </div>
+      <p class="lead" style="margin-top:.4rem">تخمين صحيح = نقطة اعتراض لفريقكم.</p>
     </div>
   </div>
 
-  <script src="js/demo.js"></script>
-  <script>
-    function show(id,btn){document.querySelectorAll('.state').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');document.querySelectorAll('.mini-tabs button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
-  </script>
+</div>
+
+<script>
+function moveNeedle(v){ const deg=(v/100)*160-80; document.getElementById('capNdl').style.transform='translateX(-50%) rotate('+deg+'deg)'; }
+</script>
 </body>
 </html>

@@ -1,63 +1,63 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>طيف — شاشة المضيف</title>
-  <link rel="stylesheet" href="css/theme.css" />
-  <link rel="stylesheet" href="css/games.css" />
-  <style>
-    .host { min-height:100vh; background:#181522; color:#f1ecf6; padding:1.4rem; }
-    .wrap { max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:1.2rem; }
-    .panel { background:#221c30; border:1px solid #322843; border-radius:var(--radius); padding:1.3rem; }
-    .panel h4 { color:#FFAAB8; font-family:var(--font-display); margin-bottom:.8rem; }
-    .ctrl { padding:1rem; border-radius:14px; font-weight:800; width:100%; }
-    .ctrl.start{background:#A8DF8E;color:#1d3b15} .ctrl.reveal{background:#FFAAB8;color:#5a1f2a} .ctrl.timer{background:#322843;color:#f1ecf6} .ctrl.add{background:#1f9d6b;color:#fff}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
-    .reveal-box{background:linear-gradient(135deg,#FFAAB8,#A8DF8E);color:#3a1320;border-radius:14px;padding:1rem 1.2rem;font-weight:800}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>طيف — شاشة المضيف</title>
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+/* مضيف طيف — داكن بنكهة وردية (سري) */
+body{ background-color:#3a2230;
+  background-image:radial-gradient(rgba(255,255,255,.05) 2px,transparent 2.5px); background-size:26px 26px; color:var(--cream) }
+.host{ max-width:760px; margin:0 auto; padding:1.4rem 1.5rem 2rem }
+.host-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; flex-wrap:wrap; gap:.6rem }
+.host-top .brand{ display:flex; align-items:center; gap:.5rem; font-family:var(--bubble); font-size:1.4rem; color:var(--cream) }
+.host-top .brand .m{ width:2.1rem;height:2.1rem;background:#E58BA6;border:3px solid #000;border-radius:8px;display:grid;place-items:center;color:var(--cream);transform:rotate(-5deg) }
+.secret-badge{ background:#000;color:#E58BA6;border:3px solid #E58BA6;border-radius:99px;padding:.35rem 1rem;font-family:var(--heavy);font-weight:900;font-size:.85rem }
+.card{ background:#4a2c3d; border:var(--bw-lg) solid #000; border-radius:var(--radius); box-shadow:6px 6px 0 #000; padding:1.3rem; margin-bottom:1.2rem }
+.card h4{ font-family:var(--bubble); font-size:1.3rem; color:#9FCB7E; margin-bottom:.9rem }
+.target{ background:linear-gradient(135deg,#E58BA6,#9FCB7E); color:#3a1320; border:var(--bw) solid #000; border-radius:12px;
+  padding:1rem 1.2rem; font-weight:900; box-shadow:var(--shadow-sm) }
+.ctrls{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-top:1rem }
+.ck{ padding:.95rem; border-radius:12px; font-family:var(--bubble); font-size:1.15rem; border:var(--bw) solid #000; box-shadow:var(--shadow-sm); transition:transform .08s }
+.ck:active{ transform:translate(2px,2px); box-shadow:2px 2px 0 #000 }
+.ck.start{ background:#9FCB7E;color:var(--ink) } .ck.reveal{ background:#E58BA6;color:var(--cream) }
+.ck.timer{ background:#5e3a4d;color:var(--cream) } .ck.add{ background:var(--teal);color:var(--cream) }
+.kv{ display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:2px dashed #5e3a4d; font-weight:700 }
+.kv:last-child{ border:none }
+</style>
 </head>
 <body>
-  <div class="demo-bar">
-    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> طيف</div>
-    <div class="demo-tabs">
-      <a href="taif-tv.html">📺 التلفزيون</a>
-      <a class="active" href="taif-host.html">🎛️ المضيف</a>
-      <a href="taif-play.html">📱 الجوال</a>
-    </div>
-    <span class="device-badge host">سري — المضيف فقط</span>
+<div class="host">
+  <div class="host-top">
+    <div class="brand"><span class="m">A</span> أركيدو · طيف</div>
+    <span class="secret-badge">🔒 شاشة المضيف — سري</span>
   </div>
 
-  <main class="host">
-    <div class="wrap">
-      <div class="panel">
-        <div class="row between" style="margin-bottom:.8rem">
-          <span class="tag" style="background:rgba(255,170,184,.18);color:#FFAAB8">الجولة 3 · دور الأخضر</span>
-        </div>
-        <div class="reveal-box">🎯 الهدف الحقيقي (سري): يقع عند <b>72%</b> ناحية «حار جداً» — تلميح الوسيط: «قهوة الصباح»</div>
-        <div class="grid2" style="margin-top:1rem">
-          <button class="ctrl start">▶ بدء الجولة</button>
-          <button class="ctrl timer">⏱ مؤقّت النقاش</button>
-          <button class="ctrl reveal">👁 كشف الهدف وإعلان النتيجة</button>
-          <button class="ctrl add">➕ إضافة النقاط للفائز</button>
-        </div>
-      </div>
-
-      <div class="panel">
-        <h4>كيف توزّع النقاط</h4>
-        <div class="row between" style="padding:.4rem 0;border-bottom:1px solid #322843"><span>الفريق الأساسي — أصاب المركز</span><b style="color:#A8DF8E">4 نقاط</b></div>
-        <div class="row between" style="padding:.4rem 0;border-bottom:1px solid #322843"><span>الفريق الأساسي — قريب من الأطراف</span><b style="color:#A8DF8E">3 أو 2</b></div>
-        <div class="row between" style="padding:.4rem 0"><span>الفريق الخصم — خمّن الاتجاه صح</span><b style="color:#FFAAB8">نقطة اعتراض 1</b></div>
-      </div>
-
-      <div class="panel">
-        <h4>حالة الأجهزة</h4>
-        <div class="row between" style="padding:.4rem 0"><span>📱 الوسيط (أخضر)</span><b>أرسل التلميح ✓</b></div>
-        <div class="row between" style="padding:.4rem 0"><span>📱 قائد الأخضر</span><b>ثبّت المؤشر ✓</b></div>
-        <div class="row between" style="padding:.4rem 0"><span>📱 الفريق الأحمر</span><b>بانتظار التخمين…</b></div>
-      </div>
+  <div class="card">
+    <span class="sticker" style="background:#E58BA6;color:var(--cream);margin-bottom:.8rem">الجولة 3 · دور الأخضر</span>
+    <div class="target">🎯 الهدف الحقيقي (سري): يقع عند <b>72%</b> ناحية «حار جداً» — تلميح الوسيط: «قهوة الصباح»</div>
+    <div class="ctrls">
+      <button class="ck start">▶ بدء الجولة</button>
+      <button class="ck timer">⏱ مؤقّت النقاش</button>
+      <button class="ck reveal">👁 كشف الهدف وإعلان النتيجة</button>
+      <button class="ck add">➕ إضافة النقاط للفائز</button>
     </div>
-  </main>
-  <script src="js/demo.js"></script>
+  </div>
+
+  <div class="card">
+    <h4>كيف توزّع النقاط</h4>
+    <div class="kv"><span>الفريق الأساسي — أصاب المركز</span><b style="color:#9FCB7E">4 نقاط</b></div>
+    <div class="kv"><span>الفريق الأساسي — قريب من الأطراف</span><b style="color:#9FCB7E">3 أو 2</b></div>
+    <div class="kv"><span>الفريق الخصم — خمّن الاتجاه صح</span><b style="color:#E58BA6">نقطة اعتراض 1</b></div>
+  </div>
+
+  <div class="card">
+    <h4>حالة الأجهزة</h4>
+    <div class="kv"><span>📱 الوسيط (أخضر)</span><b style="color:#9FCB7E">أرسل التلميح ✓</b></div>
+    <div class="kv"><span>📱 قائد الأخضر</span><b style="color:#9FCB7E">ثبّت المؤشر ✓</b></div>
+    <div class="kv"><span>📱 الفريق الأحمر</span><b style="color:#E58BA6">بانتظار التخمين…</b></div>
+  </div>
+</div>
 </body>
 </html>

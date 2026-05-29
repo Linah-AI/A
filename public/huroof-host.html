@@ -28,12 +28,13 @@ body{ background-color:#15233a;
 .kv:last-child{ border:none }
 /* لوحة مصغّرة */
 .mini{ display:flex; flex-direction:column; align-items:center; transform:scale(.82); transform-origin:top center }
-.hrow{ display:flex; margin-top:-8px } .hrow:first-child{ margin-top:0 } .hrow:nth-child(even){ margin-right:24px }
-.hcell{ position:relative;margin:0 3px;filter:drop-shadow(2px 0 0 #000) drop-shadow(-2px 0 0 #000) drop-shadow(0 2px 0 #000) drop-shadow(0 -2px 0 #000) }
-.hex{ width:46px;height:52px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
-  background:var(--cream);display:grid;place-items:center;font-family:var(--bubble);font-size:1.2rem;color:var(--ink) }
+.hrow{ display:flex; margin-top:-13px } .hrow:first-child{ margin-top:0 } .hrow:nth-child(even){ transform:translateX(-25px) }
+.hcell{ position:relative;margin:0 2px;filter:drop-shadow(2px 0 0 #000) drop-shadow(-2px 0 0 #000) drop-shadow(0 2px 0 #000) drop-shadow(0 -2px 0 #000) }
+.hex{ width:48px;height:54px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:var(--cream);display:grid;place-items:center;font-family:var(--bubble);font-size:1.5rem;color:var(--ink);
+  -webkit-text-stroke:1px var(--ink);paint-order:stroke fill }
 .hex.green{ background:var(--teal);color:var(--cream) } .hex.red{ background:var(--coral);color:var(--cream) }
-.hex.dead{ background:#1a1410;color:#5a5048 }
+.hex.dead{ background:#1a1410;color:#5a5048;-webkit-text-stroke-color:#3a3028 }
 .hcell.active{ transform:scale(1.1);z-index:3 } .hcell.active .hex{ background:#F2C744 }
 @media(max-width:820px){ .host-grid{ grid-template-columns:1fr } }
 </style>
@@ -80,8 +81,8 @@ body{ background-color:#15233a;
   </div>
 </div>
 <script>
-const rows=[['أ','ب','ت','ث'],['ج','ح','خ','د','ذ'],['ر','ز','س','ش','ص','ض'],['ط','ظ','ع','غ','ف'],['ق','ك','ل','م']];
-const states={'ب':'green','ت':'green','ح':'red','س':'green','ش':'dead','ظ':'red','ع':'red','ق':'active','ل':'green','م':'dead','ز':'red'};
+const rows=[['أ','ب','ت','ث','ج','ح'],['خ','د','ذ','ر','ز','س'],['ش','ص','ض','ط','ظ','ع'],['غ','ف','ق','ك','ل','م'],['ن','ه','و','ي']];
+const states={'ب':'green','ت':'green','ح':'red','ذ':'green','ز':'red','س':'green','ش':'dead','ظ':'red','ع':'red','ق':'active','ل':'green','م':'dead','ن':'green','و':'red'};
 const board=document.getElementById('board');
 rows.forEach(r=>{const row=document.createElement('div');row.className='hrow';r.forEach(ch=>{const cell=document.createElement('div');cell.className='hcell'+(states[ch]==='active'?' active':'');const h=document.createElement('div');h.className='hex'+(states[ch]&&states[ch]!=='active'?' '+states[ch]:'');h.textContent=ch;cell.appendChild(h);row.appendChild(cell);});board.appendChild(row);});
 </script>
