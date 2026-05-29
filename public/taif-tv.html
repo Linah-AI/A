@@ -33,18 +33,10 @@ body{ background-color:#F7E9EC;
 .clue .txt{ font-family:var(--bubble); font-size:2.2rem; color:var(--ink) }
 
 /* المقياس القوسي */
-.gauge-wrap{ width:min(640px,100%); position:relative }
-.gauge{ width:100%; aspect-ratio:2/1; position:relative; overflow:hidden }
-.gauge .arc{ position:absolute; inset:0 0 auto; width:100%; aspect-ratio:1/1; border-radius:50%;
-  background:conic-gradient(from -90deg, var(--tf-green) 0deg, #EBD96A 60deg, #EFA85C 120deg, var(--tf-pink) 180deg, transparent 180deg);
-  border:var(--bw-lg) solid var(--ink) }
-.gauge .hub-mask{ position:absolute; left:50%; bottom:0; transform:translateX(-50%); width:55%; aspect-ratio:1/1;
-  background:var(--tf-bg); border-radius:50%; border:var(--bw-lg) solid var(--ink); z-index:2 }
-.gauge .needle{ position:absolute; left:50%; bottom:2px; width:8px; height:46%; background:var(--ink); border-radius:6px;
-  transform-origin:bottom center; transform:translateX(-50%) rotate(20deg); z-index:3; transition:transform .4s var(--ease,ease) }
-.gauge .needle::after{ content:""; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%);
-  width:26px;height:26px;border-radius:50%; background:var(--mustard); border:var(--bw) solid var(--ink) }
-.poles{ display:flex; justify-content:space-between; width:min(640px,100%) }
+.gauge-wrap{ width:min(620px,100%) }
+.gauge-wrap svg{ width:100%; height:auto; display:block; overflow:visible }
+#needle{ transition:transform .5s cubic-bezier(.34,1.4,.5,1); transform-origin:200px 175px }
+.poles{ display:flex; justify-content:space-between; width:min(620px,100%) }
 .note{ text-align:center }
 @media(max-width:760px){ .bar{ grid-template-columns:1fr } .clue .txt{ font-size:1.6rem } }
 </style>
@@ -70,11 +62,32 @@ body{ background-color:#F7E9EC;
     </div>
 
     <div class="gauge-wrap">
-      <div class="gauge">
-        <div class="arc"></div>
-        <div class="hub-mask"></div>
-        <div class="needle" id="needle"></div>
-      </div>
+      <!-- عدّاد سرعة نظيف: نصف دائرة بحزام ملوّن سميك + إبرة عريضة -->
+      <svg viewBox="0 0 400 215">
+        <defs>
+          <linearGradient id="band" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#9FCB7E"/><stop offset=".5" stop-color="#EBD96A"/>
+            <stop offset=".78" stop-color="#EFA85C"/><stop offset="1" stop-color="#E58BA6"/>
+          </linearGradient>
+        </defs>
+        <!-- الحزام الملوّن (قوس سميك) -->
+        <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="#241E1A" stroke-width="54" stroke-linecap="round"/>
+        <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="url(#band)" stroke-width="44" stroke-linecap="round"/>
+        <!-- علامات تقسيم -->
+        <g stroke="#241E1A" stroke-width="3" opacity=".5">
+          <line x1="200" y1="20" x2="200" y2="44"/>
+          <line x1="92" y1="58" x2="108" y2="76"/>
+          <line x1="308" y1="58" x2="292" y2="76"/>
+        </g>
+        <!-- الإبرة -->
+        <g id="needle" transform="rotate(-55 200 175)">
+          <polygon points="200,30 211,168 189,168" fill="#241E1A"/>
+          <polygon points="200,40 206,165 194,165" fill="#FFC92E"/>
+        </g>
+        <!-- محور الإبرة -->
+        <circle cx="200" cy="175" r="26" fill="#241E1A"/>
+        <circle cx="200" cy="175" r="15" fill="#FFC92E" stroke="#241E1A" stroke-width="3"/>
+      </svg>
     </div>
     <div class="poles">
       <span class="sticker" style="background:var(--tf-green);color:var(--ink)">❄️ بارد جداً</span>
@@ -86,8 +99,9 @@ body{ background-color:#F7E9EC;
 </main>
 
 <script>
-let dir=1, deg=10; const n=document.getElementById('needle');
-setInterval(()=>{ deg+=dir*5; if(deg>60||deg<-60) dir*=-1; n.style.transform=`translateX(-50%) rotate(${deg}deg)`; },450);
+// الإبرة تتأرجح بين -75° و +75° (يسار=بارد، يمين=حار)
+let dir=1, deg=-20; const n=document.getElementById('needle');
+setInterval(()=>{ deg+=dir*12; if(deg>72||deg<-72) dir*=-1; n.setAttribute('transform',`rotate(${deg} 200 175)`); },500);
 </script>
 </body>
 </html>

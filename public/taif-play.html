@@ -26,13 +26,9 @@ body{ background-color:#F7E9EC;
 .cluebox .lbl{ font-size:.72rem; color:var(--ink-soft); font-weight:700 }
 .cluebox .v{ font-family:var(--bubble); font-size:1.3rem }
 /* مقياس مصغّر */
-.mini-gauge{ width:100%; aspect-ratio:2/1; position:relative; overflow:hidden; margin:.2rem 0 }
-.mini-gauge .arc{ position:absolute; inset:0 0 auto; width:100%; aspect-ratio:1/1; border-radius:50%;
-  background:conic-gradient(from -90deg, var(--tf-green) 0deg, #EBD96A 60deg, #EFA85C 120deg, var(--tf-pink) 180deg, transparent 180deg);
-  border:3px solid var(--ink) }
-.mini-gauge .mask{ position:absolute; left:50%; bottom:0; transform:translateX(-50%); width:55%; aspect-ratio:1/1; background:var(--cream); border-radius:50%; border:3px solid var(--ink); z-index:2 }
-.mini-gauge .ndl{ position:absolute; left:50%; bottom:2px; width:6px; height:46%; background:var(--ink); border-radius:5px; transform-origin:bottom center; z-index:3 }
-.mini-gauge .ndl::after{ content:""; position:absolute; bottom:-7px; left:50%; transform:translateX(-50%); width:18px;height:18px;border-radius:50%; background:var(--mustard); border:3px solid var(--ink) }
+.mini-gauge{ width:100%; margin:.2rem 0 }
+.mini-gauge svg{ width:100%; height:auto; display:block; overflow:visible }
+.mini-gauge .ndl{ transition:transform .4s cubic-bezier(.34,1.4,.5,1) }
 .poles{ display:flex; justify-content:space-between; font-weight:800; font-size:.75rem }
 .field{ width:100%; padding:.7rem .9rem; border:3px solid var(--ink); border-radius:10px; font-family:inherit; font-weight:700; background:var(--paper) }
 .slider{ width:100%; accent-color:var(--tf-pink); height:8px }
@@ -43,6 +39,13 @@ body{ background-color:#F7E9EC;
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="band" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#9FCB7E"/><stop offset=".5" stop-color="#EBD96A"/>
+    <stop offset=".78" stop-color="#EFA85C"/><stop offset="1" stop-color="#E58BA6"/>
+  </linearGradient>
+</defs></svg>
+
 <div class="head-note">
   <div class="t">طيف · أجهزة اللاعبين</div>
   <p>كل دور على جوال شخص مختلف — هذي الأجهزة الثلاثة منفصلة فعلياً</p>
@@ -55,7 +58,14 @@ body{ background-color:#F7E9EC;
     <div class="ph-head med"><span class="who">الوسيط</span><span class="rl">سري · أخضر</span></div>
     <div class="ph-body">
       <p class="lead">ترى الهدف والعجلة كاملة — أعطِ تلميحاً واحداً.</p>
-      <div class="mini-gauge"><div class="arc"></div><div class="mask"></div><div class="ndl" style="transform:translateX(-50%) rotate(48deg)"></div></div>
+      <div class="mini-gauge">
+        <svg viewBox="0 0 400 215">
+          <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="#241E1A" stroke-width="54" stroke-linecap="round"/>
+          <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="url(#band)" stroke-width="44" stroke-linecap="round"/>
+          <g class="ndl" transform="rotate(48 200 175)"><polygon points="200,30 211,168 189,168" fill="#241E1A"/><polygon points="200,40 206,165 194,165" fill="#FFC92E"/></g>
+          <circle cx="200" cy="175" r="24" fill="#241E1A"/><circle cx="200" cy="175" r="13" fill="#FFC92E" stroke="#241E1A" stroke-width="3"/>
+        </svg>
+      </div>
       <div class="poles"><span>❄️ بارد</span><span>🔥 حار</span></div>
       <input class="field" value="قهوة الصباح" />
       <button class="pop-btn" style="background:var(--tf-pink);color:var(--cream);width:100%">إرسال التلميح ←</button>
@@ -69,7 +79,14 @@ body{ background-color:#F7E9EC;
       <div class="cluebox"><div class="lbl">التلميح</div><div class="v">«قهوة الصباح»</div></div>
       <p class="lead">حرّك المؤشر حسب اتفاق الفريق.</p>
       <input class="slider" type="range" min="0" max="100" value="65" oninput="moveNeedle(this.value)" />
-      <div class="mini-gauge"><div class="arc"></div><div class="mask"></div><div class="ndl" id="capNdl" style="transform:translateX(-50%) rotate(18deg)"></div></div>
+      <div class="mini-gauge">
+        <svg viewBox="0 0 400 215">
+          <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="#241E1A" stroke-width="54" stroke-linecap="round"/>
+          <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="url(#band)" stroke-width="44" stroke-linecap="round"/>
+          <g class="ndl" id="capNdl" transform="rotate(18 200 175)"><polygon points="200,30 211,168 189,168" fill="#241E1A"/><polygon points="200,40 206,165 194,165" fill="#FFC92E"/></g>
+          <circle cx="200" cy="175" r="24" fill="#241E1A"/><circle cx="200" cy="175" r="13" fill="#FFC92E" stroke="#241E1A" stroke-width="3"/>
+        </svg>
+      </div>
       <button class="pop-btn teal" style="width:100%">📌 تثبيت الإجابة</button>
     </div>
   </div>
@@ -91,7 +108,7 @@ body{ background-color:#F7E9EC;
 </div>
 
 <script>
-function moveNeedle(v){ const deg=(v/100)*160-80; document.getElementById('capNdl').style.transform='translateX(-50%) rotate('+deg+'deg)'; }
+function moveNeedle(v){ const deg=(v/100)*150-75; document.getElementById('capNdl').setAttribute('transform','rotate('+deg+' 200 175)'); }
 </script>
 </body>
 </html>

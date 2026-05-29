@@ -3,7 +3,7 @@
    لوحة ريترو ناضجة · خط عربي رسومي بحواف وبروز · أيقونات SVG · بدون إيموجي
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Rakkas&family=Lalezar&family=Cairo:wght@700;800;900&family=Tajawal:wght@500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@600;700;800&family=Changa:wght@700;800&family=Cairo:wght@700;800;900&family=Tajawal:wght@500;700;800;900&display=swap');
 
 :root{
   /* لوحة ريترو ناعمة — مشبعة لكن غير صارخة */
@@ -29,9 +29,9 @@
   --radius:16px;
 
   --body:'Tajawal',system-ui,sans-serif;
-  --display:'Rakkas','Cairo',serif;   /* خط رسومي للعناوين الضخمة */
-  --bubble:'Lalezar','Cairo',sans-serif; /* خط منتفخ للستيكرات */
-  --heavy:'Cairo',sans-serif;
+  --display:'Baloo Bhaijaan 2','Cairo',sans-serif;   /* خط سميك منتفخ للعناوين الضخمة */
+  --bubble:'Baloo Bhaijaan 2','Cairo',sans-serif;    /* خط منتفخ للستيكرات والعناوين */
+  --heavy:'Changa','Cairo',sans-serif;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}

@@ -81,8 +81,13 @@ body{ background-color:#15233a;
   </div>
 </div>
 <script>
-const rows=[['أ','ب','ت','ث','ج','ح'],['خ','د','ذ','ر','ز','س'],['ش','ص','ض','ط','ظ','ع'],['غ','ف','ق','ك','ل','م'],['ن','ه','و','ي']];
-const states={'ب':'green','ت':'green','ح':'red','ذ':'green','ز':'red','س':'green','ش':'dead','ظ':'red','ع':'red','ق':'active','ل':'green','م':'dead','ن':'green','و':'red'};
+const ALL=['أ','ب','ت','ث','ج','ح','خ','د','ذ','ر','ز','س','ش','ص','ض','ط','ظ','ع','غ','ف','ق','ك','ل','م','ن','ه','و','ي'];
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.random()*(i+1)|0; [a[i],a[j]]=[a[j],a[i]]; } return a; }
+const letters=shuffle(ALL);
+const rows=[]; for(let i=0;i<letters.length;i+=5) rows.push(letters.slice(i,i+5));
+const states={}; const pool=shuffle(letters);
+pool.slice(0,4).forEach(c=>states[c]='green'); pool.slice(4,8).forEach(c=>states[c]='red');
+pool.slice(8,10).forEach(c=>states[c]='dead'); states[pool[10]]='active';
 const board=document.getElementById('board');
 rows.forEach(r=>{const row=document.createElement('div');row.className='hrow';r.forEach(ch=>{const cell=document.createElement('div');cell.className='hcell'+(states[ch]==='active'?' active':'');const h=document.createElement('div');h.className='hex'+(states[ch]&&states[ch]!=='active'?' '+states[ch]:'');h.textContent=ch;cell.appendChild(h);row.appendChild(cell);});board.appendChild(row);});
 </script>
