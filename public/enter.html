@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>أركيدو — الدخول بكود الترخيص</title>
+<link rel="stylesheet" href="css/stage.css" />
+<style>
+.enter-wrap{ min-height:100vh; display:grid; place-items:center; padding:2rem 1.2rem }
+.enter-card{ width:min(520px,100%); padding:2.4rem }
+.enter-card .top{ text-align:center; margin-bottom:1.6rem }
+.enter-card .top .m{ width:3.4rem;height:3.4rem;margin:0 auto .8rem; background:linear-gradient(180deg,var(--gold-2),var(--gold-deep));
+  border:3px solid var(--ink); border-radius:11px; display:grid;place-items:center; font-family:var(--bubble); font-size:1.6rem; color:var(--ink); box-shadow:0 4px 0 var(--ink) }
+.enter-card h1{ font-family:var(--bubble); font-size:2rem; color:var(--gold); -webkit-text-stroke:1.5px var(--ink); text-shadow:2px 2px 0 var(--ink) }
+.enter-card .sub{ color:var(--cream); opacity:.85; font-weight:700 }
+.key-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:.6rem; margin:1.6rem 0 }
+.key-grid input{ text-align:center; font-family:var(--bubble); font-size:1.5rem; letter-spacing:2px;
+  padding:.7rem .3rem; border:3px solid var(--gold); border-radius:12px; background:var(--navy);
+  color:var(--gold); text-transform:uppercase; direction:ltr; box-shadow:inset 0 2px 8px rgba(0,0,0,.4) }
+.key-grid input:focus{ outline:none; border-color:var(--cream); background:var(--navy-3) }
+.sessions{ display:flex; align-items:center; gap:.6rem; justify-content:center; margin-top:1.2rem; flex-wrap:wrap }
+.back{ display:block; text-align:center; margin-top:1.4rem; color:var(--cream); opacity:.75; font-weight:700 }
+.back:hover{ color:var(--gold) }
+</style>
+</head>
+<body>
+<div class="stage-bg"><div class="rays"></div><div class="rays b"></div><div class="spotlight"></div><div class="vignette"></div></div>
+
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l2.6 6.3 6.8.5-5.2 4.4 1.7 6.6L12 16.8 6.3 20.4l1.7-6.6L2.8 9.4l6.8-.5z" fill="currentColor" stroke="#0A1029" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+</defs></svg>
+
+<main class="enter-wrap">
+  <div class="enter-card marquee-frame" id="frame">
+    <div class="top">
+      <div class="m">A</div>
+      <h1>الدخول بكود الترخيص</h1>
+      <p class="sub">أدخل الـ License Key لفتح جلساتك والبدء فوراً</p>
+    </div>
+    <div class="key-grid">
+      <input maxlength="4" value="ARC" />
+      <input maxlength="4" value="7K2" />
+      <input maxlength="4" value="9QX" />
+      <input maxlength="4" value="L4M" />
+    </div>
+    <a class="stage-btn" style="width:100%" href="index.html#games">تفعيل والبدء</a>
+    <div class="sessions">
+      <span class="pill">★ ٣ جلسات متبقية</span>
+      <span style="color:var(--cream);opacity:.8;font-weight:700;font-size:.88rem">يتجدد الرصيد بشراء كود من سلة</span>
+    </div>
+    <a class="back" href="index.html">← رجوع للمسرح الرئيسي</a>
+  </div>
+</main>
+
+<script src="js/stage.js"></script>
+</body>
+</html>
