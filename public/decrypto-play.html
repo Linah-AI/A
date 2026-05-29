@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ديكربتو — أجهزة اللاعبين</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+  <style>
+    .mini-tabs { display:flex; gap:.4rem; padding:.8rem 1rem; flex-wrap:wrap; border-bottom:1px solid var(--line); justify-content:center; }
+    .mini-tabs button { padding:.5rem .9rem; border-radius:var(--radius-pill); background:#f3e9fb; font-weight:800; font-size:.82rem; color:#7a18c4; }
+    .mini-tabs button.on { background:#9929EA; color:#fff; }
+    .team-head { padding:1.1rem 1.4rem; color:#fff; display:flex; align-items:center; justify-content:space-between; background:#9929EA; }
+    .team-head.opp { background:#000; }
+    .team-head .who { font-family:var(--font-display); font-weight:900; }
+    .play-pad { padding:1.4rem; display:flex; flex-direction:column; gap:.9rem; height:100%; }
+    .state { display:none; flex:1; flex-direction:column; } .state.show{ display:flex; }
+    .word-card { display:flex; justify-content:space-between; align-items:center; background:#f3e9fb; border-radius:14px; padding:.8rem 1rem; font-weight:800; }
+    .word-card .n { width:1.8rem;height:1.8rem;border-radius:50%;background:#9929EA;color:#fff;display:grid;place-items:center;font-family:var(--font-display) }
+    .word-card.hidden { background:#15151b; color:#fff; }
+    .word-card.hidden .label { color:#666; }
+    .clue-in { width:100%; padding:.8rem 1rem; border:2px solid var(--line); border-radius:12px; font-family:inherit; }
+    .code-pin { display:flex; gap:.5rem; justify-content:center; }
+    .code-pin input { width:3rem; text-align:center; font-family:var(--font-display); font-weight:900; font-size:1.4rem; border:2px solid var(--line); border-radius:12px; padding:.6rem 0; }
+    .send { width:100%; padding:1rem; border-radius:14px; background:#9929EA; color:#fff; font-weight:800; }
+    .secret-tag { background:#FAEB92; color:#4a4200; padding:.5rem 1rem; border-radius:12px; font-weight:800; text-align:center; font-family:var(--font-display); }
+  </style>
+</head>
+<body class="game-decrypto">
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> ديكربتو</div>
+    <div class="demo-tabs">
+      <a href="decrypto-tv.html">📺 التلفزيون</a>
+      <a href="decrypto-host.html">🎛️ المضيف</a>
+      <a class="active" href="decrypto-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge play">أجهزة اللاعبين</span>
+  </div>
+
+  <div class="mini-tabs">
+    <button class="on" onclick="show('s-enc',this)">🔐 المشفّر</button>
+    <button onclick="show('s-ana',this)">🧩 المحلّلون</button>
+    <button onclick="show('s-opp',this)">🕵️ الخصم</button>
+  </div>
+
+  <div class="phone-wrap" style="background:linear-gradient(160deg,#1a0a2a,#0a0710)">
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="phone-notch"></div>
+
+        <!-- المشفّر -->
+        <div class="state show" id="s-enc">
+          <div class="team-head"><span class="who">المشفّر — سري تماماً</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">الأخضر</span></div>
+          <div class="play-pad">
+            <div class="secret-tag">الرمز السري: ٣ — ١ — ٤</div>
+            <p class="muted" style="font-size:.85rem">كلماتك الأربع السرية:</p>
+            <div class="word-card"><span class="label">سماء</span><span class="n">١</span></div>
+            <div class="word-card"><span class="label">أسد</span><span class="n">٢</span></div>
+            <div class="word-card"><span class="label">قهوة</span><span class="n">٣</span></div>
+            <div class="word-card"><span class="label">جبل</span><span class="n">٤</span></div>
+            <p class="muted" style="font-size:.85rem;margin-top:.4rem">اكتب ٣ تلميحات بالترتيب (٣ ثم ١ ثم ٤):</p>
+            <input class="clue-in" placeholder="تلميح للكلمة ٣" value="صباح" />
+            <input class="clue-in" placeholder="تلميح للكلمة ١" value="غيمة" />
+            <input class="clue-in" placeholder="تلميح للكلمة ٤" value="تسلّق" />
+            <button class="send">إرسال التلميحات للتلفزيون ←</button>
+          </div>
+        </div>
+
+        <!-- المحلّلون -->
+        <div class="state" id="s-ana">
+          <div class="team-head"><span class="who">المحلّلون (الأخضر)</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">يرون الكلمات</span></div>
+          <div class="play-pad">
+            <p class="muted" style="font-size:.85rem">كلماتكم: سماء(١) · أسد(٢) · قهوة(٣) · جبل(٤)</p>
+            <p class="muted" style="font-size:.85rem">التلميحات الجديدة: «صباح» · «غيمة» · «تسلّق»</p>
+            <p style="font-weight:800;text-align:center">أدخلوا الرمز الذي قصده مشفّركم:</p>
+            <div class="code-pin"><input value="٣" /><input value="١" /><input value="٤" /></div>
+            <button class="send">تأكيد الرمز</button>
+            <p class="muted" style="font-size:.8rem;text-align:center">إن أخطأتم = ⬛ رمز سوء فهم لفريقكم.</p>
+          </div>
+        </div>
+
+        <!-- الخصم -->
+        <div class="state" id="s-opp">
+          <div class="team-head opp"><span class="who">الخصم — المعترضون</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">أرقام فقط</span></div>
+          <div class="play-pad">
+            <p class="muted" style="font-size:.85rem">لا ترون كلمات الخصم — أرقام مجهولة فقط:</p>
+            <div class="word-card hidden"><span class="label">؟؟؟</span><span class="n">١</span></div>
+            <div class="word-card hidden"><span class="label">؟؟؟</span><span class="n">٢</span></div>
+            <div class="word-card hidden"><span class="label">؟؟؟</span><span class="n">٣</span></div>
+            <div class="word-card hidden"><span class="label">؟؟؟</span><span class="n">٤</span></div>
+            <p class="muted" style="font-size:.82rem">راجعوا جدول التلميحات على التلفزيون، وخمّنوا الرمز سراً قبل الفريق:</p>
+            <div class="code-pin"><input placeholder="؟" /><input placeholder="؟" /><input placeholder="؟" /></div>
+            <button class="send" style="background:#000">إرسال محاولة الاعتراض</button>
+            <p class="muted" style="font-size:.8rem;text-align:center">إصابة = ⬜ رمز اعتراض لفريقكم.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="js/demo.js"></script>
+  <script>
+    function show(id,btn){document.querySelectorAll('.state').forEach(s=>s.classList.remove('show'));document.getElementById(id).classList.add('show');document.querySelectorAll('.mini-tabs button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+  </script>
+</body>
+</html>

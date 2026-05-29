@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ديكربتو — شاشة التلفزيون</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+</head>
+<body class="game-decrypto">
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> ديكربتو</div>
+    <div class="demo-tabs">
+      <a class="active" href="decrypto-tv.html">📺 التلفزيون</a>
+      <a href="decrypto-host.html">🎛️ المضيف</a>
+      <a href="decrypto-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge tv">شاشة عامة</span>
+  </div>
+
+  <main class="tv-stage game-stage" style="color:#f3eef8">
+    <div class="tv-topbar">
+      <div class="logo"><span class="mark" style="background:#9929EA">A</span><span class="word" style="color:#fff"><span class="ar" style="color:#FF5FCF">أركيدو</span></span></div>
+      <div class="tv-title">ديكربتو</div>
+      <span class="tag" style="background:rgba(153,41,234,.3);color:#FAEB92">الجولة ٤ · دور الفريق الأخضر</span>
+    </div>
+
+    <!-- عدّاد الرموز -->
+    <div class="scorebars" style="margin-bottom:1.4rem">
+      <div class="scorebar green" style="background:rgba(153,41,234,.18);color:#fff">
+        <span class="name">الفريق الأخضر</span>
+        <span class="token-row"><span class="token white"></span><span class="token empty"></span> <span class="token black"></span><span class="token empty"></span></span>
+      </div>
+      <div class="tag" style="background:#000;color:#FAEB92">⬜ اعتراض · ⬛ سوء فهم</div>
+      <div class="scorebar red" style="background:rgba(255,95,207,.14);color:#fff">
+        <span class="name">الفريق الأحمر</span>
+        <span class="token-row"><span class="token empty"></span><span class="token empty"></span> <span class="token white"></span><span class="token empty"></span></span>
+      </div>
+    </div>
+
+    <!-- جدول التلميحات السابقة -->
+    <div class="grow" style="max-width:900px;margin:0 auto;width:100%">
+      <div class="card" style="background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.12);padding:1.4rem 1.6rem">
+        <div class="row between" style="margin-bottom:.6rem">
+          <h3 style="font-family:var(--font-display);color:#FAEB92">📜 جدول التلميحات (الفريق الأخضر)</h3>
+          <span class="muted" style="color:#c7b8d8">الكلمات السرية لا تظهر هنا أبداً</span>
+        </div>
+        <table class="clue-table">
+          <thead><tr><th>الجولة</th><th>كلمة ١</th><th>كلمة ٢</th><th>كلمة ٣</th><th>كلمة ٤</th></tr></thead>
+          <tbody>
+            <tr><td class="num">١</td><td>—</td><td>أزرق</td><td>—</td><td>سريع</td></tr>
+            <tr><td class="num">٢</td><td>ملك</td><td>—</td><td>ماء</td><td>—</td></tr>
+            <tr><td class="num">٣</td><td>—</td><td>سماء</td><td>—</td><td>سيارة</td></tr>
+            <tr style="opacity:.6"><td class="num">٤</td><td colspan="4" style="text-align:center;color:#FF5FCF">⏳ بانتظار تلميحات الرمز الجديد…</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="muted" style="text-align:center;color:#c7b8d8;margin-top:1rem">يحلّل الخصم الأنماط من الجولات السابقة لمحاولة اختراق الشفرة 🔓</p>
+    </div>
+  </main>
+  <script src="js/demo.js"></script>
+</body>
+</html>

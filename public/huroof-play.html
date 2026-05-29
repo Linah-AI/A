@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حروف — جوال اللاعب</title>
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/games.css" />
+  <style>
+    .team-head { padding:1.2rem 1.4rem; color:#fff; display:flex; align-items:center; justify-content:space-between; }
+    .team-head.green { background:#1f9d6b; }
+    .team-head .who { font-family:var(--font-display); font-weight:900; font-size:1.2rem; }
+    .play-pad { padding:1.4rem; display:flex; flex-direction:column; height:100%; }
+    .buzz { margin:auto; width:230px; height:230px; border-radius:50%; color:#fff; font-family:var(--font-display); font-weight:900; font-size:2rem;
+      background:radial-gradient(circle at 35% 30%, #36c98c, #1f9d6b); box-shadow:0 18px 0 rgba(0,0,0,.18),0 24px 50px rgba(0,0,0,.25); transition:transform .08s; }
+    .buzz:active { transform:translateY(14px); }
+  </style>
+</head>
+<body>
+  <div class="demo-bar">
+    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> حروف</div>
+    <div class="demo-tabs">
+      <a href="huroof-tv.html">📺 التلفزيون</a>
+      <a href="huroof-host.html">🎛️ المضيف</a>
+      <a class="active" href="huroof-play.html">📱 الجوال</a>
+    </div>
+    <span class="device-badge play">جوال اللاعب</span>
+  </div>
+
+  <div class="phone-wrap" style="background:#f3f7fc">
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="phone-notch"></div>
+        <div class="team-head green"><span class="who">الفريق الأخضر</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">يمين ← يسار</span></div>
+        <div class="play-pad">
+          <p class="muted" style="text-align:center">قولوا للمضيف الحرف اللي تبغونه، واضغطوا الزر أسرع من الخصم لتجاوبوا.</p>
+          <button class="buzz" onclick="flashBuzz('green')">BUZZ</button>
+          <p class="muted" style="text-align:center;font-size:.85rem">لا يوجد مؤقت — الأسرع ضغطاً يحصل على حق الإجابة.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/demo.js"></script>
+</body>
+</html>
