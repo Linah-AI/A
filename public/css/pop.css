@@ -1,0 +1,128 @@
+/* ==========================================================================
+   أركيدو — نظام التصميم "بوب-كوميك" (Neo-Brutalist Arabic Pop)
+   حدود سوداء سميكة · ظلال صلبة · ألوان فلات مشبعة · halftone · سداسيات
+   CSS صرف — بدون مكتبات
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Lalezar&family=Cairo:wght@700;800;900&family=Tajawal:wght@500;700;800;900&display=swap');
+
+:root{
+  /* لوحة بوب مشبعة */
+  --red:#FF3B30;
+  --green:#34B233;
+  --yellow:#FFC92E;
+  --blue:#1E5FD8;
+  --pink:#FF5FA2;
+  --violet:#9929EA;
+  --cream:#F4ECD8;
+  --paper:#FBF6E9;
+  --ink:#15110D;
+
+  /* حدود وظلال النظام */
+  --bw:4px;                       /* عرض الحد */
+  --bw-lg:6px;
+  --shadow:8px 8px 0 var(--ink);
+  --shadow-lg:12px 12px 0 var(--ink);
+  --shadow-sm:4px 4px 0 var(--ink);
+  --radius:18px;
+
+  --font:'Tajawal',system-ui,sans-serif;
+  --display:'Lalezar','Cairo',sans-serif;  /* عريض كرتوني */
+  --heavy:'Cairo',sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:var(--font); direction:rtl; color:var(--ink); line-height:1.6;
+  background-color:var(--paper);
+  /* خلفية ورق مربعات + بقعة لون */
+  background-image:
+    linear-gradient(rgba(21,17,13,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(21,17,13,.05) 1px,transparent 1px);
+  background-size:28px 28px;
+  min-height:100vh; overflow-x:hidden;
+}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+img,svg{display:block;max-width:100%}
+
+/* ===== أدوات halftone ونقوش ===== */
+.halftone{
+  background-image:radial-gradient(var(--ink) 22%,transparent 23%);
+  background-size:12px 12px;
+}
+.dots-yellow{ background:var(--yellow); background-image:radial-gradient(rgba(21,17,13,.25) 20%,transparent 21%); background-size:14px 14px; }
+
+/* ===== شارة / ستيكر ===== */
+.sticker{
+  display:inline-flex; align-items:center; gap:.5rem;
+  background:var(--yellow); color:var(--ink);
+  border:var(--bw) solid var(--ink); border-radius:99px;
+  padding:.4rem 1rem; font-weight:900; font-family:var(--heavy);
+  box-shadow:var(--shadow-sm);
+}
+.sticker.red{background:var(--red);color:#fff}
+.sticker.green{background:var(--green);color:#fff}
+.sticker.blue{background:var(--blue);color:#fff}
+
+/* ===== أزرار بوب ===== */
+.pop-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:.6rem;
+  background:var(--yellow); color:var(--ink);
+  border:var(--bw-lg) solid var(--ink); border-radius:14px;
+  padding:1rem 2rem; font-family:var(--display); font-size:1.4rem; letter-spacing:.5px;
+  box-shadow:var(--shadow); transition:transform .08s ease, box-shadow .08s ease;
+}
+.pop-btn:hover{ transform:translate(-2px,-2px); box-shadow:var(--shadow-lg); }
+.pop-btn:active{ transform:translate(4px,4px); box-shadow:var(--shadow-sm); }
+.pop-btn.red{background:var(--red);color:#fff}
+.pop-btn.green{background:var(--green);color:#fff}
+.pop-btn.blue{background:var(--blue);color:#fff}
+.pop-btn.white{background:#fff}
+
+/* ===== عناوين بحدّ (outline) ===== */
+.outline-title{
+  font-family:var(--display); font-weight:400; line-height:.95;
+  color:var(--yellow);
+  -webkit-text-stroke:3px var(--ink);
+  paint-order:stroke fill;
+  text-shadow:6px 6px 0 var(--ink);
+  letter-spacing:1px;
+}
+.outline-title.red{color:var(--red)}
+.outline-title.green{color:var(--green)}
+.outline-title.blue{color:var(--blue)}
+.outline-title.cream{color:var(--cream)}
+
+/* ===== بطاقة بوب ===== */
+.pop-card{
+  background:#fff; border:var(--bw-lg) solid var(--ink); border-radius:var(--radius);
+  box-shadow:var(--shadow); position:relative; overflow:hidden;
+}
+
+/* ===== شريط نافذة ريترو ===== */
+.win-bar{
+  display:flex; align-items:center; gap:.5rem; justify-content:space-between;
+  background:var(--ink); padding:.5rem .8rem; border-bottom:var(--bw) solid var(--ink);
+}
+.win-dots{display:flex;gap:.4rem}
+.win-dots i{width:.85rem;height:.85rem;border-radius:50%;display:block;border:2px solid #fff}
+.win-dots .r{background:var(--red)} .win-dots .y{background:var(--yellow)} .win-dots .g{background:var(--green)}
+.win-bar .ttl{color:#fff;font-family:var(--heavy);font-weight:900;font-size:.85rem;letter-spacing:1px}
+
+/* ===== انفجار كوميك (starburst) ===== */
+.burst{
+  display:grid; place-items:center; text-align:center;
+  background:var(--red); color:#fff; font-family:var(--display);
+  border:var(--bw) solid var(--ink);
+  clip-path:polygon(50% 0,61% 12%,76% 5%,78% 22%,95% 22%,86% 37%,100% 47%,86% 58%,96% 74%,78% 73%,75% 91%,60% 82%,50% 100%,40% 82%,25% 91%,22% 73%,4% 74%,14% 58%,0 47%,14% 37%,5% 22%,22% 22%,24% 5%,39% 12%);
+  width:120px;height:120px; transform:rotate(-8deg);
+}
+
+/* تباعد حاوية */
+.container{ width:min(1200px,100%); margin-inline:auto; padding-inline:1.5rem; }
+
+@media(max-width:640px){
+  :root{--bw:3px;--bw-lg:4px;--shadow:5px 5px 0 var(--ink);--shadow-lg:8px 8px 0 var(--ink)}
+}

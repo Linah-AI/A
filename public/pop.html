@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>أركيدو — ألعاب السهرة العربية</title>
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+/* ====== ترويسة ====== */
+.topbar{ position:sticky; top:0; z-index:50; background:var(--cream);
+  border-bottom:var(--bw-lg) solid var(--ink); }
+.topbar .container{ display:flex; align-items:center; justify-content:space-between; padding-block:.8rem; }
+.brand{ display:flex; align-items:center; gap:.6rem; font-family:var(--display); font-size:1.8rem; }
+.brand .m{ width:2.6rem;height:2.6rem;background:var(--red); border:var(--bw) solid var(--ink); border-radius:10px;
+  display:grid;place-items:center;color:#fff;box-shadow:var(--shadow-sm); transform:rotate(-6deg); }
+.nav-links{ display:flex; gap:.6rem; align-items:center }
+.nav-links a{ font-weight:900; font-family:var(--heavy); padding:.4rem .8rem }
+
+/* ====== HERO ====== */
+.hero{ position:relative; padding-block:3.5rem 4rem; overflow:hidden }
+.hero .container{ display:grid; grid-template-columns:1.05fr .95fr; gap:2.5rem; align-items:center }
+.hero-burst{ position:absolute; top:-30px; left:-30px; opacity:.9; z-index:0 }
+.hero h1{ font-size:clamp(3rem,8vw,6rem); margin-bottom:1rem; position:relative; z-index:2 }
+.hero .sub{ font-size:1.3rem; font-weight:700; max-width:42ch; margin-bottom:1.8rem; }
+.hero .cta-row{ display:flex; gap:1rem; flex-wrap:wrap }
+.hero-stats{ display:flex; gap:1.4rem; margin-top:2rem; flex-wrap:wrap }
+.stat{ font-family:var(--display); }
+.stat b{ display:block; font-size:2.2rem; color:var(--red); -webkit-text-stroke:1.5px var(--ink); }
+.stat span{ font-weight:800; font-family:var(--heavy); font-size:.9rem }
+
+/* صندوق TV داخل الهيرو */
+.hero-tv{ position:relative; z-index:2 }
+.tv-screen{ background:var(--green); border-top:none; padding:1.4rem; min-height:300px;
+  background-image:radial-gradient(rgba(21,17,13,.12) 18%,transparent 19%); background-size:18px 18px;
+  display:flex; flex-direction:column; gap:1rem; }
+.tv-q{ background:#fff; border:var(--bw) solid var(--ink); border-radius:12px; padding:1rem; box-shadow:var(--shadow-sm);
+  font-family:var(--heavy); font-weight:900; font-size:1.2rem; text-align:center }
+.tv-opts{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem }
+.tv-opt{ background:var(--cream); border:var(--bw) solid var(--ink); border-radius:10px; padding:.6rem; font-weight:800; text-align:center }
+.tv-opt.ok{ background:var(--yellow) }
+.tv-score{ display:flex; justify-content:space-between; font-family:var(--display); color:#fff; -webkit-text-stroke:1px var(--ink) }
+.tv-tag{ position:absolute; z-index:3; }
+
+/* ====== شريط متحرك ====== */
+.ticker{ background:var(--ink); color:var(--yellow); border-block:var(--bw-lg) solid var(--ink); overflow:hidden; padding:.7rem 0 }
+.ticker .track{ display:inline-flex; gap:2.5rem; white-space:nowrap; animation:tick 20s linear infinite; font-family:var(--display); font-size:1.4rem }
+.ticker .track span{ display:inline-flex; gap:.6rem; align-items:center }
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ====== الألعاب ====== */
+.section{ padding-block:4rem }
+.section-head{ text-align:center; margin-bottom:2.5rem }
+.section-head h2{ font-size:clamp(2.2rem,5vw,3.6rem) }
+.section-head p{ font-weight:700; font-size:1.1rem; margin-top:.5rem }
+.games{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.8rem }
+.game{ display:flex; flex-direction:column }
+.game .screen{ padding:1.6rem; min-height:230px; position:relative; display:flex; flex-direction:column; justify-content:space-between }
+.game .screen .big{ font-family:var(--display); font-size:2.6rem; color:#fff; -webkit-text-stroke:2px var(--ink); text-shadow:4px 4px 0 var(--ink) }
+.game .screen .ico{ font-size:3rem; filter:drop-shadow(3px 3px 0 rgba(0,0,0,.3)) }
+.game .meta{ display:flex; align-items:center; justify-content:space-between; padding:1rem 1.2rem; border-top:var(--bw) solid var(--ink); background:#fff }
+.game .meta .desc{ font-weight:700; font-size:.92rem; max-width:24ch }
+.g-mil .screen{ background:var(--green); background-image:radial-gradient(rgba(0,0,0,.12) 16%,transparent 17%); background-size:20px 20px }
+.g-hur .screen{ background:var(--blue); background-image:radial-gradient(rgba(0,0,0,.12) 16%,transparent 17%); background-size:20px 20px }
+.g-taif .screen{ background:var(--pink); background-image:radial-gradient(rgba(0,0,0,.12) 16%,transparent 17%); background-size:20px 20px }
+.g-dec .screen{ background:var(--violet); background-image:radial-gradient(rgba(0,0,0,.12) 16%,transparent 17%); background-size:20px 20px }
+.screen-tag{ position:absolute; top:1rem; left:1rem }
+
+/* ====== كيف تعمل (لوحات كوميك) ====== */
+.how{ background:var(--blue); border-block:var(--bw-lg) solid var(--ink);
+  background-image:radial-gradient(rgba(255,255,255,.12) 16%,transparent 17%); background-size:22px 22px }
+.how .section-head h2{ color:#fff; -webkit-text-stroke:2px var(--ink); text-shadow:4px 4px 0 var(--ink); font-family:var(--display) }
+.panels{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem }
+.panel{ background:#fff; text-align:center; padding:1.8rem 1.4rem }
+.panel .num{ width:3rem;height:3rem;margin-inline:auto;margin-bottom:1rem; background:var(--yellow);
+  border:var(--bw) solid var(--ink); border-radius:50%; display:grid;place-items:center; font-family:var(--display); font-size:1.5rem; box-shadow:var(--shadow-sm) }
+.panel .emoji{ font-size:2.6rem; margin-bottom:.6rem }
+.panel h3{ font-family:var(--heavy); font-weight:900; font-size:1.3rem; margin-bottom:.4rem }
+.panel p{ font-weight:700; font-size:.95rem }
+
+/* ====== الباقات (مثل المرجع) ====== */
+.bundles{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.8rem }
+.bundle{ display:flex; flex-direction:column }
+.bundle .cap{ padding:1.4rem; text-align:center; position:relative }
+.bundle .cap .label{ font-family:var(--display); font-size:1.8rem; color:#fff; -webkit-text-stroke:1.5px var(--ink); text-shadow:3px 3px 0 var(--ink) }
+.bundle.b3 .cap{ background:var(--yellow) } .bundle.b3 .cap .label{ color:var(--ink); -webkit-text-stroke:0; text-shadow:none }
+.bundle.b5 .cap{ background:var(--red) }
+.bundle.b8 .cap{ background:var(--green) }
+.bundle .body{ background:#fff; padding:1.4rem; border-top:var(--bw) solid var(--ink); flex:1; display:flex; flex-direction:column; gap:.6rem }
+.bundle .price{ font-family:var(--display); font-size:2.6rem; text-align:center; }
+.bundle .price small{ font-size:1rem; font-family:var(--heavy) }
+.bundle ul{ list-style:none; display:flex; flex-direction:column; gap:.5rem; margin:.6rem 0 }
+.bundle li{ font-weight:700; display:flex; gap:.5rem; align-items:center }
+.bundle li::before{ content:"◆"; color:var(--red) }
+.bundle.feat{ transform:scale(1.04) }
+.ribbon{ position:absolute; top:-14px; right:50%; transform:translateX(50%); }
+
+/* ====== تذييل ====== */
+footer{ background:var(--ink); color:var(--cream); border-top:var(--bw-lg) solid var(--ink); padding-block:3rem }
+footer .container{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem }
+footer .brand .m{ transform:rotate(-6deg) }
+footer .brand{ color:#fff }
+
+@media(max-width:860px){
+  .hero .container{ grid-template-columns:1fr } .games{ grid-template-columns:1fr }
+  .panels{ grid-template-columns:1fr } .bundles{ grid-template-columns:1fr } .bundle.feat{transform:none}
+  .nav-links a:not(.pop-btn){ display:none }
+}
+</style>
+</head>
+<body>
+
+<!-- ترويسة -->
+<header class="topbar">
+  <div class="container">
+    <div class="brand"><span class="m">A</span> أركيدو</div>
+    <nav class="nav-links">
+      <a href="#games">الألعاب</a>
+      <a href="#how">كيف تلعب</a>
+      <a href="#bundles">الباقات</a>
+      <a class="pop-btn red" style="font-size:1rem;padding:.5rem 1.1rem" href="index.html">دخول بالكود</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="burst hero-burst" style="width:150px;height:150px;background:var(--yellow);color:var(--ink)">جديد!</div>
+  <div class="container">
+    <div>
+      <span class="sticker red">🎉 منصة ألعاب السهرة</span>
+      <h1><span class="outline-title red">سهرتكم</span><br><span class="outline-title green">صارت لعبة!</span></h1>
+      <p class="sub">أربع ألعاب عربية تحوّل بيتكم لاستوديو مسابقات. التلفزيون يجمع الكل، وكل جوال يصير وحدة تحكّم. اشترِ، افتح، والعب فوراً.</p>
+      <div class="cta-row">
+        <a class="pop-btn red" href="#games">ابدأ اللعب 🎮</a>
+        <a class="pop-btn white" href="#how">كيف تعمل؟</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b>٤</b><span>ألعاب كاملة</span></div>
+        <div class="stat"><b>+٢٠٠٠</b><span>سؤال عربي</span></div>
+        <div class="stat"><b>∞</b><span>سهرات لا تُنسى</span></div>
+      </div>
+    </div>
+
+    <!-- تلفزيون داخل الهيرو -->
+    <div class="hero-tv">
+      <div class="sticker yellow tv-tag" style="top:-18px;right:-10px;background:var(--yellow);transform:rotate(6deg)">📺 شاشة التلفزيون</div>
+      <div class="pop-card" style="box-shadow:var(--shadow-lg)">
+        <div class="win-bar">
+          <span class="win-dots"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <span class="ttl">ARCADO · من سيربح الجائزة</span>
+        </div>
+        <div class="tv-screen">
+          <div class="tv-score"><span>🟢 الأخضر · ٤٢</span><span>الأحمر · ٢٥ 🔴</span></div>
+          <div class="tv-q">كم عظمة في جسم الإنسان البالغ؟</div>
+          <div class="tv-opts">
+            <div class="tv-opt">أ · 198</div>
+            <div class="tv-opt ok">ب · 206 ✓</div>
+            <div class="tv-opt">ج · 215</div>
+            <div class="tv-opt">د · 187</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- شريط متحرك -->
+<div class="ticker">
+  <div class="track">
+    <span>★ من سيربح الجائزة</span><span>★ حروف</span><span>★ طيف</span><span>★ ديكربتو</span>
+    <span>★ منتج رقمي 100%</span><span>★ بدون تحميل</span>
+    <span>★ من سيربح الجائزة</span><span>★ حروف</span><span>★ طيف</span><span>★ ديكربتو</span>
+    <span>★ منتج رقمي 100%</span><span>★ بدون تحميل</span>
+  </div>
+</div>
+
+<!-- الألعاب -->
+<section class="section container" id="games">
+  <div class="section-head">
+    <span class="sticker green">🕹️ اختر لعبتك</span>
+    <h2 class="outline-title" style="color:var(--ink);-webkit-text-stroke:0;text-shadow:none">أربع ألعاب تكسر السهرة</h2>
+    <p>كل لعبة على ٣ شاشات: تلفزيون + مضيف + جوال</p>
+  </div>
+  <div class="games">
+
+    <a class="pop-card game g-mil" href="millionaire-tv.html">
+      <div class="screen">
+        <span class="sticker yellow screen-tag" style="background:var(--yellow)">⚡ Buzz</span>
+        <div style="text-align:left"><span class="ico">🏆</span></div>
+        <div class="big">من سيربح الجائزة</div>
+      </div>
+      <div class="meta"><span class="desc">أسرع من يضغط يجاوب — جوائز عيدية وصناديق مفاجأة.</span><span class="pop-btn green" style="font-size:1rem;padding:.5rem 1rem">العب ←</span></div>
+    </a>
+
+    <a class="pop-card game g-hur" href="huroof-tv.html">
+      <div class="screen">
+        <span class="sticker yellow screen-tag" style="background:var(--yellow)">⬡ سداسية</span>
+        <div style="text-align:left"><span class="ico">🔤</span></div>
+        <div class="big">حروف</div>
+      </div>
+      <div class="meta"><span class="desc">صِل خطّك من طرف للطرف قبل خصمك على لوحة الحروف.</span><span class="pop-btn blue" style="font-size:1rem;padding:.5rem 1rem">العب ←</span></div>
+    </a>
+
+    <a class="pop-card game g-taif" href="taif-tv.html">
+      <div class="screen">
+        <span class="sticker yellow screen-tag" style="background:var(--yellow)">📊 مقياس</span>
+        <div style="text-align:left"><span class="ico">🎯</span></div>
+        <div class="big">طيف</div>
+      </div>
+      <div class="meta"><span class="desc">تلميح واحد… حرّك المؤشر والخصم يخمّن الاتجاه.</span><span class="pop-btn red" style="font-size:1rem;padding:.5rem 1rem">العب ←</span></div>
+    </a>
+
+    <a class="pop-card game g-dec" href="decrypto-tv.html">
+      <div class="screen">
+        <span class="sticker yellow screen-tag" style="background:var(--yellow)">🔐 شفرات</span>
+        <div style="text-align:left"><span class="ico">🕵️</span></div>
+        <div class="big">ديكربتو</div>
+      </div>
+      <div class="meta"><span class="desc">شفّر لفريقك دون أن يخترق الخصم رموزك.</span><span class="pop-btn" style="font-size:1rem;padding:.5rem 1rem;background:var(--violet);color:#fff">العب ←</span></div>
+    </a>
+
+  </div>
+</section>
+
+<!-- كيف تعمل -->
+<section class="how section" id="how">
+  <div class="container">
+    <div class="section-head"><h2>ثلاث خطوات والّعبة تبدأ</h2></div>
+    <div class="panels">
+      <div class="pop-card panel"><div class="num">١</div><div class="emoji">🛒</div><h3>اشترِ الكود</h3><p>تشتري باقة من سلة، يوصلك License Key فوراً.</p></div>
+      <div class="pop-card panel"><div class="num">٢</div><div class="emoji">📲</div><h3>اسكن وادخل</h3><p>افتح التلفزيون، كل فريق يسكن باركوده بجواله.</p></div>
+      <div class="pop-card panel"><div class="num">٣</div><div class="emoji">🎉</div><h3>والعب!</h3><p>اضغطوا Buzz، جاوبوا، واحتفلوا بالفائز.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- الباقات -->
+<section class="section container" id="bundles">
+  <div class="section-head">
+    <span class="sticker red">💎 الباقات</span>
+    <h2 class="outline-title" style="color:var(--ink);-webkit-text-stroke:0;text-shadow:none">اختر باقتك</h2>
+    <p>كل باقة كود تفعيل يفتح عدداً من الجلسات</p>
+  </div>
+  <div class="bundles">
+    <div class="pop-card bundle b3">
+      <div class="cap"><div class="label">باقة البداية</div></div>
+      <div class="body">
+        <div class="price">٤٩ <small>ريال</small></div>
+        <ul><li>٣ جلسات لعب</li><li>الألعاب الأربع</li><li>صالحة لشهر</li></ul>
+        <a class="pop-btn" style="background:var(--yellow);margin-top:auto;font-size:1.1rem" href="index.html">اشترِ الآن</a>
+      </div>
+    </div>
+    <div class="pop-card bundle b5 feat">
+      <div class="cap"><span class="sticker green ribbon">الأكثر مبيعاً 🔥</span><div class="label" style="margin-top:.6rem">باقة السهرة</div></div>
+      <div class="body">
+        <div class="price">٨٩ <small>ريال</small></div>
+        <ul><li>٨ جلسات لعب</li><li>الألعاب الأربع</li><li>صالحة ٣ أشهر</li><li>حزمة أسئلة إضافية</li></ul>
+        <a class="pop-btn red" style="margin-top:auto;font-size:1.1rem" href="index.html">اشترِ الآن</a>
+      </div>
+    </div>
+    <div class="pop-card bundle b8">
+      <div class="cap"><div class="label">باقة المحترف</div></div>
+      <div class="body">
+        <div class="price">١٤٩ <small>ريال</small></div>
+        <ul><li>٢٠ جلسة لعب</li><li>الألعاب الأربع</li><li>صالحة سنة</li><li>كل حزم الأسئلة</li></ul>
+        <a class="pop-btn green" style="margin-top:auto;font-size:1.1rem" href="index.html">اشترِ الآن</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- تذييل -->
+<footer>
+  <div class="container">
+    <div class="brand"><span class="m">A</span> أركيدو</div>
+    <p style="font-weight:700">© 2026 أركيدو — ألعاب السهرة العربية · صُنع بحب 🎮</p>
+  </div>
+</footer>
+
+</body>
+</html>
