@@ -39,10 +39,8 @@ html{-webkit-text-size-adjust:100%}
 body{
   font-family:var(--body); direction:rtl; color:var(--ink); line-height:1.6;
   background-color:var(--paper);
-  background-image:
-    linear-gradient(rgba(36,30,26,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(36,30,26,.045) 1px,transparent 1px);
-  background-size:30px 30px;
+  background-image:radial-gradient(rgba(36,30,26,.07) 2px, transparent 2.5px);
+  background-size:26px 26px;
   min-height:100vh; overflow-x:hidden;
 }
 a{color:inherit;text-decoration:none}
