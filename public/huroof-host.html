@@ -1,78 +1,89 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>حروف — شاشة المضيف</title>
-  <link rel="stylesheet" href="css/theme.css" />
-  <link rel="stylesheet" href="css/games.css" />
-  <style>
-    .host { min-height:100vh; background:#12161c; color:#e9e9ef; padding:1.4rem; }
-    .host-grid { display:grid; grid-template-columns: 1fr 340px; gap:1.2rem; max-width:1100px; margin:0 auto; }
-    .panel { background:#1c2128; border:1px solid #2a313b; border-radius:var(--radius); padding:1.3rem; }
-    .panel h4 { color:#F7DD7D; font-family:var(--font-display); margin-bottom:.8rem; }
-    .ctrl-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; }
-    .ctrl { padding:.9rem; border-radius:14px; font-weight:800; }
-    .ctrl.ok{background:#1f9d6b;color:#fff} .ctrl.no{background:#e23b32;color:#fff}
-    .ctrl.burn{background:#1b1f22;color:#cfcfd6;grid-column:1/-1} .ctrl.alt{background:#2a313b;color:#e9e9ef;grid-column:1/-1}
-    .qbank { background:#12161c; border-radius:12px; padding:.9rem 1rem; margin-bottom:.6rem; }
-    .qbank .a { color:#59B292; font-weight:800; }
-    .hex-mini { transform:scale(.7); transform-origin:top center; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>حروف — شاشة المضيف</title>
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+/* مضيف حروف — لوحة تحكّم داكنة بنكهة زرقاء (سرية) */
+body{ background-color:#15233a;
+  background-image:radial-gradient(rgba(255,255,255,.05) 2px,transparent 2.5px); background-size:26px 26px; color:var(--cream) }
+.host{ max-width:1080px; margin:0 auto; padding:1.4rem 1.5rem 2rem }
+.host-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; flex-wrap:wrap; gap:.6rem }
+.host-top .brand{ display:flex; align-items:center; gap:.5rem; font-family:var(--bubble); font-size:1.4rem; color:var(--cream) }
+.host-top .brand .m{ width:2.1rem;height:2.1rem;background:var(--coral);border:3px solid #000;border-radius:8px;display:grid;place-items:center;color:var(--cream);transform:rotate(-5deg) }
+.secret-badge{ background:#000;color:var(--hu-yellow,#F2C744);border:3px solid #F2C744;border-radius:99px;padding:.35rem 1rem;font-family:var(--heavy);font-weight:900;font-size:.85rem }
+.host-grid{ display:grid; grid-template-columns:1fr 320px; gap:1.2rem }
+.card{ background:#1d3052; border:var(--bw-lg) solid #000; border-radius:var(--radius); box-shadow:6px 6px 0 #000; padding:1.3rem }
+.card h4{ font-family:var(--bubble); font-size:1.3rem; color:#F2C744; margin-bottom:.9rem }
+.qbank{ background:#142339; border:3px solid #000; border-radius:12px; padding:.8rem 1rem; margin-bottom:.6rem; font-weight:700 }
+.qbank .a{ color:#A8DF8E; font-weight:800; display:block; margin-top:.2rem; font-size:.9rem }
+.ctrls{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-top:1rem }
+.ck{ padding:.9rem; border-radius:12px; font-family:var(--bubble); font-size:1.15rem; border:var(--bw) solid #000; box-shadow:var(--shadow-sm); transition:transform .08s }
+.ck:active{ transform:translate(2px,2px); box-shadow:2px 2px 0 #000 }
+.ck.ok{ background:var(--teal);color:var(--cream) } .ck.no{ background:var(--coral);color:var(--cream) }
+.ck.burn{ background:#1a1410;color:var(--cream);grid-column:1/-1 } .ck.alt{ background:#34507e;color:var(--cream);grid-column:1/-1 }
+.kv{ display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:2px dashed #34507e; font-weight:700 }
+.kv:last-child{ border:none }
+/* لوحة مصغّرة */
+.mini{ display:flex; flex-direction:column; align-items:center; transform:scale(.82); transform-origin:top center }
+.hrow{ display:flex; margin-top:-8px } .hrow:first-child{ margin-top:0 } .hrow:nth-child(even){ margin-right:24px }
+.hcell{ position:relative;margin:0 3px;filter:drop-shadow(2px 0 0 #000) drop-shadow(-2px 0 0 #000) drop-shadow(0 2px 0 #000) drop-shadow(0 -2px 0 #000) }
+.hex{ width:46px;height:52px;clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);
+  background:var(--cream);display:grid;place-items:center;font-family:var(--bubble);font-size:1.2rem;color:var(--ink) }
+.hex.green{ background:var(--teal);color:var(--cream) } .hex.red{ background:var(--coral);color:var(--cream) }
+.hex.dead{ background:#1a1410;color:#5a5048 }
+.hcell.active{ transform:scale(1.1);z-index:3 } .hcell.active .hex{ background:#F2C744 }
+@media(max-width:820px){ .host-grid{ grid-template-columns:1fr } }
+</style>
 </head>
-<body class="game-huroof">
-  <div class="demo-bar">
-    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> حروف</div>
-    <div class="demo-tabs">
-      <a href="huroof-tv.html">📺 التلفزيون</a>
-      <a class="active" href="huroof-host.html">🎛️ المضيف</a>
-      <a href="huroof-play.html">📱 الجوال</a>
-    </div>
-    <span class="device-badge host">سري — المضيف فقط</span>
+<body>
+<div class="host">
+  <div class="host-top">
+    <div class="brand"><span class="m">A</span> أركيدو · حروف</div>
+    <span class="secret-badge">🔒 شاشة المضيف — سري</span>
   </div>
 
-  <main class="host">
-    <div class="host-grid">
-      <div class="stack gap">
-        <div class="panel">
-          <div class="row between" style="margin-bottom:.8rem">
-            <span class="tag" style="background:rgba(247,221,125,.15);color:#F7DD7D">دور الأخضر · الحرف المطلوب «ق»</span>
-            <span class="muted" style="color:#9a9aa6">ضغط الـ Buzz: الأخضر</span>
-          </div>
-          <h4>بنك أسئلة الحرف «ق»</h4>
-          <div class="qbank">سؤال: عاصمة دولة قطر؟ <span class="a">الإجابة: الدوحة (تبدأ بـ… اختر سؤالاً بحرف ق)</span></div>
-          <div class="qbank">سؤال: ما اسم القارة المتجمدة الجنوبية؟ <span class="a">قطب — القطب الجنوبي</span></div>
-          <div class="qbank">سؤال: ما الكوكب الأحمر؟ <span class="a">يبدأ بحرف آخر → استخدم «سؤال بديل»</span></div>
-          <div class="ctrl-grid" style="margin-top:1rem">
-            <button class="ctrl ok">صح ✓ (لوّن الخلية)</button>
-            <button class="ctrl no">خطأ ✕ (الخصم يسرق)</button>
-            <button class="ctrl burn">🔥 احرق الخلية (ما أحد عرف)</button>
-            <button class="ctrl alt">🔁 سؤال بديل لنفس الحرف</button>
-          </div>
+  <div class="host-grid">
+    <div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;flex-wrap:wrap;gap:.4rem">
+          <span class="sticker" style="background:#F2C744;color:var(--ink)">دور الأخضر · الحرف «ق»</span>
+          <span style="color:#9fb4d4;font-weight:700">ضغط الـ Buzz: الأخضر</span>
         </div>
-      </div>
-
-      <div class="stack gap">
-        <div class="panel">
-          <h4>اللوحة — اضغط الحرف المطلوب</h4>
-          <div class="hex-board hex-mini" id="board"></div>
-        </div>
-        <div class="panel">
-          <h4>مسار الفريقين</h4>
-          <div class="row between" style="padding:.4rem 0"><span><span style="color:#1f9d6b">●</span> الأخضر</span><b>3 خلايا متصلة</b></div>
-          <div class="row between" style="padding:.4rem 0"><span><span style="color:#e23b32">●</span> الأحمر</span><b>خليتان متصلتان</b></div>
-          <p class="muted" style="color:#9a9aa6;font-size:.82rem;margin-top:.5rem">تابع الخلايا السوداء — قد تقطع طريق فريق وترفع الحماس.</p>
+        <h4>بنك أسئلة الحرف «ق»</h4>
+        <div class="qbank">عاصمة دولة قطر؟ <span class="a">الإجابة: قطر/الدوحة</span></div>
+        <div class="qbank">القارة المتجمدة الجنوبية؟ <span class="a">القطب الجنوبي</span></div>
+        <div class="qbank">أكبر محيط في العالم؟ <span class="a">قاري؟ → استخدم «سؤال بديل»</span></div>
+        <div class="ctrls">
+          <button class="ck ok">صح ✓ لوّن الخلية</button>
+          <button class="ck no">خطأ ✕ الخصم يسرق</button>
+          <button class="ck burn">🔥 احرق الخلية</button>
+          <button class="ck alt">🔁 سؤال بديل لنفس الحرف</button>
         </div>
       </div>
     </div>
-  </main>
 
-  <script src="js/demo.js"></script>
-  <script>
-    const rows=[['أ','ب','ت','ث'],['ج','ح','خ','د','ذ'],['ر','ز','س','ش','ص','ض'],['ط','ظ','ع','غ','ف'],['ق','ك','ل','م']];
-    const states={'ب':'green','ت':'green','ح':'red','س':'green','ش':'dead','ظ':'red','ع':'red','ق':'active','ل':'green','م':'dead','ز':'red'};
-    const board=document.getElementById('board');
-    rows.forEach(r=>{const row=document.createElement('div');row.className='hex-row';r.forEach(ch=>{const h=document.createElement('div');h.className='hex'+(states[ch]?' '+states[ch]:'');h.textContent=ch;row.appendChild(h);});board.appendChild(row);});
-  </script>
+    <div>
+      <div class="card">
+        <h4>اللوحة — اضغط الحرف</h4>
+        <div class="mini" id="board"></div>
+      </div>
+      <div class="card" style="margin-top:1.2rem">
+        <h4>المسار</h4>
+        <div class="kv"><span><span style="color:var(--teal)">●</span> الأخضر</span><b>3 خلايا متصلة</b></div>
+        <div class="kv"><span><span style="color:var(--coral)">●</span> الأحمر</span><b>خليتان</b></div>
+        <p style="color:#9fb4d4;font-size:.82rem;margin-top:.5rem;font-weight:700">تابع الخلايا السوداء — قد تقطع طريق فريق.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const rows=[['أ','ب','ت','ث'],['ج','ح','خ','د','ذ'],['ر','ز','س','ش','ص','ض'],['ط','ظ','ع','غ','ف'],['ق','ك','ل','م']];
+const states={'ب':'green','ت':'green','ح':'red','س':'green','ش':'dead','ظ':'red','ع':'red','ق':'active','ل':'green','م':'dead','ز':'red'};
+const board=document.getElementById('board');
+rows.forEach(r=>{const row=document.createElement('div');row.className='hrow';r.forEach(ch=>{const cell=document.createElement('div');cell.className='hcell'+(states[ch]==='active'?' active':'');const h=document.createElement('div');h.className='hex'+(states[ch]&&states[ch]!=='active'?' '+states[ch]:'');h.textContent=ch;cell.appendChild(h);row.appendChild(cell);});board.appendChild(row);});
+</script>
 </body>
 </html>

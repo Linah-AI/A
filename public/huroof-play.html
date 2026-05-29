@@ -1,45 +1,48 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>حروف — جوال اللاعب</title>
-  <link rel="stylesheet" href="css/theme.css" />
-  <link rel="stylesheet" href="css/games.css" />
-  <style>
-    .team-head { padding:1.2rem 1.4rem; color:#fff; display:flex; align-items:center; justify-content:space-between; }
-    .team-head.green { background:#1f9d6b; }
-    .team-head .who { font-family:var(--font-display); font-weight:900; font-size:1.2rem; }
-    .play-pad { padding:1.4rem; display:flex; flex-direction:column; height:100%; }
-    .buzz { margin:auto; width:230px; height:230px; border-radius:50%; color:#fff; font-family:var(--font-display); font-weight:900; font-size:2rem;
-      background:radial-gradient(circle at 35% 30%, #36c98c, #1f9d6b); box-shadow:0 18px 0 rgba(0,0,0,.18),0 24px 50px rgba(0,0,0,.25); transition:transform .08s; }
-    .buzz:active { transform:translateY(14px); }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>حروف — جوال اللاعب</title>
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+/* جوال حروف — زر الـ Buzz بنكهة زرقاء/خضراء */
+body{ background-color:#2F5E96; min-height:100vh; display:grid; place-items:center; padding:1.2rem }
+.phone{ width:min(420px,100%); min-height:88vh; background:var(--cream); border:var(--bw-lg) solid var(--ink);
+  border-radius:30px; box-shadow:var(--shadow-lg); overflow:hidden; display:flex; flex-direction:column }
+.ph-head{ background:var(--teal); color:var(--cream); padding:1.2rem 1.4rem; border-bottom:var(--bw) solid var(--ink);
+  display:flex; align-items:center; justify-content:space-between }
+.ph-head .team{ font-family:var(--bubble); font-size:1.5rem }
+.ph-head .dir{ background:var(--cream); color:var(--ink); border:var(--bw) solid var(--ink); border-radius:99px;
+  padding:.25rem .9rem; font-weight:900; font-size:.85rem; box-shadow:var(--shadow-sm) }
+.ph-body{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.4rem; padding:1.6rem; text-align:center }
+.buzz{ width:230px;height:230px;border-radius:50%; background:var(--teal); color:var(--cream);
+  font-family:var(--bubble); font-size:2.6rem; border:var(--bw-lg) solid var(--ink);
+  box-shadow:0 12px 0 var(--ink), 0 18px 30px rgba(0,0,0,.3); transition:transform .08s, box-shadow .08s; position:relative }
+.buzz::after{ content:""; position:absolute; inset:14px; border-radius:50%; border:3px dashed rgba(255,255,255,.5) }
+.buzz:active{ transform:translateY(10px); box-shadow:0 2px 0 var(--ink), 0 6px 14px rgba(0,0,0,.3) }
+.lead{ font-weight:800; color:var(--ink-soft); max-width:28ch }
+.hint{ font-weight:700; font-size:.88rem; color:var(--ink-soft); max-width:28ch }
+.flash{ position:fixed; inset:0; pointer-events:none; opacity:0; z-index:20; background:radial-gradient(circle,var(--teal),transparent 70%) }
+</style>
 </head>
 <body>
-  <div class="demo-bar">
-    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> حروف</div>
-    <div class="demo-tabs">
-      <a href="huroof-tv.html">📺 التلفزيون</a>
-      <a href="huroof-host.html">🎛️ المضيف</a>
-      <a class="active" href="huroof-play.html">📱 الجوال</a>
-    </div>
-    <span class="device-badge play">جوال اللاعب</span>
+<div class="phone">
+  <div class="ph-head">
+    <span class="team">الفريق الأخضر</span>
+    <span class="dir">يمين ← يسار</span>
   </div>
-
-  <div class="phone-wrap" style="background:#f3f7fc">
-    <div class="phone">
-      <div class="phone-screen">
-        <div class="phone-notch"></div>
-        <div class="team-head green"><span class="who">الفريق الأخضر</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">يمين ← يسار</span></div>
-        <div class="play-pad">
-          <p class="muted" style="text-align:center">قولوا للمضيف الحرف اللي تبغونه، واضغطوا الزر أسرع من الخصم لتجاوبوا.</p>
-          <button class="buzz" onclick="flashBuzz('green')">BUZZ</button>
-          <p class="muted" style="text-align:center;font-size:.85rem">لا يوجد مؤقت — الأسرع ضغطاً يحصل على حق الإجابة.</p>
-        </div>
-      </div>
-    </div>
+  <div class="ph-body">
+    <p class="lead">قولوا للمضيف الحرف اللي تبغونه، واضغطوا أسرع من الخصم لتجاوبوا!</p>
+    <button class="buzz" onclick="doBuzz()">BUZZ</button>
+    <p class="hint">لا يوجد مؤقت — الأسرع ضغطاً يحصل على حق الإجابة، وإجابتكم تلوّن الخلية.</p>
   </div>
-  <script src="js/demo.js"></script>
+</div>
+<div class="flash" id="flash"></div>
+<script>
+function doBuzz(){ const f=document.getElementById('flash');
+  f.animate([{opacity:0},{opacity:.6},{opacity:0}],{duration:600,easing:'ease-out'});
+  if(navigator.vibrate) navigator.vibrate(60); }
+</script>
 </body>
 </html>
