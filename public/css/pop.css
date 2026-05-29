@@ -1,127 +1,113 @@
 /* ==========================================================================
-   أركيدو — نظام التصميم "بوب-كوميك" (Neo-Brutalist Arabic Pop)
-   حدود سوداء سميكة · ظلال صلبة · ألوان فلات مشبعة · halftone · سداسيات
-   CSS صرف — بدون مكتبات
+   أركيدو — نظام تصميم "ريترو-بوب" (Vintage Arcade Pop)
+   لوحة ريترو ناضجة · خط عربي رسومي بحواف وبروز · أيقونات SVG · بدون إيموجي
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Lalezar&family=Cairo:wght@700;800;900&family=Tajawal:wght@500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rakkas&family=Lalezar&family=Cairo:wght@700;800;900&family=Tajawal:wght@500;700;800;900&display=swap');
 
 :root{
-  /* لوحة بوب مشبعة */
-  --red:#FF3B30;
-  --green:#34B233;
-  --yellow:#FFC92E;
-  --blue:#1E5FD8;
-  --pink:#FF5FA2;
-  --violet:#9929EA;
-  --cream:#F4ECD8;
-  --paper:#FBF6E9;
-  --ink:#15110D;
+  /* لوحة ريترو ناعمة — مشبعة لكن غير صارخة */
+  --paper:#F2E7CE;     /* ورق كريمي دافئ */
+  --paper-2:#EADBBE;
+  --cream:#FBF4E2;
+  --ink:#241E1A;       /* أسود دافئ بدل الأسود النقي */
+  --ink-soft:#3a322c;
 
-  /* حدود وظلال النظام */
-  --bw:4px;                       /* عرض الحد */
-  --bw-lg:6px;
-  --shadow:8px 8px 0 var(--ink);
-  --shadow-lg:12px 12px 0 var(--ink);
+  --coral:#E2583F;     /* أحمر طوبي */
+  --mustard:#E3A92E;   /* خردلي ذهبي */
+  --teal:#1E8770;      /* أخضر بترولي */
+  --blue:#3C6CA0;      /* أزرق مغبّر */
+  --rose:#DC859E;      /* وردي ترابي */
+  --plum:#6B4C97;      /* برقوقي */
+  --navy:#26354E;      /* كحلي عميق */
+  --olive:#7E8B3F;     /* زيتي */
+
+  --bw:3.5px; --bw-lg:5px;
+  --shadow:7px 7px 0 var(--ink);
+  --shadow-lg:11px 11px 0 var(--ink);
   --shadow-sm:4px 4px 0 var(--ink);
-  --radius:18px;
+  --radius:16px;
 
-  --font:'Tajawal',system-ui,sans-serif;
-  --display:'Lalezar','Cairo',sans-serif;  /* عريض كرتوني */
+  --body:'Tajawal',system-ui,sans-serif;
+  --display:'Rakkas','Cairo',serif;   /* خط رسومي للعناوين الضخمة */
+  --bubble:'Lalezar','Cairo',sans-serif; /* خط منتفخ للستيكرات */
   --heavy:'Cairo',sans-serif;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
 body{
-  font-family:var(--font); direction:rtl; color:var(--ink); line-height:1.6;
+  font-family:var(--body); direction:rtl; color:var(--ink); line-height:1.6;
   background-color:var(--paper);
-  /* خلفية ورق مربعات + بقعة لون */
   background-image:
-    linear-gradient(rgba(21,17,13,.05) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(21,17,13,.05) 1px,transparent 1px);
-  background-size:28px 28px;
+    linear-gradient(rgba(36,30,26,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(36,30,26,.045) 1px,transparent 1px);
+  background-size:30px 30px;
   min-height:100vh; overflow-x:hidden;
 }
 a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer;border:none;background:none}
-img,svg{display:block;max-width:100%}
+svg{display:block}
 
-/* ===== أدوات halftone ونقوش ===== */
-.halftone{
-  background-image:radial-gradient(var(--ink) 22%,transparent 23%);
-  background-size:12px 12px;
+/* ===== خط رسومي: عنوان ببروز متعدد الطبقات ===== */
+.graf{
+  font-family:var(--display); font-weight:400; line-height:1.04; letter-spacing:.5px;
+  color:var(--cream);
+  -webkit-text-stroke:2.5px var(--ink); paint-order:stroke fill;
+  text-shadow:3px 3px 0 var(--g,var(--coral)), 6px 6px 0 var(--ink);
 }
-.dots-yellow{ background:var(--yellow); background-image:radial-gradient(rgba(21,17,13,.25) 20%,transparent 21%); background-size:14px 14px; }
+.graf.coral{--g:var(--coral)} .graf.teal{--g:var(--teal)} .graf.mustard{--g:var(--mustard)}
+.graf.blue{--g:var(--blue)} .graf.plum{--g:var(--plum)} .graf.rose{--g:var(--rose)}
 
-/* ===== شارة / ستيكر ===== */
+/* ===== ستيكر ===== */
 .sticker{
-  display:inline-flex; align-items:center; gap:.5rem;
-  background:var(--yellow); color:var(--ink);
+  display:inline-flex; align-items:center; gap:.45rem;
+  background:var(--mustard); color:var(--ink);
   border:var(--bw) solid var(--ink); border-radius:99px;
-  padding:.4rem 1rem; font-weight:900; font-family:var(--heavy);
+  padding:.4rem 1rem; font-weight:800; font-family:var(--heavy); font-size:.95rem;
   box-shadow:var(--shadow-sm);
 }
-.sticker.red{background:var(--red);color:#fff}
-.sticker.green{background:var(--green);color:#fff}
-.sticker.blue{background:var(--blue);color:#fff}
+.sticker.coral{background:var(--coral);color:var(--cream)}
+.sticker.teal{background:var(--teal);color:var(--cream)}
+.sticker.blue{background:var(--blue);color:var(--cream)}
+.sticker.rose{background:var(--rose);color:var(--ink)}
 
-/* ===== أزرار بوب ===== */
+/* ===== أزرار ===== */
 .pop-btn{
-  display:inline-flex; align-items:center; justify-content:center; gap:.6rem;
-  background:var(--yellow); color:var(--ink);
-  border:var(--bw-lg) solid var(--ink); border-radius:14px;
-  padding:1rem 2rem; font-family:var(--display); font-size:1.4rem; letter-spacing:.5px;
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem;
+  background:var(--mustard); color:var(--ink);
+  border:var(--bw-lg) solid var(--ink); border-radius:12px;
+  padding:.85rem 1.7rem; font-family:var(--bubble); font-size:1.25rem; letter-spacing:.5px;
   box-shadow:var(--shadow); transition:transform .08s ease, box-shadow .08s ease;
 }
 .pop-btn:hover{ transform:translate(-2px,-2px); box-shadow:var(--shadow-lg); }
 .pop-btn:active{ transform:translate(4px,4px); box-shadow:var(--shadow-sm); }
-.pop-btn.red{background:var(--red);color:#fff}
-.pop-btn.green{background:var(--green);color:#fff}
-.pop-btn.blue{background:var(--blue);color:#fff}
-.pop-btn.white{background:#fff}
+.pop-btn.coral{background:var(--coral);color:var(--cream)}
+.pop-btn.teal{background:var(--teal);color:var(--cream)}
+.pop-btn.blue{background:var(--blue);color:var(--cream)}
+.pop-btn.plum{background:var(--plum);color:var(--cream)}
+.pop-btn.cream{background:var(--cream)}
+.pop-btn.sm{font-size:1rem;padding:.5rem 1rem;border-width:var(--bw)}
 
-/* ===== عناوين بحدّ (outline) ===== */
-.outline-title{
-  font-family:var(--display); font-weight:400; line-height:.95;
-  color:var(--yellow);
-  -webkit-text-stroke:3px var(--ink);
-  paint-order:stroke fill;
-  text-shadow:6px 6px 0 var(--ink);
-  letter-spacing:1px;
-}
-.outline-title.red{color:var(--red)}
-.outline-title.green{color:var(--green)}
-.outline-title.blue{color:var(--blue)}
-.outline-title.cream{color:var(--cream)}
-
-/* ===== بطاقة بوب ===== */
+/* ===== بطاقة ===== */
 .pop-card{
-  background:#fff; border:var(--bw-lg) solid var(--ink); border-radius:var(--radius);
+  background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:var(--radius);
   box-shadow:var(--shadow); position:relative; overflow:hidden;
 }
 
 /* ===== شريط نافذة ريترو ===== */
-.win-bar{
-  display:flex; align-items:center; gap:.5rem; justify-content:space-between;
-  background:var(--ink); padding:.5rem .8rem; border-bottom:var(--bw) solid var(--ink);
-}
+.win-bar{ display:flex; align-items:center; justify-content:space-between; gap:.5rem;
+  background:var(--ink); padding:.5rem .8rem; }
 .win-dots{display:flex;gap:.4rem}
-.win-dots i{width:.85rem;height:.85rem;border-radius:50%;display:block;border:2px solid #fff}
-.win-dots .r{background:var(--red)} .win-dots .y{background:var(--yellow)} .win-dots .g{background:var(--green)}
-.win-bar .ttl{color:#fff;font-family:var(--heavy);font-weight:900;font-size:.85rem;letter-spacing:1px}
+.win-dots i{width:.8rem;height:.8rem;border-radius:50%;display:block;border:2px solid var(--cream)}
+.win-dots .r{background:var(--coral)} .win-dots .y{background:var(--mustard)} .win-dots .g{background:var(--teal)}
+.win-bar .ttl{color:var(--cream);font-family:var(--heavy);font-weight:800;font-size:.82rem;letter-spacing:.5px}
 
-/* ===== انفجار كوميك (starburst) ===== */
-.burst{
-  display:grid; place-items:center; text-align:center;
-  background:var(--red); color:#fff; font-family:var(--display);
-  border:var(--bw) solid var(--ink);
-  clip-path:polygon(50% 0,61% 12%,76% 5%,78% 22%,95% 22%,86% 37%,100% 47%,86% 58%,96% 74%,78% 73%,75% 91%,60% 82%,50% 100%,40% 82%,25% 91%,22% 73%,4% 74%,14% 58%,0 47%,14% 37%,5% 22%,22% 22%,24% 5%,39% 12%);
-  width:120px;height:120px; transform:rotate(-8deg);
-}
-
-/* تباعد حاوية */
 .container{ width:min(1200px,100%); margin-inline:auto; padding-inline:1.5rem; }
+
+/* أيقونات SVG: مقاس موحّد */
+.ico{ width:56px; height:56px; }
+.ico-lg{ width:84px; height:84px; }
 
 @media(max-width:640px){
   :root{--bw:3px;--bw-lg:4px;--shadow:5px 5px 0 var(--ink);--shadow-lg:8px 8px 0 var(--ink)}
