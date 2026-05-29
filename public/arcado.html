@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>أركيدو — تجربة الدخول</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/experience.css" />
+</head>
+<body>
+
+  <!-- خلفية حيّة -->
+  <div class="aurora"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span></div>
+  <div class="grid-overlay"></div>
+  <canvas id="fx"></canvas>
+  <div class="cursor-glow"></div>
+  <div class="cursor-dot"></div>
+
+  <!-- شريط علوي -->
+  <header class="topbar">
+    <div class="brand"><span class="m"><span>A</span></span> <b>أركيدو</b></div>
+    <a class="nav-cta" href="index.html">دخول بكود الترخيص</a>
+  </header>
+
+  <div class="wrap">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="coin-wrap"><div class="coin">﷼</div></div>
+      <div class="diamond"></div>
+
+      <div class="hero-inner">
+        <span class="eyebrow"><span class="dot-live"></span> منصة ألعاب اجتماعية عربية</span>
+        <h1>
+          <span class="line">
+            <span class="l">س</span><span class="l">ه</span><span class="l">ر</span><span class="l">ت</span><span class="l">ك</span><span class="l">م</span>
+          </span>
+          <span class="line">
+            <span class="l" style="background:linear-gradient(180deg,#FFC94D,#FF3F33);-webkit-background-clip:text;background-clip:text;color:transparent">ع</span><span class="l" style="background:linear-gradient(180deg,#FFC94D,#FF3F33);-webkit-background-clip:text;background-clip:text;color:transparent">ر</span><span class="l" style="background:linear-gradient(180deg,#FFC94D,#FF3F33);-webkit-background-clip:text;background-clip:text;color:transparent">ض</span>
+          </span>
+        </h1>
+        <p>أربع ألعاب تحوّل بيتك إلى استوديو مسابقات. شاشة التلفزيون تجمع الكل، وكل جوال يصير وحدة تحكّم. اشترِ، افتح، والعب فوراً.</p>
+        <div class="hero-cta">
+          <button class="btn3d primary" onclick="celebrate()">ابدأ اللعب 🎉</button>
+          <a class="btn3d ghost" href="#deck">استكشف الألعاب</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- بطاقات الألعاب 3D -->
+    <section class="games-3d" id="deck">
+      <div class="sec-head reveal">
+        <h2>اختر ساحتك</h2>
+        <p>حرّك الماوس فوق البطاقات — وانقرها للاحتفال</p>
+      </div>
+
+      <div class="deck">
+        <a href="millionaire-tv.html" class="card3d c-mil reveal">
+          <span class="glow"></span>
+          <span class="tag3d">⚡ Buzz</span>
+          <span class="icon">🏆</span>
+          <div>
+            <h3>من سيربح الجائزة</h3>
+            <div class="desc">أسرع من يضغط يجاوب. جوائز عيدية أو صناديق مفاجأة.</div>
+          </div>
+          <span class="play">العب ←</span>
+        </a>
+
+        <a href="huroof-tv.html" class="card3d c-hur reveal">
+          <span class="glow"></span>
+          <span class="tag3d">⬡ لوحة سداسية</span>
+          <span class="icon">🔤</span>
+          <div>
+            <h3>حروف</h3>
+            <div class="desc">صِل خطّك من طرف للطرف قبل خصمك على لوحة الحروف.</div>
+          </div>
+          <span class="play">العب ←</span>
+        </a>
+
+        <a href="taif-tv.html" class="card3d c-taif reveal">
+          <span class="glow"></span>
+          <span class="tag3d">📊 مقياس</span>
+          <span class="icon">🎯</span>
+          <div>
+            <h3>طيف</h3>
+            <div class="desc">تلميح واحد… حرّك المؤشر، والخصم يخمّن الاتجاه.</div>
+          </div>
+          <span class="play">العب ←</span>
+        </a>
+
+        <a href="decrypto-tv.html" class="card3d c-dec reveal">
+          <span class="glow"></span>
+          <span class="tag3d">🔐 شفرات</span>
+          <span class="icon">🕵️</span>
+          <div>
+            <h3>ديكربتو</h3>
+            <div class="desc">شفّر لفريقك دون أن يخترق الخصم رموزك السرية.</div>
+          </div>
+          <span class="play">العب ←</span>
+        </a>
+      </div>
+
+      <!-- شريط مزايا متحرك -->
+      <div class="marquee reveal">
+        <div class="track">
+          <span><i>✦</i> منتج رقمي 100%</span><span><i>✦</i> بدون تحميل</span><span><i>✦</i> باركود لكل فريق</span>
+          <span><i>✦</i> ٥٠٠ سؤال لكل لعبة</span><span><i>✦</i> ٣ شاشات متزامنة</span><span><i>✦</i> License Key</span>
+          <span><i>✦</i> منتج رقمي 100%</span><span><i>✦</i> بدون تحميل</span><span><i>✦</i> باركود لكل فريق</span>
+          <span><i>✦</i> ٥٠٠ سؤال لكل لعبة</span><span><i>✦</i> ٣ شاشات متزامنة</span><span><i>✦</i> License Key</span>
+        </div>
+      </div>
+    </section>
+
+    <footer>© 2026 أركيدو — تجربة الدخول التفاعلية · صُنعت بـ CSS/JS صرف</footer>
+  </div>
+
+  <script src="js/experience.js"></script>
+</body>
+</html>
