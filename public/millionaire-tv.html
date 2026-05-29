@@ -1,66 +1,121 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>من سيربح الجائزة — شاشة التلفزيون</title>
-  <link rel="stylesheet" href="css/theme.css" />
-  <link rel="stylesheet" href="css/games.css" />
-</head>
-<body class="game-millionaire">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>من سيربح الجائزة — شاشة التلفزيون</title>
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+/* لعبة "من سيربح الجائزة" — نكهة الاستوديو: أصفر خردلي + كريمي دافئ */
+:root{ --mil-bg:#F3E7C8; --mil-stage:#1E8770; --green:#1E8770; --red:#E2583F; }
+body{ background-color:#F3E7C8; }
+.tv{ min-height:100vh; display:flex; flex-direction:column; padding:1.4rem 1.6rem 1.8rem; gap:1.2rem; }
 
-  <div class="demo-bar">
-    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> من سيربح الجائزة</div>
-    <div class="demo-tabs">
-      <a class="active" href="millionaire-tv.html">📺 التلفزيون</a>
-      <a href="millionaire-host.html">🎛️ المضيف</a>
-      <a href="millionaire-play.html">📱 الجوال</a>
+/* ترويسة الاستوديو */
+.tv-top{ display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+.brand{ display:flex; align-items:center; gap:.55rem; font-family:var(--bubble); font-size:1.5rem }
+.brand .m{ width:2.3rem;height:2.3rem;background:var(--coral);border:var(--bw) solid var(--ink);border-radius:9px;
+  display:grid;place-items:center;color:var(--cream);box-shadow:var(--shadow-sm);transform:rotate(-5deg);font-family:var(--bubble) }
+.show-name{ font-family:var(--display); font-size:clamp(1.6rem,4vw,2.6rem); color:var(--mustard);
+  -webkit-text-stroke:2px var(--ink); paint-order:stroke fill; text-shadow:3px 3px 0 var(--ink) }
+/* عدّاد دائري كوميك */
+.timer{ --v:100; position:relative; width:78px;height:78px;flex:none }
+.timer svg{ transform:rotate(-90deg) }
+.timer .num{ position:absolute; inset:0; display:grid; place-items:center; font-family:var(--bubble); font-size:1.8rem; color:var(--ink) }
+.timer.danger .num{ color:var(--coral) }
+
+/* لوحة النتيجة */
+.scoreboard{ display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:stretch }
+.team{ border:var(--bw-lg) solid var(--ink); border-radius:var(--radius); padding:.8rem 1.2rem; box-shadow:var(--shadow);
+  display:flex; align-items:center; justify-content:space-between; gap:.8rem }
+.team.green{ background:var(--teal); color:var(--cream) }
+.team.red{ background:var(--coral); color:var(--cream); flex-direction:row-reverse; text-align:left }
+.team .nm{ font-family:var(--bubble); font-size:1.4rem }
+.team .pts{ font-family:var(--bubble); font-size:2.4rem; line-height:1; background:var(--cream); color:var(--ink);
+  border:var(--bw) solid var(--ink); border-radius:12px; padding:.1rem .7rem; box-shadow:var(--shadow-sm) }
+.team .pts small{ font-size:.9rem }
+.round-chip{ align-self:center }
+
+/* السؤال + الخيارات */
+.stage{ flex:1; display:flex; flex-direction:column; justify-content:center; gap:1.4rem; max-width:1000px; margin:0 auto; width:100% }
+.qbox{ background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:var(--radius); box-shadow:var(--shadow-lg);
+  padding:1.8rem 2rem; text-align:center; position:relative }
+.qbox .cat{ position:absolute; top:-16px; right:24px }
+.qbox .q{ font-family:var(--heavy); font-weight:900; font-size:clamp(1.5rem,3.5vw,2.4rem); line-height:1.4 }
+.opts{ display:grid; grid-template-columns:1fr 1fr; gap:1rem }
+.opt{ display:flex; align-items:center; gap:1rem; background:var(--cream); border:var(--bw-lg) solid var(--ink);
+  border-radius:14px; padding:1rem 1.3rem; box-shadow:var(--shadow); font-weight:800; font-size:1.3rem; transition:transform .08s }
+.opt .k{ flex:none; width:2.8rem;height:2.8rem;border-radius:10px;display:grid;place-items:center;
+  font-family:var(--bubble); font-size:1.5rem; background:var(--mustard); color:var(--ink); border:var(--bw) solid var(--ink) }
+.opt.correct{ background:var(--teal); color:var(--cream) }
+.opt.correct .k{ background:var(--cream); color:var(--ink) }
+
+/* أزرار التجربة */
+.demo-row{ display:flex; gap:.8rem; justify-content:center; align-items:center; flex-wrap:wrap }
+.buzz-flash{ position:fixed; inset:0; pointer-events:none; opacity:0; z-index:30 }
+
+@media(max-width:760px){ .opts{ grid-template-columns:1fr } .scoreboard{ grid-template-columns:1fr } .round-chip{ order:-1 } }
+</style>
+</head>
+<body>
+
+<!-- مكتبة أيقونات -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3l-5-9V3" fill="#A8DF8E" stroke="#241E1A" stroke-width="1.8" stroke-linejoin="round"/><circle cx="10" cy="16" r="1" fill="#241E1A"/><circle cx="14" cy="18" r="1" fill="#241E1A"/></symbol>
+</defs></svg>
+
+<main class="tv">
+  <!-- ترويسة -->
+  <div class="tv-top">
+    <div class="brand"><span class="m">A</span> أركيدو</div>
+    <div class="show-name">من سيربح الجائزة</div>
+    <div class="timer" id="timer" data-timer="12">
+      <svg width="78" height="78"><circle cx="39" cy="39" r="33" fill="var(--cream)" stroke="#241E1A" stroke-width="5"/>
+        <circle id="ring" cx="39" cy="39" r="33" fill="none" stroke="#E2583F" stroke-width="8" stroke-linecap="round"
+          stroke-dasharray="207" stroke-dashoffset="0"/></svg>
+      <span class="num">12</span>
     </div>
-    <span class="device-badge tv">شاشة عامة</span>
   </div>
 
-  <main class="tv-stage game-stage">
-    <div class="tv-topbar">
-      <div class="logo"><span class="mark">A</span><span class="word"><span class="ar">أركيدو</span></span></div>
-      <div class="tv-title">من سيربح الجائزة</div>
-      <div class="timer-ring" data-timer="12"><span>12</span></div>
+  <!-- النتيجة -->
+  <div class="scoreboard">
+    <div class="team green"><span class="nm">الفريق الأخضر</span><span class="pts">42<small> ريال</small></span></div>
+    <div class="round-chip sticker mustard">السؤال 4 من 7</div>
+    <div class="team red"><span class="nm">الفريق الأحمر</span><span class="pts">25<small> ريال</small></span></div>
+  </div>
+
+  <!-- السؤال -->
+  <div class="stage">
+    <div class="qbox">
+      <span class="cat sticker teal"><svg width="20" height="20"><use href="#i-flask"/></svg> علوم</span>
+      <div class="q">كم عظمة في جسم الإنسان البالغ؟</div>
     </div>
-
-    <!-- رصيد الفريقين -->
-    <div class="scorebars" style="margin-bottom:1.6rem">
-      <div class="scorebar green">
-        <span class="name">الفريق الأخضر</span>
-        <span class="pts">42 <small style="font-size:1rem">ريال</small></span>
-      </div>
-      <div class="tag" style="background:rgba(255,201,77,.25);color:#7a5a00">السؤال 4 من 7</div>
-      <div class="scorebar red">
-        <span class="name">الفريق الأحمر</span>
-        <span class="pts">25 <small style="font-size:1rem">ريال</small></span>
-      </div>
+    <div class="opts">
+      <div class="opt"><span class="k">أ</span> 198 عظمة</div>
+      <div class="opt correct"><span class="k">ب</span> 206 عظمة</div>
+      <div class="opt"><span class="k">ج</span> 215 عظمة</div>
+      <div class="opt"><span class="k">د</span> 187 عظمة</div>
     </div>
-
-    <!-- السؤال -->
-    <div class="grow" style="display:flex;flex-direction:column;justify-content:center;max-width:980px;margin:0 auto;width:100%">
-      <div class="question-box">
-        <div class="cat">🧪 علوم</div>
-        <div class="q">كم عظمة في جسم الإنسان البالغ؟</div>
-      </div>
-
-      <div class="options">
-        <div class="option"><span class="key">أ</span> 198 عظمة</div>
-        <div class="option correct"><span class="key">ب</span> 206 عظمة</div>
-        <div class="option"><span class="key">ج</span> 215 عظمة</div>
-        <div class="option"><span class="key">د</span> 187 عظمة</div>
-      </div>
-
-      <div class="row center gap" style="margin-top:1.6rem">
-        <button class="btn btn-dark" onclick="flashBuzz('green')">تجربة وميض الأخضر</button>
-        <button class="btn btn-primary" onclick="flashBuzz('red')">تجربة وميض الأحمر</button>
-        <span class="muted" style="font-size:.85rem">عند الـ Buzz: الشاشة تومض بلون الفريق ويتجمّد العدّاد</span>
-      </div>
+    <div class="demo-row">
+      <button class="pop-btn teal sm" onclick="flash('var(--teal)')">وميض الأخضر</button>
+      <button class="pop-btn coral sm" onclick="flash('var(--coral)')">وميض الأحمر</button>
+      <span style="font-weight:700;font-size:.85rem;color:var(--ink-soft)">عند الـ Buzz: الشاشة تومض بلون الفريق ويتجمّد العدّاد</span>
     </div>
-  </main>
+  </div>
+</main>
 
-  <script src="js/demo.js"></script>
+<div class="buzz-flash" id="flash"></div>
+
+<script>
+// عدّاد كوميك
+(function(){
+  const t=document.getElementById('timer'), ring=document.getElementById('ring'), num=t.querySelector('.num');
+  const C=207; let v=12, total=12;
+  setInterval(()=>{ const f=v/total; ring.style.strokeDashoffset=C*(1-f); ring.setAttribute('stroke', v<=5?'#E2583F':'#E3A92E');
+    num.textContent=v; t.classList.toggle('danger',v<=5); v=v>0?v-1:total; },1000);
+})();
+function flash(c){ const f=document.getElementById('flash'); f.style.background='radial-gradient(circle,'+c+',transparent 70%)';
+  f.animate([{opacity:0},{opacity:.55},{opacity:0}],{duration:700,easing:'ease-out'}); }
+</script>
 </body>
 </html>

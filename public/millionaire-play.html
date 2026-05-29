@@ -1,117 +1,49 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>من سيربح الجائزة — جوال اللاعب</title>
-  <link rel="stylesheet" href="css/theme.css" />
-  <link rel="stylesheet" href="css/games.css" />
-  <style>
-    .play-pad { padding:1.4rem; display:flex; flex-direction:column; height:100%; }
-    .team-head { padding:1.2rem 1.4rem; color:#fff; display:flex; align-items:center; justify-content:space-between; }
-    .team-head.green { background:#1f9d6b; } .team-head.red { background:#e23b32; }
-    .team-head .who { font-family:var(--font-display); font-weight:900; font-size:1.2rem; }
-    .buzz {
-      margin:auto; width:230px; height:230px; border-radius:50%; border:none;
-      color:#fff; font-family:var(--font-display); font-weight:900; font-size:2rem;
-      box-shadow: 0 18px 0 rgba(0,0,0,.18), 0 24px 50px rgba(0,0,0,.25);
-      transition: transform .08s ease, box-shadow .08s ease;
-    }
-    .buzz.green { background:radial-gradient(circle at 35% 30%, #36c98c, #1f9d6b); }
-    .buzz.red   { background:radial-gradient(circle at 35% 30%, #ff5d54, #e23b32); }
-    .buzz:active { transform: translateY(14px); box-shadow: 0 4px 0 rgba(0,0,0,.18), 0 8px 20px rgba(0,0,0,.25); }
-    .mini-tabs { display:flex; gap:.4rem; padding:.8rem 1rem; flex-wrap:wrap; border-bottom:1px solid var(--line); }
-    .mini-tabs button { padding:.4rem .8rem; border-radius:var(--radius-pill); background:#f0f4f1; font-weight:800; font-size:.8rem; color:var(--muted); }
-    .mini-tabs button.on { background:#1f9d6b; color:#fff; }
-    .state { display:none; flex:1; flex-direction:column; }
-    .state.show { display:flex; }
-    .scan-qr { margin:1.5rem auto; }
-    .game-pick { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; padding:1rem; }
-    .gp { border-radius:16px; padding:1rem; color:#fff; font-weight:800; font-family:var(--font-display); text-align:center; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>من سيربح الجائزة — جوال اللاعب</title>
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+/* جوال اللاعب — شاشة واحدة: زر الـ Buzz العملاق بنكهة الفريق */
+body{ background-color:#F3E7C8; min-height:100vh; display:grid; place-items:center; padding:1.2rem }
+.phone{ width:min(420px,100%); min-height:88vh; background:var(--cream); border:var(--bw-lg) solid var(--ink);
+  border-radius:30px; box-shadow:var(--shadow-lg); overflow:hidden; display:flex; flex-direction:column }
+.ph-head{ background:var(--teal); color:var(--cream); padding:1.2rem 1.4rem; border-bottom:var(--bw) solid var(--ink);
+  display:flex; align-items:center; justify-content:space-between }
+.ph-head .team{ font-family:var(--bubble); font-size:1.5rem }
+.ph-head .bal{ background:var(--cream); color:var(--ink); border:var(--bw) solid var(--ink); border-radius:99px;
+  padding:.25rem .9rem; font-weight:900; box-shadow:var(--shadow-sm) }
+.ph-body{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.4rem; padding:1.6rem; text-align:center }
+.qinfo{ font-weight:800; color:var(--ink-soft) }
+.buzz{ width:230px;height:230px;border-radius:50%; background:var(--teal); color:var(--cream);
+  font-family:var(--bubble); font-size:2.6rem; border:var(--bw-lg) solid var(--ink);
+  box-shadow:0 12px 0 var(--ink), 0 18px 30px rgba(0,0,0,.3); transition:transform .08s, box-shadow .08s; position:relative }
+.buzz::after{ content:""; position:absolute; inset:14px; border-radius:50%; border:3px dashed rgba(255,255,255,.5) }
+.buzz:active{ transform:translateY(10px); box-shadow:0 2px 0 var(--ink), 0 6px 14px rgba(0,0,0,.3) }
+.hint{ font-weight:700; font-size:.9rem; color:var(--ink-soft); max-width:26ch }
+.flash{ position:fixed; inset:0; pointer-events:none; opacity:0; z-index:20; background:radial-gradient(circle,var(--teal),transparent 70%) }
+</style>
 </head>
 <body>
-  <div class="demo-bar">
-    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> من سيربح الجائزة</div>
-    <div class="demo-tabs">
-      <a href="millionaire-tv.html">📺 التلفزيون</a>
-      <a href="millionaire-host.html">🎛️ المضيف</a>
-      <a class="active" href="millionaire-play.html">📱 الجوال</a>
-    </div>
-    <span class="device-badge play">جوال اللاعب</span>
+<div class="phone">
+  <div class="ph-head">
+    <span class="team">الفريق الأخضر</span>
+    <span class="bal">42 ريال</span>
   </div>
-
-  <div class="mini-tabs">
-    <button class="on" onclick="showState('s-scan',this)">1 · السكان</button>
-    <button onclick="showState('s-pick',this)">2 · اختيار اللعبة</button>
-    <button onclick="showState('s-buzz',this)">3 · زر الفريق</button>
+  <div class="ph-body">
+    <div class="sticker mustard">السؤال 4 من 7</div>
+    <p class="qinfo">اضغطوا بسرعة لتجاوبوا قبل الخصم!</p>
+    <button class="buzz" onclick="doBuzz()">BUZZ</button>
+    <p class="hint">الأسرع ضغطاً يكسب حق الإجابة — لو أخطأ، السؤال ينتقل لكم.</p>
   </div>
-
-  <div class="phone-wrap" style="background:#eef4f0">
-    <div class="phone">
-      <div class="phone-screen">
-        <div class="phone-notch"></div>
-
-        <!-- 1 السكان -->
-        <div class="state show" id="s-scan">
-          <div class="team-head green"><span class="who">انضم لفريق</span><span class="logo" style="color:#fff"><span class="word" style="color:#fff">أركيدو</span></span></div>
-          <div class="play-pad center" style="text-align:center">
-            <p class="muted" style="margin-bottom:.5rem">اسكن باركود فريقك من شاشة المضيف</p>
-            <div class="row gap-lg center" style="margin:1rem 0">
-              <div style="text-align:center">
-                <div class="qr green" data-qr="3"></div>
-                <b style="color:#1f9d6b;display:block;margin-top:.5rem">الفريق الأخضر</b>
-              </div>
-              <div style="text-align:center">
-                <div class="qr red" data-qr="7"></div>
-                <b style="color:#e23b32;display:block;margin-top:.5rem">الفريق الأحمر</b>
-              </div>
-            </div>
-            <p class="muted" style="font-size:.85rem">كل أفراد الفريق يسكنون نفس الباركود ويدخلون كزرّ واحد.</p>
-            <div class="tag" style="margin-top:1rem">⏳ بانتظار اكتمال الفريقين…</div>
-          </div>
-        </div>
-
-        <!-- 2 اختيار اللعبة -->
-        <div class="state" id="s-pick">
-          <div class="team-head green"><span class="who">الفريق الأخضر</span><span class="tag" style="background:rgba(255,255,255,.25);color:#fff">4 لاعبين</span></div>
-          <p class="muted" style="text-align:center;padding:1rem 1rem 0">اختاروا اللعبة</p>
-          <div class="game-pick">
-            <div class="gp" style="background:#59B292;outline:3px solid #075B5E">من سيربح الجائزة</div>
-            <div class="gp" style="background:#427AB5">حروف</div>
-            <div class="gp" style="background:#FFAAB8">طيف</div>
-            <div class="gp" style="background:#9929EA">ديكربتو</div>
-          </div>
-          <div class="play-pad" style="padding-top:0">
-            <p class="muted" style="font-size:.85rem;text-align:center">عند اختيار اللعبة يظهر زر كبير بلون فريقكم فقط.</p>
-          </div>
-        </div>
-
-        <!-- 3 زر الـ Buzz -->
-        <div class="state" id="s-buzz">
-          <div class="team-head green">
-            <span class="who">الفريق الأخضر</span>
-            <span class="tag" style="background:rgba(255,255,255,.25);color:#fff">42 ريال</span>
-          </div>
-          <div class="play-pad">
-            <p class="muted" style="text-align:center">اضغط بسرعة لتجاوبوا قبل الخصم!</p>
-            <button class="buzz green" onclick="flashBuzz('green')">BUZZ</button>
-            <p class="muted" style="text-align:center;font-size:.85rem">السؤال الحالي 4 من 7 — الأسرع يكسب حق الإجابة.</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <script src="js/demo.js"></script>
-  <script>
-    function showState(id, btn){
-      document.querySelectorAll('.state').forEach(s=>s.classList.remove('show'));
-      document.getElementById(id).classList.add('show');
-      document.querySelectorAll('.mini-tabs button').forEach(b=>b.classList.remove('on'));
-      btn.classList.add('on');
-    }
-  </script>
+</div>
+<div class="flash" id="flash"></div>
+<script>
+function doBuzz(){ const f=document.getElementById('flash');
+  f.animate([{opacity:0},{opacity:.6},{opacity:0}],{duration:600,easing:'ease-out'});
+  if(navigator.vibrate) navigator.vibrate(60); }
+</script>
 </body>
 </html>

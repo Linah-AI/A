@@ -1,102 +1,104 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>من سيربح الجائزة — شاشة المضيف</title>
-  <link rel="stylesheet" href="css/theme.css" />
-  <link rel="stylesheet" href="css/games.css" />
-  <style>
-    .host { min-height:100vh; background:#15161b; color:#e9e9ef; padding:1.4rem; }
-    .host-grid { display:grid; grid-template-columns: 1fr 320px; gap:1.2rem; max-width:1100px; margin:0 auto; }
-    .panel { background:#1f2128; border:1px solid #2c2f38; border-radius:var(--radius); padding:1.3rem; }
-    .panel h4 { color:#f7dd7d; font-family:var(--font-display); margin-bottom:.8rem; }
-    .ans-correct { background:rgba(89,178,146,.16); border:2px solid #59B292; border-radius:14px; padding:1rem 1.2rem; font-weight:800; display:flex; justify-content:space-between; align-items:center; }
-    .ans-correct .badge { background:#59B292; color:#fff; padding:.2rem .7rem; border-radius:var(--radius-pill); font-size:.8rem; }
-    .ctrl-grid { display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-top:1rem; }
-    .ctrl { padding:1rem; border-radius:14px; font-weight:800; font-size:1.05rem; }
-    .ctrl.ok { background:#1f9d6b; color:#fff; } .ctrl.no { background:#e23b32; color:#fff; }
-    .ctrl.neutral { background:#2c2f38; color:#e9e9ef; }
-    .ctrl.full { grid-column:1/-1; }
-    .who { display:flex; align-items:center; gap:.6rem; background:#2c2f38; padding:.8rem 1rem; border-radius:14px; margin-bottom:1rem; }
-    .conn { display:flex; justify-content:space-between; padding:.6rem 0; border-bottom:1px solid #2c2f38; }
-    .dot { width:.7rem;height:.7rem;border-radius:50%; display:inline-block; }
-    .prize-opt { display:flex; gap:.5rem; }
-    .prize-opt button { flex:1; padding:.7rem; border-radius:12px; background:#2c2f38; color:#cfcfd6; font-weight:700; }
-    .prize-opt button.sel { background:#FFC94D; color:#5a4200; }
-    @media(max-width:820px){ .host-grid{grid-template-columns:1fr;} }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>من سيربح الجائزة — شاشة المضيف</title>
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+/* شاشة المضيف — لوحة تحكّم كوميك داكنة دافئة (سرية) */
+body{ background-color:#241E1A;
+  background-image:radial-gradient(rgba(255,255,255,.05) 2px, transparent 2.5px); background-size:26px 26px; color:var(--cream); }
+.host{ max-width:1080px; margin:0 auto; padding:1.4rem 1.5rem 2rem }
+.host-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; flex-wrap:wrap; gap:.6rem }
+.host-top .brand{ display:flex; align-items:center; gap:.5rem; font-family:var(--bubble); font-size:1.4rem; color:var(--cream) }
+.host-top .brand .m{ width:2.1rem;height:2.1rem;background:var(--coral);border:3px solid #000;border-radius:8px;display:grid;place-items:center;color:var(--cream);transform:rotate(-5deg) }
+.secret-badge{ background:#000;color:var(--mustard);border:3px solid var(--mustard);border-radius:99px;padding:.35rem 1rem;font-family:var(--heavy);font-weight:900;font-size:.85rem }
+.host-grid{ display:grid; grid-template-columns:1fr 300px; gap:1.2rem }
+.card{ background:#322a23; border:var(--bw-lg) solid #000; border-radius:var(--radius); box-shadow:6px 6px 0 #000; padding:1.3rem }
+.card h4{ font-family:var(--bubble); font-size:1.3rem; color:var(--mustard); margin-bottom:.9rem }
+.qline{ font-family:var(--heavy); font-weight:900; font-size:1.4rem; color:var(--cream); margin-bottom:1rem }
+.whobuzz{ display:flex; align-items:center; gap:.6rem; background:#1f1a16; border:3px solid var(--teal); border-radius:12px; padding:.7rem 1rem; margin-bottom:.9rem; font-weight:800 }
+.whobuzz .dot{ width:.9rem;height:.9rem;border-radius:50%;background:var(--teal);border:2px solid #000 }
+.answer{ background:var(--teal); color:var(--cream); border:var(--bw) solid #000; border-radius:12px; padding:1rem 1.2rem;
+  font-weight:900; font-size:1.15rem; display:flex; align-items:center; justify-content:space-between; box-shadow:var(--shadow-sm) }
+.answer .lock{ background:#000;color:var(--mustard);padding:.2rem .7rem;border-radius:99px;font-size:.8rem }
+.ctrls{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-top:1.1rem }
+.ck{ padding:.95rem; border-radius:12px; font-family:var(--bubble); font-size:1.2rem; border:var(--bw) solid #000; box-shadow:var(--shadow-sm); transition:transform .08s }
+.ck:active{ transform:translate(2px,2px); box-shadow:2px 2px 0 #000 }
+.ck.ok{ background:var(--teal); color:var(--cream) } .ck.no{ background:var(--coral); color:var(--cream) }
+.ck.n{ background:#4a3f35; color:var(--cream) }
+.subcard{ background:#1f1a16; border:3px solid #000; border-radius:12px; padding:.9rem; margin-top:1rem }
+.subcard .lbl{ font-size:.85rem; color:#b8a890; margin-bottom:.5rem; font-weight:700 }
+.prize-opt{ display:flex; gap:.5rem }
+.prize-opt button{ flex:1; padding:.7rem; border-radius:10px; font-weight:800; border:3px solid #000; background:#4a3f35; color:var(--cream) }
+.prize-opt button.sel{ background:var(--mustard); color:var(--ink) }
+.kv{ display:flex; justify-content:space-between; padding:.55rem 0; border-bottom:2px dashed #4a3f35; font-weight:700 }
+.kv:last-child{ border:none }
+.kv .dot{ width:.7rem;height:.7rem;border-radius:50%;display:inline-block;margin-left:.4rem }
+@media(max-width:820px){ .host-grid{ grid-template-columns:1fr } }
+</style>
 </head>
 <body>
-  <div class="demo-bar">
-    <div class="crumbs"><a href="index.html">أركيدو</a><span class="sep">/</span> من سيربح الجائزة</div>
-    <div class="demo-tabs">
-      <a href="millionaire-tv.html">📺 التلفزيون</a>
-      <a class="active" href="millionaire-host.html">🎛️ المضيف</a>
-      <a href="millionaire-play.html">📱 الجوال</a>
-    </div>
-    <span class="device-badge host">سري — المضيف فقط</span>
+<div class="host">
+  <div class="host-top">
+    <div class="brand"><span class="m">A</span> أركيدو · من سيربح الجائزة</div>
+    <span class="secret-badge">🔒 شاشة المضيف — سري</span>
   </div>
 
-  <main class="host">
-    <div class="host-grid">
-      <!-- يسار: التحكم بالسؤال -->
-      <div class="stack gap">
-        <div class="panel">
-          <div class="row between" style="margin-bottom:.6rem">
-            <span class="tag" style="background:rgba(247,221,125,.15);color:#f7dd7d">علوم · السؤال 4 من 7</span>
-            <span class="muted" style="color:#9a9aa6">عدّاد: 00:12</span>
-          </div>
-          <div style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:1rem">كم عظمة في جسم الإنسان البالغ؟</div>
-          <div class="who"><span class="dot" style="background:#1f9d6b"></span> <b>ضغط الـ Buzz: الفريق الأخضر</b></div>
-          <div class="ans-correct"><span>✅ الإجابة الصحيحة: <b>206 عظمة (ب)</b></span><span class="badge">سري</span></div>
+  <div class="host-grid">
+    <!-- التحكم -->
+    <div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;flex-wrap:wrap;gap:.4rem">
+          <span class="sticker mustard">علوم · السؤال 4 من 7</span>
+          <span style="color:#b8a890;font-weight:700">العدّاد: 00:12</span>
+        </div>
+        <div class="qline">كم عظمة في جسم الإنسان البالغ؟</div>
+        <div class="whobuzz"><span class="dot"></span> ضغط الـ Buzz: <b>الفريق الأخضر</b></div>
+        <div class="answer"><span>✓ الإجابة الصحيحة: <b>206 عظمة (ب)</b></span><span class="lock">سري</span></div>
 
-          <div class="ctrl-grid">
-            <button class="ctrl ok">صح ✓</button>
-            <button class="ctrl no">خطأ ✕</button>
-            <button class="ctrl neutral">إيقاف العدّاد ⏸</button>
-            <button class="ctrl neutral">السؤال التالي ←</button>
-          </div>
-
-          <div class="panel" style="background:#16171c;margin-top:1rem">
-            <div class="muted" style="color:#9a9aa6;margin-bottom:.5rem;font-size:.85rem">عند الخطأ، اختر:</div>
-            <div class="ctrl-grid" style="margin-top:0">
-              <button class="ctrl neutral">↪ انتقال للفريق الثاني</button>
-              <button class="ctrl neutral">🔥 لا أحد يكسب (يحترق)</button>
-            </div>
-          </div>
+        <div class="ctrls">
+          <button class="ck ok">صح ✓</button>
+          <button class="ck no">خطأ ✕</button>
+          <button class="ck n">إيقاف العدّاد ⏸</button>
+          <button class="ck n">السؤال التالي ←</button>
         </div>
 
-        <!-- نظام الجائزة -->
-        <div class="panel">
-          <h4>نظام الجائزة</h4>
-          <div class="prize-opt" style="margin-bottom:1rem">
-            <button class="sel">💰 عيدية بمبلغ محدد</button>
-            <button>🎁 هدية مجهولة</button>
-          </div>
-          <div class="row between muted" style="color:#cfcfd6">
-            <span>الحد الأعلى للعيدية</span><b style="color:#FFC94D">100 ريال</b>
+        <div class="subcard">
+          <div class="lbl">عند الخطأ، اختر:</div>
+          <div class="ctrls" style="margin-top:0">
+            <button class="ck n">↪ ينتقل للفريق الثاني</button>
+            <button class="ck n">🔥 لا أحد يكسب</button>
           </div>
         </div>
       </div>
 
-      <!-- يمين: المتصلون -->
-      <div class="stack gap">
-        <div class="panel">
-          <h4>المتصلون</h4>
-          <div class="conn"><span><span class="dot" style="background:#1f9d6b"></span> الفريق الأخضر</span><b>4 لاعبين</b></div>
-          <div class="conn"><span><span class="dot" style="background:#e23b32"></span> الفريق الأحمر</span><b>3 لاعبين</b></div>
-          <div class="conn" style="border:none"><span class="muted" style="color:#9a9aa6">عدد الأسئلة</span><b>7 (حسب أكبر فريق)</b></div>
+      <div class="card" style="margin-top:1.2rem">
+        <h4>نظام الجائزة</h4>
+        <div class="prize-opt" style="margin-bottom:.9rem">
+          <button class="sel">💰 عيدية بمبلغ</button>
+          <button>🎁 هدية مجهولة</button>
         </div>
-        <div class="panel">
-          <h4>الرصيد الحالي</h4>
-          <div class="conn"><span>الأخضر</span><b style="color:#59B292">42 ريال</b></div>
-          <div class="conn" style="border:none"><span>الأحمر</span><b style="color:#FA6781">25 ريال</b></div>
-        </div>
+        <div class="kv"><span>الحد الأعلى للعيدية</span><b style="color:var(--mustard)">100 ريال</b></div>
       </div>
     </div>
-  </main>
 
-  <script src="js/demo.js"></script>
+    <!-- جانبي -->
+    <div>
+      <div class="card">
+        <h4>المتصلون</h4>
+        <div class="kv"><span><span class="dot" style="background:var(--teal)"></span>الفريق الأخضر</span><b>4 لاعبين</b></div>
+        <div class="kv"><span><span class="dot" style="background:var(--coral)"></span>الفريق الأحمر</span><b>3 لاعبين</b></div>
+        <div class="kv"><span style="color:#b8a890">عدد الأسئلة</span><b>7</b></div>
+      </div>
+      <div class="card" style="margin-top:1.2rem">
+        <h4>الرصيد</h4>
+        <div class="kv"><span>الأخضر</span><b style="color:var(--teal)">42 ريال</b></div>
+        <div class="kv"><span>الأحمر</span><b style="color:var(--coral)">25 ريال</b></div>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
