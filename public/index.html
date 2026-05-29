@@ -3,199 +3,219 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>أركيدو — مسرح ألعاب السهرة العربية</title>
-<link rel="stylesheet" href="css/stage.css" />
+<title>أركيدو — ألعاب السهرة العربية</title>
+<link rel="stylesheet" href="css/pop.css" />
 <style>
-/* ===== ترويسة ===== */
-.topbar{ position:sticky; top:0; z-index:40; backdrop-filter:blur(6px);
-  background:rgba(14,26,82,.7); border-bottom:3px solid var(--gold); }
-.topbar .container{ display:flex; align-items:center; justify-content:space-between; padding-block:.7rem }
-.brand{ display:flex; align-items:center; gap:.6rem; font-family:var(--bubble); font-size:1.7rem; color:var(--gold) }
-.brand .m{ width:2.5rem;height:2.5rem;background:linear-gradient(180deg,var(--gold-2),var(--gold-deep));
-  border:3px solid var(--ink); border-radius:9px; display:grid;place-items:center;color:var(--ink);
-  font-family:var(--bubble); transform:rotate(-4deg); box-shadow:0 3px 0 var(--ink) }
+/* ====== ترويسة ====== */
+.topbar{ position:sticky; top:0; z-index:50; background:var(--paper-2); border-bottom:var(--bw-lg) solid var(--ink); }
+.topbar .container{ display:flex; align-items:center; justify-content:space-between; padding-block:.7rem; }
+.brand{ display:flex; align-items:center; gap:.6rem; font-family:var(--bubble); font-size:1.7rem; }
+.brand .m{ width:2.5rem;height:2.5rem;background:var(--coral); border:var(--bw) solid var(--ink); border-radius:9px;
+  display:grid;place-items:center;color:var(--cream);box-shadow:var(--shadow-sm); transform:rotate(-5deg); font-family:var(--bubble); }
 .nav-links{ display:flex; gap:.5rem; align-items:center }
-.nav-links a:not(.stage-btn){ font-weight:800; font-family:var(--heavy); padding:.4rem .7rem; color:var(--cream) }
-.nav-links a:not(.stage-btn):hover{ color:var(--gold) }
+.nav-links a:not(.pop-btn){ font-weight:800; font-family:var(--heavy); padding:.4rem .7rem }
 
-/* ===== HERO ===== */
-.hero{ padding-block:3.5rem 4rem; text-align:center }
-.hero .pill{ margin-bottom:1.4rem }
-.hero-marquee{ max-width:760px; margin:0 auto }
-.hero-sub{ font-size:1.25rem; font-weight:700; color:var(--cream); max-width:48ch; margin:1.6rem auto 0; opacity:.92 }
-.hero-cta{ display:flex; gap:1rem; justify-content:center; flex-wrap:wrap; margin-top:1.6rem }
-.hero-mascot{ margin:1.2rem auto 0 }
-.hero-stats{ display:flex; gap:2.4rem; justify-content:center; flex-wrap:wrap; margin-top:2.4rem }
-.hstat b{ display:block; font-family:var(--bubble); font-size:2.4rem; color:var(--gold);
-  -webkit-text-stroke:1.5px var(--ink); text-shadow:2px 2px 0 var(--ink); line-height:1 }
-.hstat span{ font-weight:800; font-family:var(--heavy); font-size:.9rem; color:var(--cream) }
+/* ====== HERO ====== */
+.hero{ position:relative; padding-block:3rem 3.5rem; overflow:hidden }
+.hero .container{ display:grid; grid-template-columns:1.05fr .95fr; gap:2.5rem; align-items:center }
+.hero h1{ font-size:clamp(3.2rem,8vw,6rem); margin-bottom:1.1rem }
+.hero .sub{ font-size:1.25rem; font-weight:700; max-width:42ch; margin-bottom:1.6rem; color:var(--ink-soft) }
+.hero .cta-row{ display:flex; gap:1rem; flex-wrap:wrap }
+.hero-stats{ display:flex; gap:1.6rem; margin-top:1.8rem; flex-wrap:wrap }
+.stat b{ display:block; font-family:var(--bubble); font-size:2.1rem; color:var(--coral); line-height:1 }
+.stat span{ font-weight:800; font-family:var(--heavy); font-size:.88rem }
+.hero-deco{ position:absolute; top:24px; left:30px; z-index:0; opacity:.9; transform:rotate(-6deg) }
 
-/* ===== شريط فاصل بلمبات ===== */
-.lightbar{ height:5px; background:repeating-linear-gradient(90deg,var(--gold) 0 14px, transparent 14px 28px);
-  position:relative; z-index:5; opacity:.6; margin-block:1rem }
+/* صندوق TV داخل الهيرو */
+.hero-tv{ position:relative; z-index:2 }
+.tv-tag{ position:absolute; top:-16px; right:-8px; z-index:3; transform:rotate(5deg) }
+.tv-screen{ background:var(--teal); padding:1.3rem;
+  background-image:radial-gradient(rgba(0,0,0,.10) 16%,transparent 17%); background-size:18px 18px;
+  display:flex; flex-direction:column; gap:.9rem; }
+.tv-score{ display:flex; justify-content:space-between; font-family:var(--bubble); color:var(--cream); font-size:1.1rem }
+.tv-score .pc{ display:inline-flex; align-items:center; gap:.4rem }
+.dotc{ width:.8rem;height:.8rem;border-radius:50%;border:2px solid var(--ink);display:inline-block }
+.tv-q{ background:var(--cream); border:var(--bw) solid var(--ink); border-radius:11px; padding:.9rem; box-shadow:var(--shadow-sm);
+  font-family:var(--heavy); font-weight:900; font-size:1.15rem; text-align:center }
+.tv-opts{ display:grid; grid-template-columns:1fr 1fr; gap:.55rem }
+.tv-opt{ background:var(--paper); border:var(--bw) solid var(--ink); border-radius:9px; padding:.55rem; font-weight:800; text-align:center; font-size:.95rem }
+.tv-opt.ok{ background:var(--mustard) }
 
-/* ===== الألعاب: تذاكر مسرحية ===== */
+/* ====== شريط متحرك ====== */
+.ticker{ background:var(--navy); color:var(--cream); border-block:var(--bw-lg) solid var(--ink); overflow:hidden; padding:.6rem 0 }
+.ticker .track{ display:inline-flex; gap:2.2rem; white-space:nowrap; animation:tick 22s linear infinite; font-family:var(--bubble); font-size:1.3rem; align-items:center }
+.ticker .track span{ display:inline-flex; gap:.55rem; align-items:center }
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ====== أقسام ====== */
 .section{ padding-block:4rem }
-.section-head{ text-align:center; margin-bottom:2.8rem }
-.section-head h2{ font-size:clamp(2.4rem,6vw,4rem); margin-top:.6rem }
-.section-head p{ font-weight:700; color:var(--cream); opacity:.85; margin-top:.5rem }
-.tickets{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.8rem }
-.ticket{ position:relative; border-radius:18px; overflow:hidden; border:4px solid var(--gold);
-  box-shadow:0 0 0 4px var(--navy), 0 16px 36px rgba(0,0,0,.45);
-  transition:transform .2s, box-shadow .2s; }
-.ticket:hover{ transform:translateY(-6px) }
-.ticket .head{ padding:1.4rem 1.5rem; display:flex; align-items:center; gap:1.2rem; position:relative }
-.ticket .head::after{ content:""; position:absolute; inset:0;
-  background:repeating-conic-gradient(from 0deg at 80% 30%, rgba(255,255,255,.10) 0 6deg, transparent 6deg 16deg) }
-.ticket .iconwrap{ flex:none; width:92px;height:92px; background:var(--navy); border:3px solid var(--gold);
-  border-radius:14px; display:grid;place-items:center; box-shadow:0 4px 0 var(--ink); position:relative; z-index:2 }
-.ticket .tname{ font-family:var(--bubble); font-size:2.3rem; line-height:1; position:relative; z-index:2;
-  color:var(--cream); -webkit-text-stroke:2px var(--ink); text-shadow:2px 2px 0 var(--ink) }
-.ticket .perf{ display:block; font-family:var(--heavy); font-weight:900; font-size:.85rem; color:var(--gold); margin-bottom:.3rem; -webkit-text-stroke:0; text-shadow:none; position:relative; z-index:2 }
-.ticket .foot{ background:var(--navy-2); border-top:3px dashed var(--gold);
-  padding:1rem 1.4rem; display:flex; align-items:center; justify-content:space-between; gap:1rem }
-.ticket .foot .desc{ font-weight:700; font-size:.92rem; color:var(--cream); opacity:.9; max-width:24ch }
-.ticket .notch{ position:absolute; width:26px;height:26px;border-radius:50%;background:var(--navy-2);
-  border:3px solid var(--gold); top:calc(100% - 64px); z-index:3 }
-.ticket .notch.r{ right:-16px } .ticket .notch.l{ left:-16px }
-.t-mil .head{ background:linear-gradient(135deg,#2a47c4,#16246e) }
-.t-hur .head{ background:linear-gradient(135deg,#17836e,#0d4a3d) }
-.t-taif .head{ background:linear-gradient(135deg,#b6486a,#7d2440) }
-.t-dec .head{ background:linear-gradient(135deg,#6b4c97,#3d1e6b) }
+.section-head{ text-align:center; margin-bottom:2.6rem }
+.section-head h2{ font-size:clamp(2.4rem,5vw,3.8rem); margin-top:.4rem }
+.section-head p{ font-weight:700; font-size:1.05rem; margin-top:.6rem; color:var(--ink-soft) }
 
-/* ===== كيف تعمل ===== */
-.steps{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem }
-.step{ text-align:center; padding:2rem 1.4rem; position:relative;
-  background:linear-gradient(180deg,var(--navy-3),var(--navy)); border:3px solid var(--gold);
-  border-radius:16px; box-shadow:0 10px 26px rgba(0,0,0,.4) }
-.step .num{ position:absolute; top:-18px; right:50%; transform:translateX(50%);
-  width:3.2rem;height:3.2rem; background:linear-gradient(180deg,var(--gold-2),var(--gold-deep));
-  border:3px solid var(--ink); border-radius:50%; display:grid;place-items:center;
-  font-family:var(--bubble); font-size:1.5rem; color:var(--ink); box-shadow:0 4px 0 var(--ink) }
-.step .pic{ width:90px;height:90px;margin:.8rem auto .8rem; display:grid;place-items:center }
-.step h3{ font-family:var(--heavy); font-weight:900; font-size:1.3rem; margin-bottom:.4rem; color:var(--gold) }
-.step p{ font-weight:700; font-size:.95rem; color:var(--cream); opacity:.9 }
+/* الألعاب */
+.games{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.8rem }
+.game .screen{ padding:1.5rem; min-height:200px; position:relative; display:flex; align-items:center; gap:1.2rem }
+.game .screen .txt .big{ font-family:var(--bubble); font-size:2.4rem; color:var(--cream); line-height:1; -webkit-text-stroke:1.5px var(--ink); }
+.game .screen .txt .big.dk{ color:var(--ink); -webkit-text-stroke:0 }
+.game .iconwrap{ flex:none; width:96px;height:96px; background:var(--cream); border:var(--bw) solid var(--ink); border-radius:14px;
+  display:grid; place-items:center; box-shadow:var(--shadow-sm) }
+.game .meta{ display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; border-top:var(--bw) solid var(--ink); background:var(--cream) }
+.game .meta .desc{ font-weight:700; font-size:.92rem; max-width:26ch }
+.screen-tag{ position:absolute; top:1rem; left:1rem }
+.g-mil .screen{ background:var(--mustard) }
+.g-hur .screen{ background:var(--teal) }
+.g-taif .screen{ background:var(--rose) }
+.g-dec .screen{ background:var(--plum) }
+.g-mil .screen .big{ color:var(--ink); -webkit-text-stroke:0 }
+.g-taif .screen .big{ color:var(--ink); -webkit-text-stroke:0 }
 
-/* ===== الباقات ===== */
-.plans{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.8rem; align-items:start }
-.plan{ border:4px solid var(--gold); border-radius:16px; overflow:hidden;
-  box-shadow:0 0 0 4px var(--navy), 0 14px 30px rgba(0,0,0,.4); background:var(--navy-2) }
-.plan .cap{ padding:1.2rem; text-align:center; font-family:var(--bubble); font-size:1.7rem;
-  color:var(--ink); background:linear-gradient(180deg,var(--gold-2),var(--gold-deep)) }
-.plan.feat .cap{ background:linear-gradient(180deg,#ff5b52,#c12e26); color:#fff }
-.plan .body{ padding:1.4rem; display:flex; flex-direction:column; gap:.5rem }
-.plan .price{ font-family:var(--bubble); font-size:2.8rem; text-align:center; color:var(--gold);
-  -webkit-text-stroke:1.5px var(--ink); text-shadow:2px 2px 0 var(--ink); line-height:1 }
-.plan .price small{ font-size:1rem; color:var(--cream); -webkit-text-stroke:0; text-shadow:none; font-family:var(--heavy) }
-.plan ul{ list-style:none; display:flex; flex-direction:column; gap:.55rem; margin:.6rem 0 1rem }
-.plan li{ font-weight:700; color:var(--cream); display:flex; gap:.5rem; align-items:center }
-.plan.feat{ transform:scale(1.04) }
-.ribbon{ position:absolute; margin-top:-1.2rem; left:50%; transform:translateX(-50%) }
+/* كيف تعمل */
+.how{ background:var(--blue); border-block:var(--bw-lg) solid var(--ink);
+  background-image:radial-gradient(rgba(255,255,255,.10) 15%,transparent 16%); background-size:24px 24px }
+.how .section-head h2{ color:var(--cream); -webkit-text-stroke:2px var(--ink); text-shadow:4px 4px 0 var(--ink); font-family:var(--display); font-weight:400 }
+.panels{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.6rem }
+.panel{ text-align:center; padding:1.8rem 1.4rem; position:relative }
+.panel .num{ position:absolute; top:-18px; right:-14px; width:3rem;height:3rem; background:var(--mustard);
+  border:var(--bw) solid var(--ink); border-radius:50%; display:grid;place-items:center; font-family:var(--bubble); font-size:1.4rem; box-shadow:var(--shadow-sm); transform:rotate(8deg) }
+.panel .pic{ width:88px;height:88px;margin:0 auto .8rem; display:grid;place-items:center }
+.panel h3{ font-family:var(--heavy); font-weight:900; font-size:1.3rem; margin-bottom:.4rem }
+.panel p{ font-weight:700; font-size:.95rem; color:var(--ink-soft) }
+
+/* الباقات */
+.bundles{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.8rem; align-items:start }
+.bundle .cap{ padding:1.2rem; text-align:center }
+.bundle .cap .label{ font-family:var(--bubble); font-size:1.7rem; color:var(--cream) }
+.bundle.b3 .cap{ background:var(--mustard) } .bundle.b3 .cap .label{ color:var(--ink) }
+.bundle.b5 .cap{ background:var(--coral) }
+.bundle.b8 .cap{ background:var(--teal) }
+.bundle .body{ padding:1.4rem; border-top:var(--bw) solid var(--ink); display:flex; flex-direction:column; gap:.5rem }
+.bundle .price{ font-family:var(--bubble); font-size:2.6rem; text-align:center; line-height:1 }
+.bundle .price small{ font-size:1rem; font-family:var(--heavy); font-weight:800 }
+.bundle ul{ list-style:none; display:flex; flex-direction:column; gap:.5rem; margin:.5rem 0 .8rem }
+.bundle li{ font-weight:700; display:flex; gap:.5rem; align-items:center }
+.bundle li svg{ flex:none }
+.bundle.feat{ transform:scale(1.04) }
+.ribbon{ position:absolute; top:-14px; left:50%; transform:translateX(-50%) rotate(-2deg) }
 
 /* تذييل */
-footer{ border-top:3px solid var(--gold); padding-block:2.6rem; background:rgba(10,16,41,.6) }
+footer{ background:var(--ink); color:var(--paper); border-top:var(--bw-lg) solid var(--ink); padding-block:2.6rem }
 footer .container{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem }
-footer p{ font-weight:700; color:var(--cream); opacity:.8 }
+footer .brand{ color:var(--cream) }
+footer p{ font-weight:700; color:#c9bda8 }
 
 @media(max-width:860px){
-  .tickets{ grid-template-columns:1fr } .steps{ grid-template-columns:1fr }
-  .plans{ grid-template-columns:1fr } .plan.feat{transform:none}
-  .nav-links a:not(.stage-btn){ display:none }
+  .hero .container{ grid-template-columns:1fr } .games{ grid-template-columns:1fr }
+  .panels{ grid-template-columns:1fr } .bundles{ grid-template-columns:1fr } .bundle.feat{transform:none}
+  .nav-links a:not(.pop-btn){ display:none }
 }
 </style>
 </head>
 <body>
 
-<!-- خلفية المسرح -->
-<div class="stage-bg">
-  <div class="rays"></div>
-  <div class="rays b"></div>
-  <div class="spotlight"></div>
-  <div class="vignette"></div>
-</div>
-<div class="star-field" id="stars"></div>
+<!-- ===== مكتبة الأيقونات SVG (مرسومة يدوياً) ===== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <!-- كأس -->
+    <symbol id="i-trophy" viewBox="0 0 64 64">
+      <path d="M18 9h28v11c0 8-6 14-14 14s-14-6-14-14z" fill="#E3A92E" stroke="#241E1A" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M18 13h-7c0 7 4 10 9 11" fill="none" stroke="#241E1A" stroke-width="3" stroke-linecap="round"/>
+      <path d="M46 13h7c0 7-4 10-9 11" fill="none" stroke="#241E1A" stroke-width="3" stroke-linecap="round"/>
+      <rect x="29" y="33" width="6" height="9" fill="#E3A92E" stroke="#241E1A" stroke-width="3"/>
+      <path d="M21 44h22l3 9H18z" fill="#E2583F" stroke="#241E1A" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M27 15.5l1.8 3.8 4 .6-3 3 .7 4.1L27 28l-3.2 1.9.7-4.1-3-3 4-.6z" fill="#FBF4E2" stroke="#241E1A" stroke-width="1.8" stroke-linejoin="round"/>
+    </symbol>
 
-<!-- مكتبة أيقونات SVG -->
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
-  <symbol id="i-trophy" viewBox="0 0 64 64">
-    <path d="M18 9h28v11c0 8-6 14-14 14s-14-6-14-14z" fill="#FFC21E" stroke="#0A1029" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M18 13h-7c0 7 4 10 9 11" fill="none" stroke="#0A1029" stroke-width="3" stroke-linecap="round"/>
-    <path d="M46 13h7c0 7-4 10-9 11" fill="none" stroke="#0A1029" stroke-width="3" stroke-linecap="round"/>
-    <rect x="29" y="33" width="6" height="9" fill="#FFC21E" stroke="#0A1029" stroke-width="3"/>
-    <path d="M21 44h22l3 9H18z" fill="#E23B32" stroke="#0A1029" stroke-width="3" stroke-linejoin="round"/>
-    <path d="M27 15.5l1.8 3.8 4 .6-3 3 .7 4.1L27 28l-3.2 1.9.7-4.1-3-3 4-.6z" fill="#FFF4D6" stroke="#0A1029" stroke-width="1.6" stroke-linejoin="round"/>
-  </symbol>
-  <symbol id="i-hex" viewBox="0 0 64 64">
-    <polygon points="22,14 32.4,20 32.4,32 22,38 11.6,32 11.6,20" fill="#19A88C" stroke="#0A1029" stroke-width="2.6" stroke-linejoin="round"/>
-    <polygon points="42,14 52.4,20 52.4,32 42,38 31.6,32 31.6,20" fill="#E23B32" stroke="#0A1029" stroke-width="2.6" stroke-linejoin="round"/>
-    <polygon points="32,33 42.4,39 42.4,51 32,57 21.6,51 21.6,39" fill="#FFC21E" stroke="#0A1029" stroke-width="2.6" stroke-linejoin="round"/>
-    <text x="22" y="31" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#FFF4D6">ح</text>
-    <text x="42" y="31" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#FFF4D6">ر</text>
-    <text x="32" y="50" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#0A1029">ف</text>
-  </symbol>
-  <symbol id="i-gauge" viewBox="0 0 64 64">
-    <path d="M8 46 A24 24 0 0 1 32 22" fill="none" stroke="#19A88C" stroke-width="7" stroke-linecap="round"/>
-    <path d="M32 22 A24 24 0 0 1 56 46" fill="none" stroke="#E23B32" stroke-width="7" stroke-linecap="round"/>
-    <line x1="8" y1="46" x2="56" y2="46" stroke="#0A1029" stroke-width="3" stroke-linecap="round"/>
-    <line x1="32" y1="46" x2="44" y2="29" stroke="#0A1029" stroke-width="4" stroke-linecap="round"/>
-    <circle cx="32" cy="46" r="5" fill="#FFC21E" stroke="#0A1029" stroke-width="3"/>
-  </symbol>
-  <symbol id="i-decoder" viewBox="0 0 64 64">
-    <rect x="10" y="10" width="44" height="44" rx="8" fill="#6B4C97" stroke="#0A1029" stroke-width="3"/>
-    <line x1="32" y1="12" x2="32" y2="52" stroke="#0A1029" stroke-width="2.4"/>
-    <line x1="12" y1="32" x2="52" y2="32" stroke="#0A1029" stroke-width="2.4"/>
-    <text x="21" y="28" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#FFF4D6">1</text>
-    <text x="43" y="28" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#FFF4D6">2</text>
-    <text x="21" y="49" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#FFC21E">3</text>
-    <text x="43" y="49" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#FFC21E">4</text>
-  </symbol>
-  <symbol id="i-cart" viewBox="0 0 64 64">
-    <path d="M8 12h8l6 27h26" fill="none" stroke="#FFF4D6" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M18 18h36l-4 16H21z" fill="#19A88C" stroke="#FFF4D6" stroke-width="3.2" stroke-linejoin="round"/>
-    <circle cx="26" cy="50" r="4.5" fill="#FFC21E" stroke="#FFF4D6" stroke-width="3"/>
-    <circle cx="44" cy="50" r="4.5" fill="#FFC21E" stroke="#FFF4D6" stroke-width="3"/>
-  </symbol>
-  <symbol id="i-scan" viewBox="0 0 64 64">
-    <rect x="18" y="6" width="28" height="52" rx="6" fill="#FFF4D6" stroke="#0A1029" stroke-width="3.2"/>
-    <rect x="24" y="14" width="16" height="16" fill="#0A1029"/>
-    <rect x="27" y="17" width="4" height="4" fill="#FFF4D6"/>
-    <rect x="33" y="23" width="4" height="4" fill="#FFF4D6"/>
-    <rect x="24" y="34" width="5" height="5" fill="#0A1029"/>
-    <rect x="31" y="34" width="9" height="3" fill="#2440B0"/>
-    <rect x="31" y="40" width="9" height="3" fill="#E23B32"/>
-    <circle cx="32" cy="51" r="2.4" fill="#0A1029"/>
-  </symbol>
-  <symbol id="i-confetti" viewBox="0 0 64 64">
-    <path d="M12 52l16-18 6 6z" fill="#FFC21E" stroke="#FFF4D6" stroke-width="3" stroke-linejoin="round"/>
-    <line x1="36" y1="30" x2="44" y2="22" stroke="#19A88C" stroke-width="3" stroke-linecap="round"/>
-    <line x1="40" y1="34" x2="50" y2="30" stroke="#E23B32" stroke-width="3" stroke-linecap="round"/>
-    <line x1="34" y1="24" x2="38" y2="14" stroke="#FFF4D6" stroke-width="3" stroke-linecap="round"/>
-    <circle cx="52" cy="20" r="3" fill="#FFC21E" stroke="#FFF4D6" stroke-width="2"/>
-  </symbol>
-  <symbol id="i-mascot" viewBox="0 0 90 92">
-    <line x1="34" y1="22" x2="25" y2="8" stroke="#FFC21E" stroke-width="3.5" stroke-linecap="round"/>
-    <line x1="56" y1="22" x2="65" y2="8" stroke="#FFC21E" stroke-width="3.5" stroke-linecap="round"/>
-    <path d="M25 8l-2-4 5 1z" fill="#FFC21E" stroke="#0A1029" stroke-width="1.6"/>
-    <circle cx="65" cy="6" r="4" fill="#E23B32" stroke="#0A1029" stroke-width="2.5"/>
-    <rect x="8" y="22" width="74" height="54" rx="11" fill="#E23B32" stroke="#0A1029" stroke-width="4"/>
-    <rect x="8" y="22" width="74" height="54" rx="11" fill="none" stroke="#FFC21E" stroke-width="1.5" stroke-dasharray="2 5"/>
-    <rect x="15" y="29" width="46" height="40" rx="6" fill="#15246B" stroke="#0A1029" stroke-width="3.5"/>
-    <circle cx="29" cy="46" r="4" fill="#FFF4D6"/><circle cx="30" cy="47" r="2" fill="#0A1029"/>
-    <circle cx="47" cy="46" r="4" fill="#FFF4D6"/><circle cx="48" cy="47" r="2" fill="#0A1029"/>
-    <path d="M27 56q11 9 22 0" fill="none" stroke="#FFC21E" stroke-width="3.5" stroke-linecap="round"/>
-    <circle cx="71" cy="37" r="4" fill="#FFC21E" stroke="#0A1029" stroke-width="2.5"/>
-    <circle cx="71" cy="51" r="4" fill="#19A88C" stroke="#0A1029" stroke-width="2.5"/>
-    <line x1="26" y1="76" x2="26" y2="86" stroke="#0A1029" stroke-width="4" stroke-linecap="round"/>
-    <line x1="64" y1="76" x2="64" y2="86" stroke="#0A1029" stroke-width="4" stroke-linecap="round"/>
-  </symbol>
-  <symbol id="i-star" viewBox="0 0 24 24">
-    <path d="M12 2l2.6 6.3 6.8.5-5.2 4.4 1.7 6.6L12 16.8 6.3 20.4l1.7-6.6L2.8 9.4l6.8-.5z" fill="currentColor" stroke="#0A1029" stroke-width="1.4" stroke-linejoin="round"/>
-  </symbol>
-  <symbol id="i-check" viewBox="0 0 24 24">
-    <circle cx="12" cy="12" r="9.5" fill="#19A88C" stroke="#0A1029" stroke-width="2"/>
-    <path d="M7.5 12.5l3 3 6-6.5" fill="none" stroke="#FFF4D6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-  </symbol>
-</defs></svg>
+    <!-- سداسيات حروف -->
+    <symbol id="i-hex" viewBox="0 0 64 64">
+      <polygon points="22,14 32.4,20 32.4,32 22,38 11.6,32 11.6,20" fill="#1E8770" stroke="#241E1A" stroke-width="2.6" stroke-linejoin="round"/>
+      <polygon points="42,14 52.4,20 52.4,32 42,38 31.6,32 31.6,20" fill="#E2583F" stroke="#241E1A" stroke-width="2.6" stroke-linejoin="round"/>
+      <polygon points="32,33 42.4,39 42.4,51 32,57 21.6,51 21.6,39" fill="#E3A92E" stroke="#241E1A" stroke-width="2.6" stroke-linejoin="round"/>
+      <text x="22" y="31" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#FBF4E2">ح</text>
+      <text x="42" y="31" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#FBF4E2">ر</text>
+      <text x="32" y="50" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="15" fill="#241E1A">ف</text>
+    </symbol>
+
+    <!-- مقياس طيف -->
+    <symbol id="i-gauge" viewBox="0 0 64 64">
+      <path d="M8 46 A24 24 0 0 1 32 22" fill="none" stroke="#1E8770" stroke-width="7" stroke-linecap="round"/>
+      <path d="M32 22 A24 24 0 0 1 56 46" fill="none" stroke="#E2583F" stroke-width="7" stroke-linecap="round"/>
+      <line x1="8" y1="46" x2="56" y2="46" stroke="#241E1A" stroke-width="3" stroke-linecap="round"/>
+      <line x1="32" y1="46" x2="44" y2="29" stroke="#241E1A" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="32" cy="46" r="5" fill="#E3A92E" stroke="#241E1A" stroke-width="3"/>
+    </symbol>
+
+    <!-- فاكّ شفرة (ديكربتو) -->
+    <symbol id="i-decoder" viewBox="0 0 64 64">
+      <rect x="10" y="10" width="44" height="44" rx="8" fill="#6B4C97" stroke="#241E1A" stroke-width="3"/>
+      <line x1="32" y1="12" x2="32" y2="52" stroke="#241E1A" stroke-width="2.4"/>
+      <line x1="12" y1="32" x2="52" y2="32" stroke="#241E1A" stroke-width="2.4"/>
+      <text x="21" y="29" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="16" fill="#FBF4E2">1</text>
+      <text x="43" y="29" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="16" fill="#FBF4E2">2</text>
+      <text x="21" y="50" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="16" fill="#DC859E">3</text>
+      <text x="43" y="50" text-anchor="middle" font-family="Lalezar,sans-serif" font-size="16" fill="#E3A92E">4</text>
+    </symbol>
+
+    <!-- عربة تسوّق -->
+    <symbol id="i-cart" viewBox="0 0 64 64">
+      <path d="M8 12h8l6 27h26" fill="none" stroke="#241E1A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18 18h36l-4 16H21z" fill="#1E8770" stroke="#241E1A" stroke-width="3.2" stroke-linejoin="round"/>
+      <circle cx="26" cy="50" r="4.5" fill="#E3A92E" stroke="#241E1A" stroke-width="3"/>
+      <circle cx="44" cy="50" r="4.5" fill="#E3A92E" stroke="#241E1A" stroke-width="3"/>
+    </symbol>
+
+    <!-- جوال + باركود -->
+    <symbol id="i-scan" viewBox="0 0 64 64">
+      <rect x="18" y="6" width="28" height="52" rx="6" fill="#FBF4E2" stroke="#241E1A" stroke-width="3.2"/>
+      <rect x="24" y="14" width="16" height="16" fill="#241E1A"/>
+      <rect x="27" y="17" width="4" height="4" fill="#FBF4E2"/>
+      <rect x="33" y="23" width="4" height="4" fill="#FBF4E2"/>
+      <rect x="24" y="34" width="5" height="5" fill="#241E1A"/>
+      <rect x="31" y="34" width="9" height="3" fill="#3C6CA0"/>
+      <rect x="31" y="40" width="9" height="3" fill="#E2583F"/>
+      <circle cx="32" cy="51" r="2.4" fill="#241E1A"/>
+    </symbol>
+
+    <!-- مفرقعة احتفال -->
+    <symbol id="i-confetti" viewBox="0 0 64 64">
+      <path d="M12 52l16-18 6 6z" fill="#E3A92E" stroke="#241E1A" stroke-width="3" stroke-linejoin="round"/>
+      <line x1="36" y1="30" x2="44" y2="22" stroke="#1E8770" stroke-width="3" stroke-linecap="round"/>
+      <line x1="40" y1="34" x2="50" y2="30" stroke="#E2583F" stroke-width="3" stroke-linecap="round"/>
+      <line x1="34" y1="24" x2="38" y2="14" stroke="#3C6CA0" stroke-width="3" stroke-linecap="round"/>
+      <rect x="46" y="38" width="5" height="5" fill="#DC859E" stroke="#241E1A" stroke-width="2" transform="rotate(20 48 40)"/>
+      <circle cx="52" cy="20" r="3" fill="#6B4C97" stroke="#241E1A" stroke-width="2"/>
+      <rect x="24" y="16" width="5" height="5" fill="#E2583F" stroke="#241E1A" stroke-width="2" transform="rotate(-15 26 18)"/>
+    </symbol>
+
+    <!-- شخصية التلفزيون (ماسكوت) -->
+    <symbol id="i-tv" viewBox="0 0 80 76">
+      <line x1="30" y1="18" x2="22" y2="6" stroke="#241E1A" stroke-width="3" stroke-linecap="round"/>
+      <line x1="50" y1="18" x2="58" y2="6" stroke="#241E1A" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="21" cy="5" r="3.5" fill="#E3A92E" stroke="#241E1A" stroke-width="2.5"/>
+      <circle cx="59" cy="5" r="3.5" fill="#E2583F" stroke="#241E1A" stroke-width="2.5"/>
+      <rect x="8" y="18" width="64" height="46" rx="9" fill="#E2583F" stroke="#241E1A" stroke-width="3.5"/>
+      <rect x="14" y="24" width="40" height="34" rx="5" fill="#FBF4E2" stroke="#241E1A" stroke-width="3"/>
+      <circle cx="26" cy="38" r="3.2" fill="#241E1A"/>
+      <circle cx="42" cy="38" r="3.2" fill="#241E1A"/>
+      <path d="M24 46q10 8 20 0" fill="none" stroke="#241E1A" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="63" cy="31" r="3.4" fill="#E3A92E" stroke="#241E1A" stroke-width="2.5"/>
+      <circle cx="63" cy="44" r="3.4" fill="#1E8770" stroke="#241E1A" stroke-width="2.5"/>
+      <line x1="24" y1="64" x2="24" y2="71" stroke="#241E1A" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="56" y1="64" x2="56" y2="71" stroke="#241E1A" stroke-width="3.5" stroke-linecap="round"/>
+    </symbol>
+
+    <!-- نجمة -->
+    <symbol id="i-star" viewBox="0 0 24 24">
+      <path d="M12 2l2.6 6.3 6.8.5-5.2 4.4 1.7 6.6L12 16.8 6.3 20.4l1.7-6.6L2.8 9.4l6.8-.5z" fill="#E3A92E" stroke="#241E1A" stroke-width="1.6" stroke-linejoin="round"/>
+    </symbol>
+
+    <!-- علامة صح (للباقات) -->
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9.5" fill="#1E8770" stroke="#241E1A" stroke-width="2"/>
+      <path d="M7.5 12.5l3 3 6-6.5" fill="none" stroke="#FBF4E2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+</svg>
 
 <!-- ترويسة -->
 <header class="topbar">
@@ -204,106 +224,142 @@ footer p{ font-weight:700; color:var(--cream); opacity:.8 }
     <nav class="nav-links">
       <a href="#games">الألعاب</a>
       <a href="#how">كيف تلعب</a>
-      <a href="#plans">الباقات</a>
-      <a class="stage-btn sm" href="enter.html">دخول بالكود</a>
+      <a href="#bundles">الباقات</a>
+      <a class="pop-btn coral sm" href="index.html">دخول بالكود</a>
     </nav>
   </div>
 </header>
 
 <!-- HERO -->
 <section class="hero">
+  <svg class="hero-deco" width="120" height="120" aria-hidden="true"><use href="#i-star"/></svg>
   <div class="container">
-    <span class="pill">★ مسرح ألعاب السهرة العربية ★</span>
-    <div class="hero-marquee marquee-frame" id="heroFrame">
-      <div class="show-title">
-        <span class="en">ARCADO</span>
-        <span class="ar">سهرتكم صارت لعبة</span>
+    <div>
+      <span class="sticker coral">منصة ألعاب السهرة</span>
+      <h1><span class="graf coral">سهرتكم</span><br><span class="graf teal">صارت لعبة</span></h1>
+      <p class="sub">أربع ألعاب عربية تحوّل بيتكم لاستوديو مسابقات. التلفزيون يجمع الكل، وكل جوال يصير وحدة تحكّم. اشترِ، افتح، والعب فوراً.</p>
+      <div class="cta-row">
+        <a class="pop-btn coral" href="#games">ابدأ اللعب</a>
+        <a class="pop-btn cream" href="#how">كيف تعمل؟</a>
       </div>
-      <div class="hero-cta">
-        <a class="stage-btn" href="#games" onclick="arcadoCelebrate()">ابدأ اللعب</a>
-        <a class="stage-btn blue" href="#how">طريقة اللعب</a>
+      <div class="hero-stats">
+        <div class="stat"><b>4</b><span>ألعاب كاملة</span></div>
+        <div class="stat"><b>+2000</b><span>سؤال عربي</span></div>
+        <div class="stat"><b>∞</b><span>سهرات لا تُنسى</span></div>
       </div>
     </div>
-    <div class="hero-mascot"><svg width="120" height="124"><use href="#i-mascot"/></svg></div>
-    <p class="hero-sub">أربع ألعاب عربية تحوّل بيتكم لاستوديو مسابقات. التلفزيون يجمع الكل، وكل جوال يصير وحدة تحكّم. اشترِ، افتح، والعب فوراً.</p>
-    <div class="hero-stats">
-      <div class="hstat"><b>4</b><span>ألعاب كاملة</span></div>
-      <div class="hstat"><b>+2000</b><span>سؤال عربي</span></div>
-      <div class="hstat"><b>∞</b><span>سهرات لا تُنسى</span></div>
+
+    <div class="hero-tv">
+      <span class="sticker mustard tv-tag">شاشة التلفزيون</span>
+      <div class="pop-card" style="box-shadow:var(--shadow-lg)">
+        <div class="win-bar">
+          <span class="win-dots"><i class="r"></i><i class="y"></i><i class="g"></i></span>
+          <span class="ttl">ARCADO · من سيربح الجائزة</span>
+        </div>
+        <div class="tv-screen">
+          <div class="tv-score">
+            <span class="pc"><span class="dotc" style="background:var(--teal)"></span> الأخضر · 42</span>
+            <span class="pc">25 · الأحمر <span class="dotc" style="background:var(--coral)"></span></span>
+          </div>
+          <div class="tv-q">كم عظمة في جسم الإنسان البالغ؟</div>
+          <div class="tv-opts">
+            <div class="tv-opt">أ · 198</div>
+            <div class="tv-opt ok">ب · 206</div>
+            <div class="tv-opt">ج · 215</div>
+            <div class="tv-opt">د · 187</div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<div class="lightbar"></div>
+<!-- شريط متحرك -->
+<div class="ticker">
+  <div class="track">
+    <span><svg class="ico" width="22" height="22"><use href="#i-star"/></svg> من سيربح الجائزة</span>
+    <span><svg width="22" height="22"><use href="#i-star"/></svg> حروف</span>
+    <span><svg width="22" height="22"><use href="#i-star"/></svg> طيف</span>
+    <span><svg width="22" height="22"><use href="#i-star"/></svg> ديكربتو</span>
+    <span><svg width="22" height="22"><use href="#i-star"/></svg> منتج رقمي 100%</span>
+    <span><svg width="22" height="22"><use href="#i-star"/></svg> من سيربح الجائزة</span>
+    <span><svg width="22" height="22"><use href="#i-star"/></svg> حروف</span>
+    <span><svg width="22" height="22"><use href="#i-star"/></svg> طيف</span>
+    <span><svg width="22" height="22"><use href="#i-star"/></svg> ديكربتو</span>
+    <span><svg width="22" height="22"><use href="#i-star"/></svg> منتج رقمي 100%</span>
+  </div>
+</div>
 
 <!-- الألعاب -->
 <section class="section container" id="games">
   <div class="section-head">
-    <span class="pill">اختر لعبتك</span>
-    <h2 class="gold-text">أربع ألعاب تكسر السهرة</h2>
+    <span class="sticker teal">اختر لعبتك</span>
+    <h2 class="graf mustard" style="-webkit-text-stroke:2px var(--ink)">أربع ألعاب تكسر السهرة</h2>
     <p>كل لعبة على 3 شاشات: تلفزيون + مضيف + جوال</p>
   </div>
-  <div class="tickets">
+  <div class="games">
 
-    <a class="ticket t-mil" href="millionaire-tv.html">
-      <div class="head">
-        <div class="iconwrap"><svg width="76" height="76"><use href="#i-trophy"/></svg></div>
-        <div><span class="perf">سرعة بَدِيهة</span><span class="tname">من سيربح<br>الجائزة</span></div>
+    <a class="pop-card game g-mil" href="millionaire-tv.html">
+      <div class="screen">
+        <span class="sticker cream screen-tag">سرعة بَدِيهة</span>
+        <div class="iconwrap"><svg class="ico-lg"><use href="#i-trophy"/></svg></div>
+        <div class="txt"><div class="big">من سيربح<br>الجائزة</div></div>
       </div>
-      <span class="notch r"></span><span class="notch l"></span>
-      <div class="foot"><span class="desc">أسرع من يضغط يجاوب — جوائز عيدية وصناديق مفاجأة.</span><span class="stage-btn sm">العب ←</span></div>
+      <div class="meta"><span class="desc">أسرع من يضغط يجاوب — جوائز عيدية وصناديق مفاجأة.</span><span class="pop-btn teal sm">العب ←</span></div>
     </a>
 
-    <a class="ticket t-hur" href="huroof-tv.html">
-      <div class="head">
-        <div class="iconwrap"><svg width="76" height="76"><use href="#i-hex"/></svg></div>
-        <div><span class="perf">لوحة سداسية</span><span class="tname">حروف</span></div>
+    <a class="pop-card game g-hur" href="huroof-tv.html">
+      <div class="screen">
+        <span class="sticker cream screen-tag">لوحة سداسية</span>
+        <div class="iconwrap"><svg class="ico-lg"><use href="#i-hex"/></svg></div>
+        <div class="txt"><div class="big">حروف</div></div>
       </div>
-      <span class="notch r"></span><span class="notch l"></span>
-      <div class="foot"><span class="desc">صِل خطّك من طرف للطرف قبل خصمك على لوحة الحروف.</span><span class="stage-btn sm">العب ←</span></div>
+      <div class="meta"><span class="desc">صِل خطّك من طرف للطرف قبل خصمك على لوحة الحروف.</span><span class="pop-btn blue sm">العب ←</span></div>
     </a>
 
-    <a class="ticket t-taif" href="taif-tv.html">
-      <div class="head">
-        <div class="iconwrap"><svg width="76" height="76"><use href="#i-gauge"/></svg></div>
-        <div><span class="perf">حدْس وتخمين</span><span class="tname">طيف</span></div>
+    <a class="pop-card game g-taif" href="taif-tv.html">
+      <div class="screen">
+        <span class="sticker cream screen-tag">حدْس وتخمين</span>
+        <div class="iconwrap"><svg class="ico-lg"><use href="#i-gauge"/></svg></div>
+        <div class="txt"><div class="big">طيف</div></div>
       </div>
-      <span class="notch r"></span><span class="notch l"></span>
-      <div class="foot"><span class="desc">تلميح واحد… حرّك المؤشر والخصم يخمّن الاتجاه.</span><span class="stage-btn sm">العب ←</span></div>
+      <div class="meta"><span class="desc">تلميح واحد… حرّك المؤشر والخصم يخمّن الاتجاه.</span><span class="pop-btn coral sm">العب ←</span></div>
     </a>
 
-    <a class="ticket t-dec" href="decrypto-tv.html">
-      <div class="head">
-        <div class="iconwrap"><svg width="76" height="76"><use href="#i-decoder"/></svg></div>
-        <div><span class="perf">شفرات سرية</span><span class="tname">ديكربتو</span></div>
+    <a class="pop-card game g-dec" href="decrypto-tv.html">
+      <div class="screen">
+        <span class="sticker cream screen-tag">شفرات سرية</span>
+        <div class="iconwrap"><svg class="ico-lg"><use href="#i-decoder"/></svg></div>
+        <div class="txt"><div class="big">ديكربتو</div></div>
       </div>
-      <span class="notch r"></span><span class="notch l"></span>
-      <div class="foot"><span class="desc">شفّر لفريقك دون أن يخترق الخصم رموزك.</span><span class="stage-btn sm">العب ←</span></div>
+      <div class="meta"><span class="desc">شفّر لفريقك دون أن يخترق الخصم رموزك.</span><span class="pop-btn plum sm">العب ←</span></div>
     </a>
 
   </div>
 </section>
-
-<div class="lightbar"></div>
 
 <!-- كيف تعمل -->
-<section class="section container" id="how">
-  <div class="section-head"><span class="pill">3 خطوات</span><h2 class="gold-text">والّعبة تبدأ</h2></div>
-  <div class="steps">
-    <div class="step"><span class="num">1</span><div class="pic"><svg width="84" height="84"><use href="#i-cart"/></svg></div><h3>اشترِ الكود</h3><p>تشتري باقة من سلة، يوصلك License Key فوراً.</p></div>
-    <div class="step"><span class="num">2</span><div class="pic"><svg width="84" height="84"><use href="#i-scan"/></svg></div><h3>اسكن وادخل</h3><p>افتح التلفزيون، كل فريق يسكن باركوده بجواله.</p></div>
-    <div class="step"><span class="num">3</span><div class="pic"><svg width="84" height="84"><use href="#i-confetti"/></svg></div><h3>والعب!</h3><p>اضغطوا الزر، جاوبوا، واحتفلوا بالفائز.</p></div>
+<section class="how section" id="how">
+  <div class="container">
+    <div class="section-head"><h2>ثلاث خطوات والّعبة تبدأ</h2></div>
+    <div class="panels">
+      <div class="pop-card panel"><span class="num">1</span><div class="pic"><svg class="ico-lg"><use href="#i-cart"/></svg></div><h3>اشترِ الكود</h3><p>تشتري باقة من سلة، يوصلك License Key فوراً.</p></div>
+      <div class="pop-card panel"><span class="num">2</span><div class="pic"><svg class="ico-lg"><use href="#i-scan"/></svg></div><h3>اسكن وادخل</h3><p>افتح التلفزيون، كل فريق يسكن باركوده بجواله.</p></div>
+      <div class="pop-card panel"><span class="num">3</span><div class="pic"><svg class="ico-lg"><use href="#i-confetti"/></svg></div><h3>والعب!</h3><p>اضغطوا الزر، جاوبوا، واحتفلوا بالفائز.</p></div>
+    </div>
   </div>
 </section>
 
-<div class="lightbar"></div>
-
 <!-- الباقات -->
-<section class="section container" id="plans">
-  <div class="section-head"><span class="pill">الباقات</span><h2 class="gold-text">اختر باقتك</h2><p>كل باقة كود تفعيل يفتح عدداً من الجلسات</p></div>
-  <div class="plans">
-    <div class="plan">
-      <div class="cap">باقة البداية</div>
+<section class="section container" id="bundles">
+  <div class="section-head">
+    <span class="sticker coral">الباقات</span>
+    <h2 class="graf blue" style="-webkit-text-stroke:2px var(--ink)">اختر باقتك</h2>
+    <p>كل باقة كود تفعيل يفتح عدداً من الجلسات</p>
+  </div>
+  <div class="bundles">
+    <div class="pop-card bundle b3">
+      <div class="cap"><div class="label">باقة البداية</div></div>
       <div class="body">
         <div class="price">49 <small>ريال</small></div>
         <ul>
@@ -311,12 +367,13 @@ footer p{ font-weight:700; color:var(--cream); opacity:.8 }
           <li><svg width="20" height="20"><use href="#i-check"/></svg> الألعاب الأربع</li>
           <li><svg width="20" height="20"><use href="#i-check"/></svg> صالحة لشهر</li>
         </ul>
-        <a class="stage-btn" href="enter.html">اشترِ الآن</a>
+        <a class="pop-btn" href="index.html">اشترِ الآن</a>
       </div>
     </div>
-    <div class="plan feat">
-      <span class="pill ribbon" style="background:#c12e26;color:#fff;border-color:var(--gold)">الأكثر مبيعاً</span>
-      <div class="cap">باقة السهرة</div>
+
+    <div class="pop-card bundle b5 feat">
+      <span class="sticker teal ribbon">الأكثر مبيعاً</span>
+      <div class="cap"><div class="label">باقة السهرة</div></div>
       <div class="body">
         <div class="price">89 <small>ريال</small></div>
         <ul>
@@ -325,11 +382,12 @@ footer p{ font-weight:700; color:var(--cream); opacity:.8 }
           <li><svg width="20" height="20"><use href="#i-check"/></svg> صالحة 3 أشهر</li>
           <li><svg width="20" height="20"><use href="#i-check"/></svg> حزمة أسئلة إضافية</li>
         </ul>
-        <a class="stage-btn red" href="enter.html">اشترِ الآن</a>
+        <a class="pop-btn coral" href="index.html">اشترِ الآن</a>
       </div>
     </div>
-    <div class="plan">
-      <div class="cap">باقة المحترف</div>
+
+    <div class="pop-card bundle b8">
+      <div class="cap"><div class="label">باقة المحترف</div></div>
       <div class="body">
         <div class="price">149 <small>ريال</small></div>
         <ul>
@@ -338,19 +396,19 @@ footer p{ font-weight:700; color:var(--cream); opacity:.8 }
           <li><svg width="20" height="20"><use href="#i-check"/></svg> صالحة سنة</li>
           <li><svg width="20" height="20"><use href="#i-check"/></svg> كل حزم الأسئلة</li>
         </ul>
-        <a class="stage-btn" href="enter.html">اشترِ الآن</a>
+        <a class="pop-btn teal" href="index.html">اشترِ الآن</a>
       </div>
     </div>
   </div>
 </section>
 
+<!-- تذييل -->
 <footer>
   <div class="container">
     <div class="brand"><span class="m">A</span> أركيدو</div>
-    <p>© 2026 أركيدو — مسرح ألعاب السهرة العربية</p>
+    <p>© 2026 أركيدو — ألعاب السهرة العربية</p>
   </div>
 </footer>
 
-<script src="js/stage.js"></script>
 </body>
 </html>
