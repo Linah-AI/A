@@ -15,7 +15,7 @@ body{ background-color:#F7E9EC;
 .brand{ display:flex; align-items:center; gap:.55rem; font-family:var(--bubble); font-size:1.4rem }
 .brand .m{ width:2.2rem;height:2.2rem;background:var(--tf-pink);border:var(--bw) solid var(--ink);border-radius:8px;
   display:grid;place-items:center;color:var(--cream);box-shadow:var(--shadow-sm);transform:rotate(-5deg);font-family:var(--bubble) }
-.show-name{ font-family:var(--display); font-size:clamp(1.8rem,4.5vw,3rem); color:var(--tf-pink);
+.show-name{ font-family:var(--display); font-weight:800; font-size:clamp(2.2rem,5.5vw,3.6rem); color:var(--tf-pink);
   -webkit-text-stroke:2.5px var(--ink); paint-order:stroke fill; text-shadow:3px 3px 0 var(--ink) }
 .bar{ display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:center }
 .team{ border:var(--bw-lg) solid var(--ink); border-radius:14px; padding:.55rem 1.1rem; box-shadow:var(--shadow);
@@ -62,31 +62,22 @@ body{ background-color:#F7E9EC;
     </div>
 
     <div class="gauge-wrap">
-      <!-- عدّاد سرعة نظيف: نصف دائرة بحزام ملوّن سميك + إبرة عريضة -->
+      <!-- عدّاد سرعة بوب: ألوان فلات صريحة (بلا تدرّج) + إبرة سميكة متّسقة -->
       <svg viewBox="0 0 400 215">
-        <defs>
-          <linearGradient id="band" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#9FCB7E"/><stop offset=".5" stop-color="#EBD96A"/>
-            <stop offset=".78" stop-color="#EFA85C"/><stop offset="1" stop-color="#E58BA6"/>
-          </linearGradient>
-        </defs>
-        <!-- الحزام الملوّن (قوس سميك) -->
-        <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="#241E1A" stroke-width="54" stroke-linecap="round"/>
-        <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="url(#band)" stroke-width="44" stroke-linecap="round"/>
-        <!-- علامات تقسيم -->
-        <g stroke="#241E1A" stroke-width="3" opacity=".5">
-          <line x1="200" y1="20" x2="200" y2="44"/>
-          <line x1="92" y1="58" x2="108" y2="76"/>
-          <line x1="308" y1="58" x2="292" y2="76"/>
-        </g>
-        <!-- الإبرة -->
+        <!-- خلفية القوس (حدّ أسود سميك) -->
+        <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="#241E1A" stroke-width="56" stroke-linecap="round"/>
+        <!-- 4 أقسام فلات -->
+        <path d="M28 175 A172 172 0 0 1 78.4 53.4"   fill="none" stroke="#9FCB7E" stroke-width="44"/>
+        <path d="M78.4 53.4 A172 172 0 0 1 200 3"    fill="none" stroke="#F2C744" stroke-width="44"/>
+        <path d="M200 3 A172 172 0 0 1 321.6 53.4"   fill="none" stroke="#EFA85C" stroke-width="44"/>
+        <path d="M321.6 53.4 A172 172 0 0 1 372 175" fill="none" stroke="#E58BA6" stroke-width="44"/>
+        <!-- الإبرة: مثلّث سميك بحدّ أسود وقلب أصفر -->
         <g id="needle" transform="rotate(-55 200 175)">
-          <polygon points="200,30 211,168 189,168" fill="#241E1A"/>
-          <polygon points="200,40 206,165 194,165" fill="#FFC92E"/>
+          <polygon points="200,44 210,172 190,172" fill="#FFC92E" stroke="#241E1A" stroke-width="6" stroke-linejoin="round"/>
         </g>
         <!-- محور الإبرة -->
-        <circle cx="200" cy="175" r="26" fill="#241E1A"/>
-        <circle cx="200" cy="175" r="15" fill="#FFC92E" stroke="#241E1A" stroke-width="3"/>
+        <circle cx="200" cy="175" r="28" fill="#241E1A"/>
+        <circle cx="200" cy="175" r="15" fill="#FFC92E" stroke="#241E1A" stroke-width="4"/>
       </svg>
     </div>
     <div class="poles">
