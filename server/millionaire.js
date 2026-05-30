@@ -1,23 +1,7 @@
 // أركيدو — محرّك لعبة "من سيربح الجائزة"
 // آلة حالة خالصة: لا تعرف شيئاً عن الشبكة، تُختبر بسهولة.
 
-import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const QUESTIONS = JSON.parse(
-  readFileSync(join(__dirname, '../data/questions-millionaire.json'), 'utf-8')
-);
-
-function shuffle(arr) {
-  const a = arr.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
+import { millionaireBank } from './qbank.js';
 
 // مراحل اللعبة
 export const Phase = {
@@ -35,30 +19,38 @@ export class MillionaireGame {
     this.prizeCap = opts.prizeCap ?? 100;          // سقف العيدية بالريال
     this.timerSeconds = opts.timerSeconds ?? 12;
 
+    // ذاكرة اللاعب (التقدّم) ودوال الحفظ تُحقن من الشبكة.
+    // progress = { seen:Set, wrong:Set } · onAnswer(qid, correct) للتسجيل الدائم.
+    this.bank = opts.bank || millionaireBank;
+    this.progress = opts.progress || { seen: new Set(), wrong: new Set() };
+    this.onAnswer = opts.onAnswer || (() => {});
+    this.onRoundSelected = opts.onRoundSelected || (() => {});
+
     this.teams = {
       green: { name: 'الفريق الأخضر', score: 0, players: 0 },
       red: { name: 'الفريق الأحمر', score: 0, players: 0 }
     };
 
     this.phase = Phase.LOBBY;
-    this.deck = shuffle(QUESTIONS);
+    this.deck = [];            // تُملأ عند البدء من بنك الأسئلة الذكي
     this.index = -1;
     this.current = null;
     this.buzzedBy = null;      // 'green' | 'red'
     this.lockedTeams = {};     // فرق مُنعت من الـ Buzz لهذا السؤال
-    this.totalQuestions = 7;   // يُحدّد حسب أكبر فريق عند البدء
+    this.totalQuestions = 0;   // يُحدّد حسب أكبر فريق عند البدء
     this.lastResult = null;    // 'correct' | 'wrong' | 'burned'
-  }
-
-  // عدد الأسئلة = حسب أكبر فريق (بحد أدنى 5، أقصى = عدد الأسئلة المتاحة)
-  setTotalFromTeams() {
-    const maxPlayers = Math.max(this.teams.green.players, this.teams.red.players, 1);
-    this.totalQuestions = Math.min(Math.max(maxPlayers + 3, 5), this.deck.length);
+    this.recycled = false;     // هل بدأت إعادة تدوير البنك لهذا اللاعب؟
   }
 
   start() {
     if (this.phase !== Phase.LOBBY) return false;
-    this.setTotalFromTeams();
+    // آلة حاسبة + توزيع متساوٍ + ذاكرة (لا تكرار) عبر بنك الأسئلة الذكي
+    const maxPlayers = Math.max(this.teams.green.players, this.teams.red.players, 1);
+    const { questions, recycledCats } = this.bank.selectRound(this.progress, maxPlayers);
+    this.deck = questions;
+    this.totalQuestions = questions.length;
+    this.recycled = recycledCats.length > 0;
+    this.onRoundSelected(this.progress);   // احفظ "المرئي" المحدّث
     return this.nextQuestion();
   }
 
@@ -95,6 +87,8 @@ export class MillionaireGame {
     this.teams[team].score += reward;
     this.lastResult = 'correct';
     this.phase = Phase.REVEAL;
+    // ثبتت في الذاكرة → تخرج من قائمة المراجعة
+    if (this.current) this.onAnswer(this.current.id, true);
     return { team, reward };
   }
 
@@ -112,9 +106,10 @@ export class MillionaireGame {
       this.lastResult = 'wrong';
       return { result: 'stolen', stealTeam: other };
     }
-    // لا أحد يكسب — السؤال يحترق
+    // لا أحد يكسب — السؤال يحترق → ما ثبت في رأس أحد، يدخل قائمة المراجعة
     this.lastResult = 'burned';
     this.phase = Phase.REVEAL;
+    if (this.current) this.onAnswer(this.current.id, false);
     return { result: 'burned' };
   }
 

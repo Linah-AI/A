@@ -8,6 +8,8 @@ import QRCode from 'qrcode';
 import { customAlphabet } from 'nanoid';
 
 import { MillionaireGame, Phase } from './millionaire.js';
+import { millionaireBank } from './qbank.js';
+import { getProgress, saveProgress, recordAnswer, stats } from './progress.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
@@ -25,9 +27,21 @@ const newCode = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 5);
 const sessions = new Map();
 
 class Session {
-  constructor(code) {
+  constructor(code, opts = {}) {
     this.code = code;
-    this.game = new MillionaireGame();
+    // مُعرّف اللاعب يربط الجلسة بذاكرته الدائمة (سيصير License Key لاحقاً)
+    this.playerId = opts.playerId || `guest:${code}`;
+    const progress = getProgress(this.playerId, 'millionaire');
+    this.game = new MillionaireGame({
+      prizeMode: opts.prizeMode,
+      prizeCap: opts.prizeCap,
+      bank: millionaireBank,
+      progress,
+      // يُسجّل نتيجة كل سؤال في الذاكرة الدائمة
+      onAnswer: (qid, correct) => recordAnswer(this.playerId, 'millionaire', qid, correct),
+      // يحفظ "المرئي" بعد اختيار جولة جديدة
+      onRoundSelected: (p) => saveProgress(this.playerId, 'millionaire', p)
+    });
     this.hostId = null;
     this.tvIds = new Set();
     this.timer = null;
@@ -73,9 +87,12 @@ io.on('connection', (socket) => {
   // المضيف ينشئ جلسة جديدة
   socket.on('host:create', async (opts, cb) => {
     const code = newCode();
-    const session = new Session(code);
-    if (opts?.prizeMode) session.game.prizeMode = opts.prizeMode;
-    if (opts?.prizeCap != null) session.game.prizeCap = opts.prizeCap;
+    // playerId = License Key مستقبلاً؛ الآن مُعرّف اختياري من المضيف أو ضيف
+    const session = new Session(code, {
+      playerId: opts?.playerId,
+      prizeMode: opts?.prizeMode,
+      prizeCap: opts?.prizeCap
+    });
     sessions.set(code, session);
 
     mySession = session; myRole = 'host';
@@ -87,7 +104,9 @@ io.on('connection', (socket) => {
       green: await QRCode.toDataURL(`${base}/play.html?s=${code}&t=green`, { margin: 1, width: 240 }),
       red: await QRCode.toDataURL(`${base}/play.html?s=${code}&t=red`, { margin: 1, width: 240 })
     };
-    cb?.({ ok: true, code, qr });
+    // إحصاء ذاكرة اللاعب: كم سؤال شاهد، كم متبقٍّ، كم بحاجة مراجعة
+    const mem = stats(session.playerId, 'millionaire', millionaireBank.size);
+    cb?.({ ok: true, code, qr, memory: mem });
     session.broadcast(io);
   });
 
