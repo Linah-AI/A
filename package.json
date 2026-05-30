@@ -1,0 +1,16 @@
+{
+  "name": "arcado",
+  "version": "0.1.0",
+  "description": "أركيدو — منصة ألعاب السهرة العربية (الوقت الفعلي)",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "socket.io": "^4.8.1",
+    "qrcode": "^1.5.4",
+    "nanoid": "^5.0.9"
+  }
+}

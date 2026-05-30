@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>من سيربح الجائزة — المضيف (مباشر)</title>
+<link rel="stylesheet" href="css/fonts.css" />
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,255,.05) 2px,transparent 2.5px); background-size:26px 26px; color:var(--cream) }
+.host{ max-width:1080px; margin:0 auto; padding:1.2rem 1.4rem 2rem }
+.top{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.6rem; margin-bottom:1rem }
+.brand{ display:flex; align-items:center; gap:.5rem; font-family:var(--bubble); font-weight:800; font-size:1.3rem }
+.brand .m{ width:2.1rem;height:2.1rem;background:var(--coral);border:3px solid #000;border-radius:8px;display:grid;place-items:center;color:var(--cream);transform:rotate(-5deg) }
+.badge{ background:#000;color:var(--mustard);border:3px solid var(--mustard);border-radius:99px;padding:.3rem 1rem;font-family:var(--heavy);font-weight:800;font-size:.85rem }
+.card{ background:#322a23; border:var(--bw-lg) solid #000; border-radius:var(--radius); box-shadow:6px 6px 0 #000; padding:1.3rem; margin-bottom:1.1rem }
+.card h4{ font-family:var(--bubble); font-weight:800; font-size:1.25rem; color:var(--mustard); margin-bottom:.8rem }
+.grid{ display:grid; grid-template-columns:1fr 320px; gap:1.1rem; align-items:start }
+@media(max-width:820px){ .grid{ grid-template-columns:1fr } }
+.qrs{ display:flex; gap:1rem; justify-content:center; flex-wrap:wrap }
+.qr{ text-align:center }
+.qr img{ width:170px;height:170px; border:var(--bw) solid #000; border-radius:12px; background:#fff; padding:6px; box-shadow:var(--shadow-sm) }
+.qr.green b{ color:#34c98c } .qr.red b{ color:#ff6f63 }
+.code{ font-family:var(--bubble); font-weight:800; font-size:2rem; letter-spacing:3px; text-align:center; color:var(--mustard); margin:.4rem 0 }
+.qline{ font-family:var(--heavy); font-weight:800; font-size:1.3rem; margin-bottom:.8rem; min-height:1.5em }
+.whobuzz{ display:none; align-items:center; gap:.6rem; background:#1f1a16; border:3px solid var(--teal); border-radius:12px; padding:.6rem 1rem; margin-bottom:.8rem; font-weight:800 }
+.whobuzz.show{ display:flex }
+.whobuzz .dot{ width:.9rem;height:.9rem;border-radius:50% }
+.answer{ background:var(--teal); color:var(--cream); border:var(--bw) solid #000; border-radius:12px; padding:.9rem 1.1rem; font-weight:800; display:none; align-items:center; justify-content:space-between; box-shadow:var(--shadow-sm); margin-bottom:1rem }
+.answer.show{ display:flex }
+.ctrls{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem }
+.ck{ padding:.85rem; border-radius:12px; font-family:var(--bubble); font-weight:800; font-size:1.05rem; border:var(--bw) solid #000; box-shadow:var(--shadow-sm); transition:transform .08s; color:#fff }
+.ck:active{ transform:translate(2px,2px); box-shadow:2px 2px 0 #000 }
+.ck:disabled{ opacity:.4; cursor:not-allowed }
+.ck.ok{ background:var(--teal) } .ck.no{ background:var(--coral) } .ck.n{ background:#4a3f35 } .ck.full{ grid-column:1/-1 }
+.ck.big{ background:var(--mustard); color:var(--ink); font-size:1.3rem; padding:1.1rem }
+.kv{ display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:2px dashed #4a3f35; font-weight:700 }
+.kv:last-child{ border:none }
+.dot{ width:.7rem;height:.7rem;border-radius:50%;display:inline-block;margin-left:.4rem }
+.setup label{ display:block; font-weight:700; margin:.5rem 0 .3rem }
+.setup select,.setup input{ width:100%; padding:.6rem; border:3px solid #000; border-radius:10px; background:#1f1a16; color:var(--cream); font-family:inherit; font-weight:700 }
+.hint{ color:#b8a890; font-size:.85rem; font-weight:700 }
+.over{ text-align:center; font-family:var(--bubble); font-weight:800; font-size:1.6rem; color:var(--mustard) }
+</style>
+</head>
+<body>
+<div class="host">
+  <div class="top">
+    <div class="brand"><span class="m">A</span> أركيدو · من سيربح الجائزة</div>
+    <span class="badge">🔒 شاشة المضيف — مباشر</span>
+  </div>
+
+  <!-- إعداد + باركود -->
+  <div class="card" id="lobby">
+    <h4>ابدأ جلسة جديدة</h4>
+    <div class="grid">
+      <div class="setup">
+        <label>نظام الجائزة</label>
+        <select id="prizeMode">
+          <option value="eidiya">💰 عيدية بمبلغ محدد</option>
+          <option value="gift">🎁 هدية مجهولة (صناديق)</option>
+        </select>
+        <label>الحد الأعلى للعيدية (ريال)</label>
+        <input id="prizeCap" type="number" value="100" min="10" />
+        <button class="ck big full" id="createBtn" style="margin-top:1rem">🎬 افتح الجلسة واعرض الباركود</button>
+        <p class="hint" style="margin-top:.6rem">افتح <b>tv.html</b> على شاشة التلفزيون وأدخل الرمز، ثم وجّه اللاعبين لمسح الباركود.</p>
+      </div>
+      <div>
+        <div class="code" id="codeBox">—</div>
+        <div class="qrs" id="qrBox" style="display:none">
+          <div class="qr green"><img id="qrGreen" alt="باركود الأخضر"/><b>الفريق الأخضر</b></div>
+          <div class="qr red"><img id="qrRed" alt="باركود الأحمر"/><b>الفريق الأحمر</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="kv" style="margin-top:1rem"><span><span class="dot" style="background:var(--teal)"></span>المتصلون — الأخضر</span><b id="pGreen">0</b></div>
+    <div class="kv"><span><span class="dot" style="background:var(--coral)"></span>المتصلون — الأحمر</span><b id="pRed">0</b></div>
+    <button class="ck ok full" id="startBtn" style="margin-top:1rem" disabled>▶ الكل جاهز — ابدأ اللعبة</button>
+  </div>
+
+  <!-- التحكم باللعبة -->
+  <div class="card" id="play" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;flex-wrap:wrap;gap:.4rem">
+      <span class="sticker mustard" id="qMeta">—</span>
+      <span class="hint">العدّاد: <b id="timer">—</b></span>
+    </div>
+    <div class="qline" id="qText">—</div>
+    <div class="whobuzz" id="whoBuzz"><span class="dot"></span> <span id="whoBuzzText"></span></div>
+    <div class="answer" id="answer"><span id="answerText"></span><span style="background:#000;color:var(--mustard);padding:.15rem .6rem;border-radius:99px;font-size:.8rem">سري</span></div>
+    <div class="ctrls">
+      <button class="ck ok" id="btnCorrect" disabled>صح ✓</button>
+      <button class="ck no" id="btnWrong" disabled>خطأ ✕</button>
+      <button class="ck n" id="btnTimer">⏸ إيقاف/تشغيل العدّاد</button>
+      <button class="ck n" id="btnNext">السؤال التالي ←</button>
+    </div>
+    <div style="margin-top:.8rem" id="wrongOpts" class="ctrls" hidden>
+      <button class="ck n" id="btnSteal">↪ ينتقل للفريق الثاني</button>
+      <button class="ck n" id="btnBurn">🔥 لا أحد يكسب</button>
+    </div>
+  </div>
+
+  <!-- النتيجة -->
+  <div class="card">
+    <h4>الرصيد</h4>
+    <div class="kv"><span>الأخضر</span><b id="sGreen" style="color:var(--teal)">0</b></div>
+    <div class="kv"><span>الأحمر</span><b id="sRed" style="color:var(--coral)">0</b></div>
+    <div class="over" id="overBox" style="display:none;margin-top:1rem"></div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module">
+import { socket, el, sfx } from './js/arcado-client.js';
+
+let started = false;
+
+el('createBtn').onclick = () => {
+  const opts = {
+    prizeMode: el('prizeMode').value,
+    prizeCap: Number(el('prizeCap').value) || 100,
+    origin: location.origin
+  };
+  socket.emit('host:create', opts, (res) => {
+    if (!res?.ok) return alert(res?.error || 'تعذّر إنشاء الجلسة');
+    el('codeBox').textContent = res.code;
+    el('qrGreen').src = res.qr.green;
+    el('qrRed').src = res.qr.red;
+    el('qrBox').style.display = 'flex';
+    el('createBtn').disabled = true;
+  });
+};
+
+el('startBtn').onclick = () => { socket.emit('host:start'); };
+el('btnCorrect').onclick = () => { socket.emit('host:judge', { correct: true }); };
+el('btnWrong').onclick = () => { el('wrongOpts').hidden = false; };
+el('btnSteal').onclick = () => { socket.emit('host:judge', { correct: false, steal: true }); el('wrongOpts').hidden = true; };
+el('btnBurn').onclick = () => { socket.emit('host:judge', { correct: false, steal: false }); el('wrongOpts').hidden = true; };
+el('btnNext').onclick = () => { socket.emit('host:next'); };
+let timerRunning = true;
+el('btnTimer').onclick = () => { timerRunning = !timerRunning; socket.emit('host:timer', { action: timerRunning ? 'start' : 'stop' }); };
+
+socket.on('timer', ({ timeLeft }) => { el('timer').textContent = String(Math.max(0, timeLeft)).padStart(2, '0'); });
+
+socket.on('state', (s) => {
+  el('pGreen').textContent = s.teams.green.players;
+  el('pRed').textContent = s.teams.red.players;
+  el('sGreen').textContent = s.teams.green.score;
+  el('sRed').textContent = s.teams.red.score;
+  el('startBtn').disabled = !(s.teams.green.players > 0 && s.teams.red.players > 0) || s.phase !== 'lobby';
+
+  if (s.phase !== 'lobby' && !started) { started = true; el('lobby').style.display = 'none'; el('play').style.display = 'block'; }
+
+  if (s.question) {
+    el('qMeta').textContent = `${s.question.cat} · السؤال ${s.questionNumber} من ${s.totalQuestions}`;
+    el('qText').textContent = s.question.q;
+    if (s.question.answer != null) {
+      el('answerText').innerHTML = `✓ الإجابة الصحيحة: <b>${s.question.options[s.question.answer]}</b>`;
+      el('answer').classList.add('show');
+    }
+  }
+
+  // من ضغط Buzz
+  const wb = el('whoBuzz');
+  if (s.buzzedBy) {
+    wb.classList.add('show');
+    el('whoBuzzText').innerHTML = `ضغط الـ Buzz: <b>${s.teams[s.buzzedBy].name}</b>`;
+    wb.querySelector('.dot').style.background = s.buzzedBy === 'green' ? 'var(--teal)' : 'var(--coral)';
+  } else wb.classList.remove('show');
+
+  const canJudge = s.phase === 'buzzed';
+  el('btnCorrect').disabled = !canJudge;
+  el('btnWrong').disabled = !canJudge;
+  if (!canJudge) el('wrongOpts').hidden = true;
+
+  if (s.phase === 'over') {
+    el('play').style.display = 'none';
+    const box = el('overBox'); box.style.display = 'block';
+    if (s.winner === 'tie') box.textContent = '🤝 تعادل!';
+    else box.textContent = `🏆 فاز ${s.teams[s.winner].name} برصيد ${s.teams[s.winner].score} ${s.prizeMode === 'gift' ? 'صندوق' : 'ريال'}!`;
+  }
+});
+
+socket.on('result', (r) => { if (r.type === 'correct') sfx.correct(); else sfx.wrong(); });
+socket.on('buzz', () => sfx.buzz());
+socket.on('session:ended', () => {});
+</script>
+</body>
+</html>

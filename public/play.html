@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+<title>من سيربح الجائزة — اللاعب</title>
+<link rel="stylesheet" href="css/fonts.css" />
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+:root{ --green:#1E8770; --red:#E2583F; }
+body{ min-height:100vh; display:flex; flex-direction:column; background:var(--cream) }
+body.t-green{ --tc:var(--green) } body.t-red{ --tc:var(--red) }
+.head{ background:var(--tc,var(--green)); color:var(--cream); padding:1.1rem 1.3rem; border-bottom:var(--bw) solid var(--ink); display:flex; align-items:center; justify-content:space-between }
+.head .team{ font-family:var(--bubble); font-weight:800; font-size:1.3rem }
+.head .bal{ background:var(--cream); color:var(--ink); border:var(--bw) solid var(--ink); border-radius:99px; padding:.2rem .8rem; font-weight:800; box-shadow:var(--shadow-sm) }
+.body{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.3rem; padding:1.6rem; text-align:center }
+.status{ font-weight:800; color:var(--ink-soft); min-height:1.5em }
+.buzz{ width:min(74vw,280px); aspect-ratio:1; border-radius:50%; background:var(--tc,var(--green)); color:var(--cream); font-family:var(--bubble); font-weight:800; font-size:2.6rem; border:var(--bw-lg) solid var(--ink); box-shadow:0 12px 0 var(--ink),0 18px 30px rgba(0,0,0,.3); transition:transform .08s,box-shadow .08s,opacity .2s; position:relative }
+.buzz::after{ content:""; position:absolute; inset:16px; border-radius:50%; border:3px dashed rgba(255,255,255,.5) }
+.buzz:active{ transform:translateY(10px); box-shadow:0 2px 0 var(--ink) }
+.buzz:disabled{ opacity:.35; box-shadow:0 6px 0 var(--ink) }
+.hint{ font-weight:700; font-size:.9rem; color:var(--ink-soft) }
+.join{ flex:1; display:grid; place-items:center; padding:2rem }
+.join .box{ width:min(380px,100%); text-align:center }
+.join h1{ font-family:var(--bubble); font-weight:800; font-size:1.6rem; color:var(--coral); margin-bottom:1rem }
+.join input{ width:100%; text-align:center; font-family:var(--bubble); font-weight:800; font-size:1.4rem; padding:.6rem; border:var(--bw) solid var(--ink); border-radius:12px; margin-bottom:.6rem; background:var(--paper) }
+.teamsel{ display:flex; gap:.6rem; margin:.6rem 0 }
+.teamsel button{ flex:1; padding:1rem; border-radius:12px; font-family:var(--bubble); font-weight:800; font-size:1.1rem; border:var(--bw) solid var(--ink); color:#fff; box-shadow:var(--shadow-sm) }
+.flash{ position:fixed; inset:0; pointer-events:none; opacity:0; z-index:20; background:radial-gradient(circle,var(--tc),transparent 70%) }
+</style>
+</head>
+<body>
+<!-- انضمام -->
+<div class="join" id="joinView">
+  <div class="box">
+    <h1>انضم للعبة</h1>
+    <input id="codeInput" maxlength="5" placeholder="رمز الجلسة" />
+    <div class="teamsel">
+      <button style="background:var(--green)" data-t="green">الفريق الأخضر</button>
+      <button style="background:var(--red)" data-t="red">الفريق الأحمر</button>
+    </div>
+    <p class="hint">أو امسح باركود فريقك من شاشة المضيف</p>
+  </div>
+</div>
+
+<!-- اللعب -->
+<div id="gameView" style="display:none;flex:1;flex-direction:column">
+  <div class="head"><span class="team" id="teamName">—</span><span class="bal" id="bal">0</span></div>
+  <div class="body">
+    <p class="status" id="status">في انتظار بدء اللعبة…</p>
+    <button class="buzz" id="buzzBtn" disabled>BUZZ</button>
+    <p class="hint" id="hint">الأسرع ضغطاً يكسب حق الإجابة</p>
+  </div>
+</div>
+
+<div class="flash" id="flash"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module">
+import { socket, el, qs, sfx } from './js/arcado-client.js';
+
+let team = null;
+
+function join(code, t) {
+  socket.emit('player:join', { code, team: t }, (res) => {
+    if (!res?.ok) return alert(res?.error || 'تعذّر الانضمام');
+    team = res.team;
+    document.body.classList.add('t-' + team);
+    el('teamName').textContent = res.teamName;
+    el('joinView').style.display = 'none';
+    el('gameView').style.display = 'flex';
+  });
+}
+
+document.querySelectorAll('.teamsel button').forEach(b => {
+  b.onclick = () => { const c = el('codeInput').value.trim().toUpperCase(); if (!c) return alert('أدخل رمز الجلسة'); join(c, b.dataset.t); };
+});
+
+// من الباركود مباشرة
+const ps = qs('s'), pt = qs('t');
+if (ps && pt) join(ps.toUpperCase(), pt);
+
+el('buzzBtn').onclick = () => {
+  socket.emit('player:buzz');
+  sfx.buzz();
+  if (navigator.vibrate) navigator.vibrate(60);
+  const f = el('flash'); f.animate([{ opacity: 0 }, { opacity: .6 }, { opacity: 0 }], { duration: 500 });
+};
+
+socket.on('state', (s) => {
+  if (!team) return;
+  el('bal').textContent = s.teams[team].score + (s.prizeMode === 'gift' ? ' 🎁' : ' ﷼');
+
+  const canBuzz = (s.phase === 'question' || s.phase === 'stolen') && !s.lockedTeams?.[team] && !s.buzzedBy;
+  el('buzzBtn').disabled = !canBuzz;
+
+  if (s.phase === 'lobby') el('status').textContent = '✅ انضممت! في انتظار بدء المضيف…';
+  else if (s.phase === 'question') el('status').textContent = `السؤال ${s.questionNumber} — اضغط بسرعة!`;
+  else if (s.phase === 'buzzed') el('status').textContent = s.buzzedBy === team ? '🔔 ضغطت أولاً! بانتظار حكم المضيف' : '⏳ الفريق الآخر ضغط أولاً';
+  else if (s.phase === 'stolen') el('status').textContent = s.lockedTeams?.[team] ? '🚫 خرجت من هذا السؤال' : '⚡ فرصة سرقة — اضغط!';
+  else if (s.phase === 'reveal') el('status').textContent = s.lastResult === 'correct' ? '🎉 إجابة صحيحة!' : (s.lastResult === 'burned' ? '🔥 احترق السؤال' : 'انتقل السؤال');
+  else if (s.phase === 'over') {
+    const win = s.winner === team;
+    el('status').textContent = s.winner === 'tie' ? '🤝 تعادل!' : (win ? '🏆 فزتم!' : 'انتهت اللعبة');
+    el('buzzBtn').disabled = true;
+  }
+});
+
+socket.on('result', (r) => { if (r.type === 'correct') sfx.correct(); else if (r.type === 'wrong' || r.type === 'burned') sfx.wrong(); });
+socket.on('session:ended', () => { alert('انتهت الجلسة'); location.reload(); });
+</script>
+</body>
+</html>

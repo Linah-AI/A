@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>من سيربح الجائزة — التلفزيون (مباشر)</title>
+<link rel="stylesheet" href="css/fonts.css" />
+<link rel="stylesheet" href="css/pop.css" />
+<style>
+:root{ --green:#1E8770; --red:#E2583F; }
+body{ background-color:#F3E7C8; background-image:radial-gradient(rgba(36,30,26,.07) 2px,transparent 2.5px); background-size:26px 26px }
+.join{ min-height:100vh; display:grid; place-items:center; padding:2rem }
+.join .box{ background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:2rem; text-align:center; width:min(440px,100%) }
+.join h1{ font-family:var(--bubble); font-weight:800; font-size:2rem; color:var(--coral); margin-bottom:.4rem }
+.join input{ width:100%; text-align:center; font-family:var(--bubble); font-weight:800; font-size:1.8rem; letter-spacing:4px; text-transform:uppercase; padding:.7rem; border:var(--bw) solid var(--ink); border-radius:12px; margin:1rem 0; background:var(--paper) }
+.tv{ min-height:100vh; display:none; flex-direction:column; padding:1.4rem 1.8rem }
+.tv.show{ display:flex }
+.tv-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem }
+.brand{ display:flex; align-items:center; gap:.5rem; font-family:var(--bubble); font-weight:800; font-size:1.4rem }
+.brand .m{ width:2.3rem;height:2.3rem;background:var(--coral);border:var(--bw) solid var(--ink);border-radius:9px;display:grid;place-items:center;color:var(--cream);transform:rotate(-5deg) }
+.show-name{ font-family:var(--bubble); font-weight:800; font-size:clamp(2rem,5vw,3.2rem); color:var(--mustard); -webkit-text-stroke:2.5px var(--ink); paint-order:stroke fill; text-shadow:3px 3px 0 var(--ink) }
+.timer{ --v:100; position:relative; width:84px;height:84px }
+.timer .num{ position:absolute; inset:0; display:grid; place-items:center; font-family:var(--bubble); font-weight:800; font-size:1.9rem; color:var(--ink) }
+.bar{ display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:stretch; margin-bottom:1.4rem }
+.team{ border:var(--bw-lg) solid var(--ink); border-radius:14px; padding:.7rem 1.2rem; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:space-between; gap:.7rem; transition:transform .15s }
+.team.green{ background:var(--green); color:var(--cream) } .team.red{ background:var(--red); color:var(--cream); flex-direction:row-reverse }
+.team.lit{ transform:scale(1.05); box-shadow:var(--shadow-lg) }
+.team .nm{ font-family:var(--bubble); font-weight:800; font-size:1.3rem }
+.team .pts{ font-family:var(--bubble); font-weight:800; font-size:2.2rem; background:var(--cream); color:var(--ink); border:var(--bw) solid var(--ink); border-radius:10px; padding:0 .6rem; box-shadow:var(--shadow-sm) }
+.stage{ flex:1; display:flex; flex-direction:column; justify-content:center; gap:1.3rem; max-width:1000px; margin:0 auto; width:100% }
+.qbox{ background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:1.6rem 2rem; text-align:center; position:relative }
+.qbox .cat{ position:absolute; top:-15px; right:24px }
+.qbox .q{ font-family:var(--heavy); font-weight:800; font-size:clamp(1.4rem,3.2vw,2.2rem); line-height:1.4 }
+.opts{ display:grid; grid-template-columns:1fr 1fr; gap:1rem }
+.opt{ display:flex; align-items:center; gap:1rem; background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:14px; padding:1rem 1.3rem; box-shadow:var(--shadow); font-weight:800; font-size:1.25rem; transition:all .2s }
+.opt .k{ flex:none; width:2.7rem;height:2.7rem;border-radius:10px;display:grid;place-items:center;font-family:var(--bubble);font-weight:800;font-size:1.4rem;background:var(--mustard);color:var(--ink);border:var(--bw) solid var(--ink) }
+.opt.correct{ background:var(--green); color:var(--cream) } .opt.correct .k{ background:var(--cream);color:var(--ink) }
+.opt.dim{ opacity:.45 }
+.flash{ position:fixed; inset:0; pointer-events:none; opacity:0; z-index:30 }
+#fx{ position:fixed; inset:0; pointer-events:none; z-index:40 }
+.over{ flex:1; display:grid; place-items:center; text-align:center }
+.over h2{ font-family:var(--bubble); font-weight:800; font-size:clamp(2.5rem,7vw,5rem); color:var(--mustard); -webkit-text-stroke:3px var(--ink); paint-order:stroke fill; text-shadow:4px 4px 0 var(--ink) }
+@media(max-width:760px){ .opts{ grid-template-columns:1fr } .bar{ grid-template-columns:1fr } }
+</style>
+</head>
+<body>
+<!-- إدخال الرمز -->
+<div class="join" id="joinView">
+  <div class="box">
+    <h1>شاشة التلفزيون</h1>
+    <p class="muted" style="font-weight:700;color:#7a6a55">أدخل رمز الجلسة من شاشة المضيف</p>
+    <input id="codeInput" maxlength="5" placeholder="ABCDE" />
+    <button class="pop-btn coral" style="width:100%" id="joinBtn">اتصال بالجلسة</button>
+  </div>
+</div>
+
+<!-- اللعبة -->
+<main class="tv" id="tvView">
+  <div class="tv-top">
+    <div class="brand"><span class="m">A</span> أركيدو</div>
+    <div class="show-name">من سيربح الجائزة</div>
+    <div class="timer" id="timer">
+      <svg width="84" height="84"><circle cx="42" cy="42" r="35" fill="var(--cream)" stroke="#241E1A" stroke-width="5"/>
+        <circle id="ring" cx="42" cy="42" r="35" fill="none" stroke="#E2583F" stroke-width="8" stroke-linecap="round" stroke-dasharray="220" stroke-dashoffset="0" transform="rotate(-90 42 42)"/></svg>
+      <span class="num" id="timerNum">—</span>
+    </div>
+  </div>
+
+  <div class="bar">
+    <div class="team green" id="teamGreen"><span class="nm">الفريق الأخضر</span><span class="pts" id="ptsGreen">0</span></div>
+    <div class="sticker mustard" id="roundChip">بانتظار البدء</div>
+    <div class="team red" id="teamRed"><span class="nm">الفريق الأحمر</span><span class="pts" id="ptsRed">0</span></div>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="qbox">
+      <span class="cat sticker teal" id="cat">—</span>
+      <div class="q" id="qText">في انتظار المضيف ليبدأ اللعبة…</div>
+    </div>
+    <div class="opts" id="opts"></div>
+  </div>
+
+  <div class="over" id="overView" style="display:none"><div><h2 id="overText"></h2></div></div>
+</main>
+
+<div class="flash" id="flash"></div>
+<canvas id="fx"></canvas>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module">
+import { socket, el, qs, sfx, confetti } from './js/arcado-client.js';
+
+function join(code) {
+  socket.emit('tv:join', { code }, (res) => {
+    if (!res?.ok) return alert(res?.error || 'تعذّر الاتصال');
+    el('joinView').style.display = 'none';
+    el('tvView').classList.add('show');
+  });
+}
+el('joinBtn').onclick = () => { const c = el('codeInput').value.trim().toUpperCase(); if (c) join(c); };
+const pre = qs('s'); if (pre) { el('codeInput').value = pre.toUpperCase(); join(pre.toUpperCase()); }
+
+const KEYS = ['أ', 'ب', 'ج', 'د'];
+
+socket.on('timer', ({ timeLeft }) => {
+  const t = Math.max(0, timeLeft);
+  el('timerNum').textContent = String(t);
+  const frac = t / 12;
+  el('ring').style.strokeDashoffset = 220 * (1 - frac);
+  el('ring').setAttribute('stroke', t <= 5 ? '#E2583F' : '#E3A92E');
+  if (t <= 5 && t > 0) sfx.tick();
+});
+
+socket.on('state', (s) => {
+  el('ptsGreen').textContent = s.teams.green.score;
+  el('ptsRed').textContent = s.teams.red.score;
+
+  if (s.phase === 'lobby') { el('roundChip').textContent = 'بانتظار البدء'; return; }
+  if (s.phase === 'over') {
+    el('stage').style.display = 'none';
+    el('overView').style.display = 'grid';
+    const unit = s.prizeMode === 'gift' ? 'صندوق' : 'ريال';
+    el('overText').textContent = s.winner === 'tie' ? '🤝 تعادل!' : `🏆 فاز ${s.teams[s.winner].name} بـ ${s.teams[s.winner].score} ${unit}!`;
+    confetti(el('fx'));
+    sfx.correct();
+    return;
+  }
+
+  if (s.question) {
+    el('roundChip').textContent = `السؤال ${s.questionNumber} من ${s.totalQuestions}`;
+    el('cat').textContent = s.question.cat;
+    el('qText').textContent = s.question.q;
+    const box = el('opts'); box.innerHTML = '';
+    s.question.options.forEach((opt, i) => {
+      const d = document.createElement('div');
+      d.className = 'opt';
+      if (s.question.answer != null) { d.classList.add(i === s.question.answer ? 'correct' : 'dim'); }
+      d.innerHTML = `<span class="k">${KEYS[i]}</span> ${opt}`;
+      box.appendChild(d);
+    });
+  }
+
+  // إضاءة فريق الـ Buzz
+  el('teamGreen').classList.toggle('lit', s.buzzedBy === 'green');
+  el('teamRed').classList.toggle('lit', s.buzzedBy === 'red');
+});
+
+socket.on('buzz', ({ team }) => {
+  sfx.buzz();
+  const f = el('flash');
+  f.style.background = `radial-gradient(circle, ${team === 'green' ? 'rgba(30,135,112,.5)' : 'rgba(226,88,63,.5)'}, transparent 70%)`;
+  f.animate([{ opacity: 0 }, { opacity: 1 }, { opacity: .3 }], { duration: 500, easing: 'ease-out' });
+});
+
+socket.on('result', (r) => {
+  if (r.type === 'correct') { sfx.correct(); confetti(el('fx'), 90); }
+  else if (r.type === 'stolen') sfx.buzz();
+  else sfx.wrong();
+});
+socket.on('session:ended', () => { alert('انتهت الجلسة'); location.reload(); });
+</script>
+</body>
+</html>
