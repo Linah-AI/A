@@ -1,16 +1,20 @@
-/* أركيدو — خطوط محلية (تعمل بدون إنترنت) */
+/* أركيدو — خطوط محلية رسمية (تعمل بدون إنترنت) · ترخيص OFL — راجع fonts/OFL.txt */
 
 @font-face{
+  font-family:'Baloo Bhaijaan 2'; font-style:normal; font-weight:500; font-display:swap;
+  src:url('../fonts/BalooBhaijaan2-Medium.ttf') format('truetype');
+}
+@font-face{
   font-family:'Baloo Bhaijaan 2'; font-style:normal; font-weight:600; font-display:swap;
-  src:url('../fonts/baloo-600.ttf') format('truetype');
+  src:url('../fonts/BalooBhaijaan2-SemiBold.ttf') format('truetype');
 }
 @font-face{
   font-family:'Baloo Bhaijaan 2'; font-style:normal; font-weight:700; font-display:swap;
-  src:url('../fonts/baloo-700.ttf') format('truetype');
+  src:url('../fonts/BalooBhaijaan2-Bold.ttf') format('truetype');
 }
 @font-face{
   font-family:'Baloo Bhaijaan 2'; font-style:normal; font-weight:800; font-display:swap;
-  src:url('../fonts/baloo-800.ttf') format('truetype');
+  src:url('../fonts/BalooBhaijaan2-ExtraBold.ttf') format('truetype');
 }
 @font-face{
   font-family:'Changa'; font-style:normal; font-weight:700; font-display:swap;
@@ -21,5 +25,5 @@
   src:url('../fonts/changa-800.ttf') format('truetype');
 }
 
-/* Tajawal للنصوص — يبقى من Google لو متوفّر، وإلا fallback نظامي */
+/* Tajawal للنصوص — من Google لو متوفّر، وإلا fallback نظامي */
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap');
