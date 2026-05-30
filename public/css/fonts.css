@@ -1,0 +1,25 @@
+/* أركيدو — خطوط محلية (تعمل بدون إنترنت) */
+
+@font-face{
+  font-family:'Baloo Bhaijaan 2'; font-style:normal; font-weight:600; font-display:swap;
+  src:url('../fonts/baloo-600.ttf') format('truetype');
+}
+@font-face{
+  font-family:'Baloo Bhaijaan 2'; font-style:normal; font-weight:700; font-display:swap;
+  src:url('../fonts/baloo-700.ttf') format('truetype');
+}
+@font-face{
+  font-family:'Baloo Bhaijaan 2'; font-style:normal; font-weight:800; font-display:swap;
+  src:url('../fonts/baloo-800.ttf') format('truetype');
+}
+@font-face{
+  font-family:'Changa'; font-style:normal; font-weight:700; font-display:swap;
+  src:url('../fonts/changa-700.ttf') format('truetype');
+}
+@font-face{
+  font-family:'Changa'; font-style:normal; font-weight:800; font-display:swap;
+  src:url('../fonts/changa-800.ttf') format('truetype');
+}
+
+/* Tajawal للنصوص — يبقى من Google لو متوفّر، وإلا fallback نظامي */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap');
