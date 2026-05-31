@@ -20,6 +20,9 @@ const io = new Server(httpServer);
 
 app.use(express.static(join(__dirname, '../public')));
 
+// فحص صحّة للاستضافة (Render/Railway)
+app.get('/healthz', (_req, res) => res.json({ ok: true, sessions: sessions.size }));
+
 // رمز جلسة قصير سهل القراءة
 const newCode = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 5);
 

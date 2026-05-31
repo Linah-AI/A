@@ -1,0 +1,13 @@
+# أركيدو — إعداد النشر على Render.com
+# اربط مستودع GitHub بـ Render وسيقرأ هذا الملف تلقائياً.
+services:
+  - type: web
+    name: arcado
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
