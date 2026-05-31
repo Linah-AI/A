@@ -84,7 +84,7 @@ export class MillionaireGame {
 
   // حكم المضيف: صح
   judgeCorrect() {
-    if (this.phase !== Phase.BUZZED) return false;
+    if (this.phase !== Phase.BUZZED && this.phase !== Phase.STOLEN) return false;
     const team = this.buzzedBy;
     const reward = this._reward();
     this.teams[team].score += reward;
@@ -95,21 +95,22 @@ export class MillionaireGame {
     return { team, reward };
   }
 
-  // حكم المضيف: خطأ — مع خيار الانتقال أو الحرق
+  // حكم المضيف: خطأ
   judgeWrong({ steal = true } = {}) {
-    if (this.phase !== Phase.BUZZED) return false;
+    if (this.phase !== Phase.BUZZED && this.phase !== Phase.STOLEN) return false;
     const wrongTeam = this.buzzedBy;
     this.lockedTeams[wrongTeam] = true;
     const other = wrongTeam === 'green' ? 'red' : 'green';
 
     if (steal && !this.lockedTeams[other]) {
-      // الفريق الثاني يسرق
-      this.buzzedBy = null;
+      // السؤال ينتقل فوراً للفريق الثاني — buzzedBy يُعيَّن مباشرة بلا buzz
+      this.buzzedBy = other;
       this.phase = Phase.STOLEN;
       this.lastResult = 'wrong';
       return { result: 'stolen', stealTeam: other };
     }
-    // لا أحد يكسب — السؤال يحترق → ما ثبت في رأس أحد، يدخل قائمة المراجعة
+    // كلا الفريقين أجابا خطأ — السؤال يحترق
+    this.buzzedBy = null;
     this.lastResult = 'burned';
     this.phase = Phase.REVEAL;
     if (this.current) this.onAnswer(this.current.id, false);

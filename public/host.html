@@ -112,10 +112,6 @@ body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,25
       <button class="ck n" id="btnTimer">⏸ إيقاف/تشغيل العدّاد</button>
       <button class="ck n" id="btnNext">السؤال التالي ←</button>
     </div>
-    <div style="margin-top:.8rem" id="wrongOpts" class="ctrls" hidden>
-      <button class="ck n" id="btnSteal">↪ ينتقل للفريق الثاني</button>
-      <button class="ck n" id="btnBurn">لا أحد يكسب</button>
-    </div>
   </div>
 
   <!-- النتيجة -->
@@ -166,9 +162,7 @@ el('openTvBtn').onclick = () => {
 
 el('startBtn').onclick = () => { socket.emit('host:start'); };
 el('btnCorrect').onclick = () => { socket.emit('host:judge', { correct: true }); };
-el('btnWrong').onclick = () => { el('wrongOpts').hidden = false; };
-el('btnSteal').onclick = () => { socket.emit('host:judge', { correct: false, steal: true }); el('wrongOpts').hidden = true; };
-el('btnBurn').onclick = () => { socket.emit('host:judge', { correct: false, steal: false }); el('wrongOpts').hidden = true; };
+el('btnWrong').onclick = () => { socket.emit('host:judge', { correct: false, steal: true }); };
 el('btnNext').onclick = () => { socket.emit('host:next'); };
 let timerRunning = true;
 el('btnTimer').onclick = () => { timerRunning = !timerRunning; socket.emit('host:timer', { action: timerRunning ? 'start' : 'stop' }); };
@@ -193,18 +187,20 @@ socket.on('state', (s) => {
     }
   }
 
-  // من ضغط Buzz
+  // من ضغط Buzz أو انتقل إليه السؤال
   const wb = el('whoBuzz');
   if (s.buzzedBy) {
     wb.classList.add('show');
-    el('whoBuzzText').innerHTML = `ضغط الـ Buzz: <b>${s.teams[s.buzzedBy].name}</b>`;
+    const label = s.phase === 'stolen'
+      ? `السؤال انتقل لـ <b>${s.teams[s.buzzedBy].name}</b>`
+      : `ضغط الـ Buzz: <b>${s.teams[s.buzzedBy].name}</b>`;
+    el('whoBuzzText').innerHTML = label;
     wb.querySelector('.dot').style.background = s.buzzedBy === 'green' ? 'var(--teal)' : 'var(--coral)';
   } else wb.classList.remove('show');
 
-  const canJudge = s.phase === 'buzzed';
+  const canJudge = s.phase === 'buzzed' || s.phase === 'stolen';
   el('btnCorrect').disabled = !canJudge;
   el('btnWrong').disabled = !canJudge;
-  if (!canJudge) el('wrongOpts').hidden = true;
 
   if (s.phase === 'over') {
     el('play').style.display = 'none';
