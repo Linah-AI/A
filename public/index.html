@@ -10,8 +10,8 @@
 .topbar{ position:sticky; top:0; z-index:50; background:var(--paper-2); border-bottom:var(--bw-lg) solid var(--ink); }
 .topbar .container{ display:flex; align-items:center; justify-content:space-between; padding-block:.7rem; }
 .brand{ display:flex; align-items:center; gap:.6rem; font-family:var(--bubble); font-size:1.7rem; }
-.brand .m{ width:2.5rem;height:2.5rem;background:var(--coral); border:var(--bw) solid var(--ink); border-radius:9px;
-  display:grid;place-items:center;color:var(--cream);box-shadow:var(--shadow-sm); transform:rotate(-5deg); font-family:var(--bubble); }
+.brand .m{ width:2.6rem;height:2.6rem; display:block }
+.brand .m svg{ width:100%;height:100%;overflow:visible }
 .nav-links{ display:flex; gap:.5rem; align-items:center }
 .nav-links a:not(.pop-btn){ font-weight:800; font-family:var(--heavy); padding:.4rem .7rem }
 
@@ -56,8 +56,10 @@
 /* الألعاب */
 .games{ display:grid; grid-template-columns:repeat(2,1fr); gap:1.8rem }
 .game .screen{ padding:1.5rem; min-height:200px; position:relative; display:flex; align-items:center; gap:1.2rem }
-.game .screen .txt .big{ font-family:var(--bubble); font-size:2.4rem; color:var(--cream); line-height:1; -webkit-text-stroke:1.5px var(--ink); }
-.game .screen .txt .big.dk{ color:var(--ink); -webkit-text-stroke:0 }
+.game .screen .txt .big{ font-family:var(--bubble); font-size:2.6rem; line-height:1.05;
+  color:var(--cream); -webkit-text-stroke:2.5px var(--ink); paint-order:stroke fill;
+  text-shadow:3px 3px 0 var(--ink); }
+.game .screen .txt .big.dk{ color:var(--cream); }
 .game .iconwrap{ flex:none; width:96px;height:96px; background:var(--cream); border:var(--bw) solid var(--ink); border-radius:14px;
   display:grid; place-items:center; box-shadow:var(--shadow-sm) }
 .game .meta{ display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:1rem 1.2rem; border-top:var(--bw) solid var(--ink); background:var(--cream) }
@@ -67,8 +69,6 @@
 .g-hur .screen{ background:var(--teal) }
 .g-taif .screen{ background:var(--rose) }
 .g-dec .screen{ background:var(--plum) }
-.g-mil .screen .big{ color:var(--ink); -webkit-text-stroke:0 }
-.g-taif .screen .big{ color:var(--ink); -webkit-text-stroke:0 }
 
 /* كيف تعمل */
 .how{ background:var(--blue); border-block:var(--bw-lg) solid var(--ink);
@@ -116,6 +116,15 @@ footer p{ font-weight:700; color:#c9bda8 }
 <!-- ===== مكتبة الأيقونات SVG (مرسومة يدوياً) ===== -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
+    <!-- شعار أركيدو: 4 دوائر ملوّنة + نجمة -->
+    <symbol id="arcado-mark" viewBox="0 0 100 100">
+      <circle cx="38" cy="38" r="32" fill="#59B292" stroke="#241E1A" stroke-width="4"/>
+      <circle cx="62" cy="38" r="32" fill="#FFC94D" stroke="#241E1A" stroke-width="4"/>
+      <circle cx="38" cy="62" r="32" fill="#FA6781" stroke="#241E1A" stroke-width="4"/>
+      <circle cx="62" cy="62" r="32" fill="#075B5E" stroke="#241E1A" stroke-width="4"/>
+      <polygon points="50,36 53,46 64,46 55,53 58,63 50,57 42,63 45,53 36,46 47,46"
+        fill="#fff" stroke="#241E1A" stroke-width="2" stroke-linejoin="round"/>
+    </symbol>
     <!-- كأس -->
     <symbol id="i-trophy" viewBox="0 0 64 64">
       <path d="M18 9h28v11c0 8-6 14-14 14s-14-6-14-14z" fill="#E3A92E" stroke="#241E1A" stroke-width="3" stroke-linejoin="round"/>
@@ -220,7 +229,7 @@ footer p{ font-weight:700; color:#c9bda8 }
 <!-- ترويسة -->
 <header class="topbar">
   <div class="container">
-    <div class="brand"><span class="m">A</span> أركيدو</div>
+    <div class="brand"><span class="m"><svg viewBox="0 0 100 100"><use href="#arcado-mark"/></svg></span> أركيدو</div>
     <nav class="nav-links">
       <a href="#games">الألعاب</a>
       <a href="#how">كيف تلعب</a>
@@ -236,7 +245,7 @@ footer p{ font-weight:700; color:#c9bda8 }
   <div class="container">
     <div>
       <span class="sticker coral">منصة ألعاب السهرة</span>
-      <h1><span class="graf coral">سهرتكم</span><br><span class="graf teal">صارت لعبة</span></h1>
+      <h1><span class="graf" style="color:var(--coral);text-shadow:4px 4px 0 var(--ink)">سهرتكم</span><br><span class="graf" style="color:var(--teal);text-shadow:4px 4px 0 var(--ink)">صارت لعبة</span></h1>
       <p class="sub">أربع ألعاب عربية تحوّل بيتكم لاستوديو مسابقات. التلفزيون يجمع الكل، وكل جوال يصير وحدة تحكّم. اشترِ، افتح، والعب فوراً.</p>
       <div class="cta-row">
         <a class="pop-btn coral" href="#games">ابدأ اللعب</a>
@@ -294,7 +303,7 @@ footer p{ font-weight:700; color:#c9bda8 }
 <section class="section container" id="games">
   <div class="section-head">
     <span class="sticker teal">اختر لعبتك</span>
-    <h2 class="graf mustard" style="-webkit-text-stroke:2px var(--ink)">أربع ألعاب تكسر السهرة</h2>
+    <h2 class="graf" style="color:var(--coral);text-shadow:3px 3px 0 var(--ink)">أربع ألعاب تكسر السهرة</h2>
     <p>كل لعبة على 3 شاشات: تلفزيون + مضيف + جوال</p>
   </div>
   <div class="games">
@@ -354,7 +363,7 @@ footer p{ font-weight:700; color:#c9bda8 }
 <section class="section container" id="bundles">
   <div class="section-head">
     <span class="sticker coral">الباقات</span>
-    <h2 class="graf blue" style="-webkit-text-stroke:2px var(--ink)">اختر باقتك</h2>
+    <h2 class="graf" style="color:var(--blue);text-shadow:3px 3px 0 var(--ink)">اختر باقتك</h2>
     <p>كل باقة كود تفعيل يفتح عدداً من الجلسات</p>
   </div>
   <div class="bundles">
@@ -405,7 +414,7 @@ footer p{ font-weight:700; color:#c9bda8 }
 <!-- تذييل -->
 <footer>
   <div class="container">
-    <div class="brand"><span class="m">A</span> أركيدو</div>
+    <div class="brand"><span class="m"><svg viewBox="0 0 100 100"><use href="#arcado-mark"/></svg></span> أركيدو</div>
     <p>© 2026 أركيدو — ألعاب السهرة العربية</p>
   </div>
 </footer>
