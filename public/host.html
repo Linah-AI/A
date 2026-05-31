@@ -110,6 +110,10 @@ body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,25
     </div>
     <div class="qline" id="qText">—</div>
     <div class="whobuzz" id="whoBuzz"><span class="dot"></span> <span id="whoBuzzText"></span></div>
+    <div id="stolenDecision" class="ctrls" hidden style="margin-bottom:.7rem">
+      <button class="ck ok full" id="btnWillAnswer">سيجيب — ابدأ العداد</button>
+      <button class="ck no full" id="btnWillPass">يمرر — السؤال يحترق</button>
+    </div>
     <div class="answer" id="answer"><span id="answerText"></span><span style="background:#000;color:var(--mustard);padding:.15rem .6rem;border-radius:99px;font-size:.8rem">سري</span></div>
     <div class="ctrls">
       <button class="ck ok" id="btnCorrect" disabled>صح ✓</button>
@@ -138,10 +142,19 @@ let sessionCode = null;
 let autoNextEnabled = false;
 let autoNextTimer = null;
 let autoNextCountdown = 0;
+let stolenReady = false;
+let prevPhase = null;
 
 function cancelAutoNext() {
   if (autoNextTimer) { clearInterval(autoNextTimer); autoNextTimer = null; }
   el('autoNextHint').style.display = 'none';
+}
+
+function giftPhrase(n) {
+  if (n === 1) return 'بصندوق';
+  if (n === 2) return 'بصندوقين';
+  if (n >= 3 && n <= 10) return `بـ${n} صناديق`;
+  return `بـ${n} صندوق`;
 }
 
 // إخفاء/إظهار خانة مبلغ العيدية حسب نوع الجائزة
@@ -179,6 +192,17 @@ el('startBtn').onclick = () => { socket.emit('host:start'); };
 el('btnCorrect').onclick = () => { socket.emit('host:judge', { correct: true }); };
 el('btnWrong').onclick = () => { socket.emit('host:judge', { correct: false, steal: true }); };
 el('btnNext').onclick = () => { cancelAutoNext(); socket.emit('host:next'); };
+el('btnWillAnswer').onclick = () => {
+  stolenReady = true;
+  el('stolenDecision').hidden = true;
+  socket.emit('host:timer', { action: 'start' });
+  el('btnCorrect').disabled = false;
+  el('btnWrong').disabled = false;
+};
+el('btnWillPass').onclick = () => {
+  el('stolenDecision').hidden = true;
+  socket.emit('host:judge', { correct: false, steal: false });
+};
 let timerRunning = true;
 el('btnTimer').onclick = () => { timerRunning = !timerRunning; socket.emit('host:timer', { action: timerRunning ? 'start' : 'stop' }); };
 
@@ -213,7 +237,19 @@ socket.on('state', (s) => {
     wb.querySelector('.dot').style.background = s.buzzedBy === 'green' ? 'var(--teal)' : 'var(--coral)';
   } else wb.classList.remove('show');
 
-  const canJudge = s.phase === 'buzzed' || s.phase === 'stolen';
+  // إدارة مرحلة stolen: إظهار قرار يجيب/يمرر
+  if (s.phase !== prevPhase) {
+    if (s.phase === 'stolen') {
+      stolenReady = false;
+      el('stolenDecision').hidden = false;
+    } else {
+      el('stolenDecision').hidden = true;
+      if (s.phase !== 'stolen') stolenReady = false;
+    }
+    prevPhase = s.phase;
+  }
+
+  const canJudge = s.phase === 'buzzed' || (s.phase === 'stolen' && stolenReady);
   el('btnCorrect').disabled = !canJudge;
   el('btnWrong').disabled = !canJudge;
 
@@ -240,7 +276,11 @@ socket.on('state', (s) => {
     el('play').style.display = 'none';
     const box = el('overBox'); box.style.display = 'block';
     if (s.winner === 'tie') box.textContent = 'تعادل!';
-    else box.textContent = `فاز ${s.teams[s.winner].name} برصيد ${s.teams[s.winner].score} ${s.prizeMode === 'gift' ? 'صندوق' : 'ريال'}!`;
+    else {
+      const score = s.teams[s.winner].score;
+      const prize = s.prizeMode === 'gift' ? giftPhrase(score) : `بـ${score} ريال`;
+      box.textContent = `فاز ${s.teams[s.winner].name} ${prize}!`;
+    }
   }
 });
 

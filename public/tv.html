@@ -77,7 +77,7 @@ body{ background-color:#F3E7C8; background-image:radial-gradient(rgba(36,30,26,.
 
   <div class="bar">
     <div class="team green" id="teamGreen"><span class="nm">الفريق الأخضر</span><span class="pts" id="ptsGreen">0</span></div>
-    <div class="sticker mustard" id="roundChip">بانتظار البدء</div>
+    <div class="sticker mustard" id="roundChip" style="position:relative;z-index:2">بانتظار البدء</div>
     <div class="team red" id="teamRed"><span class="nm">الفريق الأحمر</span><span class="pts" id="ptsRed">0</span></div>
   </div>
 
@@ -98,6 +98,13 @@ body{ background-color:#F3E7C8; background-image:radial-gradient(rgba(36,30,26,.
 <script src="/socket.io/socket.io.js"></script>
 <script type="module">
 import { socket, el, qs, sfx, confetti } from './js/arcado-client.js';
+
+function giftPhrase(n) {
+  if (n === 1) return 'بصندوق';
+  if (n === 2) return 'بصندوقين';
+  if (n >= 3 && n <= 10) return `بـ${n} صناديق`;
+  return `بـ${n} صندوق`;
+}
 
 function join(code) {
   socket.emit('tv:join', { code }, (res) => {
@@ -128,8 +135,9 @@ socket.on('state', (s) => {
   if (s.phase === 'over') {
     el('stage').style.display = 'none';
     el('overView').style.display = 'grid';
-    const unit = s.prizeMode === 'gift' ? 'صندوق' : 'ريال';
-    el('overText').textContent = s.winner === 'tie' ? 'تعادل!' : `فاز ${s.teams[s.winner].name} بـ ${s.teams[s.winner].score} ${unit}!`;
+    const score = s.teams[s.winner].score;
+    const prize = s.prizeMode === 'gift' ? giftPhrase(score) : `بـ${score} ريال`;
+    el('overText').textContent = s.winner === 'tie' ? 'تعادل!' : `فاز ${s.teams[s.winner].name} ${prize}!`;
     confetti(el('fx'));
     sfx.correct();
     return;

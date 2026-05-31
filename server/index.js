@@ -168,7 +168,7 @@ io.on('connection', (socket) => {
     } else {
       const r = g.judgeWrong({ steal });
       if (r?.result === 'stolen') {
-        mySession.startTimer(io); // وقت محدود للسرقة
+        // المضيف يقرر إذا الفريق الثاني سيجيب — لا يبدأ العداد تلقائياً
         io.to(mySession.room()).emit('result', { type: 'stolen', team: r.stealTeam });
       } else {
         io.to(mySession.room()).emit('result', { type: 'burned' });

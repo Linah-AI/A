@@ -121,8 +121,19 @@ socket.on('state', (s) => {
   if (s.phase === 'lobby') setStatus('i-check', 'انضممت! في انتظار بدء المضيف');
   else if (s.phase === 'question') setStatus('i-bolt', `السؤال ${s.questionNumber} — اضغط بسرعة!`);
   else if (s.phase === 'buzzed') s.buzzedBy === team ? setStatus('i-bell','ضغطت أولاً! بانتظار حكم المضيف') : setStatus('i-hourglass','الفريق الآخر ضغط أولاً');
-  else if (s.phase === 'stolen') s.lockedTeams?.[team] ? setStatus('i-ban','خرجت من هذا السؤال') : setStatus('i-bolt','فرصة سرقة — اضغط!');
-  else if (s.phase === 'reveal') setStatus(s.lastResult === 'correct' ? 'i-star' : (s.lastResult === 'burned' ? 'i-fire' : 'i-hourglass'), s.lastResult === 'correct' ? 'إجابة صحيحة!' : (s.lastResult === 'burned' ? 'احترق السؤال' : 'انتقل السؤال'));
+  else if (s.phase === 'stolen') {
+    if (s.lockedTeams?.[team]) setStatus('i-ban', 'خرجت من هذا السؤال');
+    else setStatus('i-bell', 'السؤال انتقل إليكم!');
+  }
+  else if (s.phase === 'reveal') {
+    if (s.lastResult === 'correct') {
+      s.buzzedBy === team ? setStatus('i-star', 'أجبتم صح!') : setStatus('i-hourglass', 'الفريق الآخر أجاب صح');
+    } else if (s.lastResult === 'burned') {
+      setStatus('i-fire', 'احترق السؤال');
+    } else {
+      setStatus('i-hourglass', 'انتقل السؤال');
+    }
+  }
   else if (s.phase === 'over') {
     const win = s.winner === team;
     setStatus(s.winner === 'tie' ? 'i-handshake' : 'i-trophy', s.winner === 'tie' ? 'تعادل!' : (win ? 'فزتم!' : 'انتهت اللعبة'));
