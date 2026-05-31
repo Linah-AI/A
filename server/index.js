@@ -38,6 +38,7 @@ class Session {
     this.game = new MillionaireGame({
       prizeMode: opts.prizeMode,
       prizeCap: opts.prizeCap,
+      teamSize: opts.teamSize,
       bank: millionaireBank,
       progress,
       // يُسجّل نتيجة كل سؤال في الذاكرة الدائمة
@@ -94,7 +95,8 @@ io.on('connection', (socket) => {
     const session = new Session(code, {
       playerId: opts?.playerId,
       prizeMode: opts?.prizeMode,
-      prizeCap: opts?.prizeCap
+      prizeCap: opts?.prizeCap,
+      teamSize: opts?.teamSize
     });
     sessions.set(code, session);
 

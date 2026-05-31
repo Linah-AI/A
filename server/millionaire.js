@@ -25,6 +25,8 @@ export class MillionaireGame {
     this.progress = opts.progress || { seen: new Set(), wrong: new Set() };
     this.onAnswer = opts.onAnswer || (() => {});
     this.onRoundSelected = opts.onRoundSelected || (() => {});
+    // عدد لاعبي الفريق الواحد (يحدّده المضيف) → أساس الآلة الحاسبة
+    this.teamSize = opts.teamSize ?? null;
 
     this.teams = {
       green: { name: 'الفريق الأخضر', score: 0, players: 0 },
@@ -44,9 +46,10 @@ export class MillionaireGame {
 
   start() {
     if (this.phase !== Phase.LOBBY) return false;
-    // آلة حاسبة + توزيع متساوٍ + ذاكرة (لا تكرار) عبر بنك الأسئلة الذكي
-    const maxPlayers = Math.max(this.teams.green.players, this.teams.red.players, 1);
-    const { questions, recycledCats } = this.bank.selectRound(this.progress, maxPlayers);
+    // الآلة الحاسبة: حجم الفريق الذي حدّده المضيف، وإلا أكبر فريق متصل فعلياً
+    const connected = Math.max(this.teams.green.players, this.teams.red.players, 1);
+    const basis = this.teamSize ?? connected;
+    const { questions, recycledCats } = this.bank.selectRound(this.progress, basis);
     this.deck = questions;
     this.totalQuestions = questions.length;
     this.recycled = recycledCats.length > 0;
