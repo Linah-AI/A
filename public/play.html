@@ -13,13 +13,14 @@ body.t-green{ --tc:var(--green) } body.t-red{ --tc:var(--red) }
 .head{ background:var(--tc,var(--green)); color:var(--cream); padding:1.1rem 1.3rem; border-bottom:var(--bw) solid var(--ink); display:flex; align-items:center; justify-content:space-between }
 .head .team{ font-family:var(--bubble); font-weight:800; font-size:1.3rem }
 .head .bal{ background:var(--cream); color:var(--ink); border:var(--bw) solid var(--ink); border-radius:99px; padding:.2rem .8rem; font-weight:800; box-shadow:var(--shadow-sm) }
-.body{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.3rem; padding:1.6rem; text-align:center }
-.status{ font-weight:800; color:var(--ink-soft); min-height:1.5em }
+.body{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1rem; padding:1.6rem; text-align:center }
+.status-icon{ width:42px; height:42px }
+.status{ font-family:var(--bubble); font-weight:800; font-size:1.15rem; color:var(--ink); min-height:1.4em }
 .buzz{ width:min(74vw,280px); aspect-ratio:1; border-radius:50%; background:var(--tc,var(--green)); color:var(--cream); font-family:var(--bubble); font-weight:800; font-size:2.6rem; border:var(--bw-lg) solid var(--ink); box-shadow:0 12px 0 var(--ink),0 18px 30px rgba(0,0,0,.3); transition:transform .08s,box-shadow .08s,opacity .2s; position:relative }
 .buzz::after{ content:""; position:absolute; inset:16px; border-radius:50%; border:3px dashed rgba(255,255,255,.5) }
 .buzz:active{ transform:translateY(10px); box-shadow:0 2px 0 var(--ink) }
 .buzz:disabled{ opacity:.35; box-shadow:0 6px 0 var(--ink) }
-.hint{ font-weight:700; font-size:.9rem; color:var(--ink-soft) }
+.hint{ font-family:var(--bubble); font-weight:800; font-size:.95rem; color:var(--ink-soft) }
 .join{ flex:1; display:grid; place-items:center; padding:2rem }
 .join .box{ width:min(380px,100%); text-align:center }
 .join h1{ font-family:var(--bubble); font-weight:800; font-size:1.6rem; color:var(--coral); margin-bottom:1rem }
@@ -27,9 +28,26 @@ body.t-green{ --tc:var(--green) } body.t-red{ --tc:var(--red) }
 .teamsel{ display:flex; gap:.6rem; margin:.6rem 0 }
 .teamsel button{ flex:1; padding:1rem; border-radius:12px; font-family:var(--bubble); font-weight:800; font-size:1.1rem; border:var(--bw) solid var(--ink); color:#fff; box-shadow:var(--shadow-sm) }
 .flash{ position:fixed; inset:0; pointer-events:none; opacity:0; z-index:20; background:radial-gradient(circle,var(--tc),transparent 70%) }
+.bal-box{ display:inline-flex; align-items:center; gap:.3rem }
+.bal-box svg{ width:1rem; height:1rem }
 </style>
 </head>
 <body>
+<!-- مكتبة أيقونات SVG (بدل الإيموجي) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#1E8770" stroke="#241E1A" stroke-width="2"/><path d="M7 12.5l3.2 3.2L17 8.5" fill="none" stroke="#FBF4E2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L4 14h6l-1 8 9-12h-6z" fill="#FFC94D" stroke="#241E1A" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M12 3a5 5 0 0 1 5 5v4l2 3H5l2-3V8a5 5 0 0 1 5-5z" fill="#FFC94D" stroke="#241E1A" stroke-width="2" stroke-linejoin="round"/><path d="M10 19a2 2 0 0 0 4 0" fill="none" stroke="#241E1A" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-hourglass" viewBox="0 0 24 24"><path d="M6 3h12M6 21h12M7 3c0 5 10 5 10 9s-10 4-10 9" fill="none" stroke="#241E1A" stroke-width="2" stroke-linecap="round"/><path d="M17 3c0 5-10 5-10 9s10 4 10 9" fill="none" stroke="#241E1A" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-ban" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="#E2583F" stroke-width="2.5"/><line x1="6" y1="6" x2="18" y2="18" stroke="#E2583F" stroke-width="2.5" stroke-linecap="round"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l2.6 6.3 6.8.5-5.2 4.4 1.7 6.6L12 16.8 6.3 20.4l1.7-6.6L2.8 9.2l6.8-.5z" fill="#FFC94D" stroke="#241E1A" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+  <symbol id="i-fire" viewBox="0 0 24 24"><path d="M12 3c1 4-3 5-3 9a3 3 0 0 0 6 0c0-2-1-3-1-3 2 1 3 3 3 5a5 5 0 0 1-10 0c0-5 4-7 5-11z" fill="#E2583F" stroke="#241E1A" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M7 4h10v5a5 5 0 0 1-10 0z" fill="#FFC94D" stroke="#241E1A" stroke-width="2" stroke-linejoin="round"/><path d="M7 5H4c0 3 2 4 3.5 4M17 5h3c0 3-2 4-3.5 4" fill="none" stroke="#241E1A" stroke-width="2" stroke-linecap="round"/><path d="M9 18h6l1 3H8z" fill="#E2583F" stroke="#241E1A" stroke-width="2" stroke-linejoin="round"/><line x1="12" y1="14" x2="12" y2="18" stroke="#241E1A" stroke-width="2"/></symbol>
+  <symbol id="i-handshake" viewBox="0 0 24 24"><path d="M3 12l4-4 5 4 5-4 4 4-4 5-3-2-3 2-3-2z" fill="#9FC87E" stroke="#241E1A" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-coin" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#FFC94D" stroke="#241E1A" stroke-width="2"/><text x="12" y="16" text-anchor="middle" font-family="Baloo Bhaijaan 2,sans-serif" font-size="11" font-weight="900" fill="#241E1A">﷼</text></symbol>
+  <symbol id="i-gift" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" fill="#FA6781" stroke="#241E1A" stroke-width="2"/><rect x="3" y="7" width="18" height="4" fill="#FFC94D" stroke="#241E1A" stroke-width="2"/><line x1="12" y1="7" x2="12" y2="20" stroke="#241E1A" stroke-width="2"/></symbol>
+</defs></svg>
+
 <!-- انضمام -->
 <div class="join" id="joinView">
   <div class="box">
@@ -45,8 +63,9 @@ body.t-green{ --tc:var(--green) } body.t-red{ --tc:var(--red) }
 
 <!-- اللعب -->
 <div id="gameView" style="display:none;flex:1;flex-direction:column">
-  <div class="head"><span class="team" id="teamName">—</span><span class="bal" id="bal">0</span></div>
+  <div class="head"><span class="team" id="teamName">—</span><span class="bal bal-box"><span id="bal">0</span> <svg id="balIcon"><use href="#i-coin"/></svg></span></div>
   <div class="body">
+    <svg class="status-icon" id="statusIcon"><use href="#i-hourglass"/></svg>
     <p class="status" id="status">في انتظار بدء اللعبة…</p>
     <button class="buzz" id="buzzBtn" disabled>BUZZ</button>
     <p class="hint" id="hint">الأسرع ضغطاً يكسب حق الإجابة</p>
@@ -60,6 +79,11 @@ body.t-green{ --tc:var(--green) } body.t-red{ --tc:var(--red) }
 import { socket, el, qs, sfx } from './js/arcado-client.js';
 
 let team = null;
+
+function setStatus(icon, text){
+  el('statusIcon').innerHTML = '<use href="#'+icon+'"/>';
+  el('status').textContent = text;
+}
 
 function join(code, t) {
   socket.emit('player:join', { code, team: t }, (res) => {
@@ -76,7 +100,6 @@ document.querySelectorAll('.teamsel button').forEach(b => {
   b.onclick = () => { const c = el('codeInput').value.trim().toUpperCase(); if (!c) return alert('أدخل رمز الجلسة'); join(c, b.dataset.t); };
 });
 
-// من الباركود مباشرة
 const ps = qs('s'), pt = qs('t');
 if (ps && pt) join(ps.toUpperCase(), pt);
 
@@ -89,19 +112,20 @@ el('buzzBtn').onclick = () => {
 
 socket.on('state', (s) => {
   if (!team) return;
-  el('bal').textContent = s.teams[team].score + (s.prizeMode === 'gift' ? ' 🎁' : ' ﷼');
+  el('bal').textContent = s.teams[team].score;
+  el('balIcon').innerHTML = '<use href="#' + (s.prizeMode === 'gift' ? 'i-gift' : 'i-coin') + '"/>';
 
   const canBuzz = (s.phase === 'question' || s.phase === 'stolen') && !s.lockedTeams?.[team] && !s.buzzedBy;
   el('buzzBtn').disabled = !canBuzz;
 
-  if (s.phase === 'lobby') el('status').textContent = '✅ انضممت! في انتظار بدء المضيف…';
-  else if (s.phase === 'question') el('status').textContent = `السؤال ${s.questionNumber} — اضغط بسرعة!`;
-  else if (s.phase === 'buzzed') el('status').textContent = s.buzzedBy === team ? '🔔 ضغطت أولاً! بانتظار حكم المضيف' : '⏳ الفريق الآخر ضغط أولاً';
-  else if (s.phase === 'stolen') el('status').textContent = s.lockedTeams?.[team] ? '🚫 خرجت من هذا السؤال' : '⚡ فرصة سرقة — اضغط!';
-  else if (s.phase === 'reveal') el('status').textContent = s.lastResult === 'correct' ? '🎉 إجابة صحيحة!' : (s.lastResult === 'burned' ? '🔥 احترق السؤال' : 'انتقل السؤال');
+  if (s.phase === 'lobby') setStatus('i-check', 'انضممت! في انتظار بدء المضيف');
+  else if (s.phase === 'question') setStatus('i-bolt', `السؤال ${s.questionNumber} — اضغط بسرعة!`);
+  else if (s.phase === 'buzzed') s.buzzedBy === team ? setStatus('i-bell','ضغطت أولاً! بانتظار حكم المضيف') : setStatus('i-hourglass','الفريق الآخر ضغط أولاً');
+  else if (s.phase === 'stolen') s.lockedTeams?.[team] ? setStatus('i-ban','خرجت من هذا السؤال') : setStatus('i-bolt','فرصة سرقة — اضغط!');
+  else if (s.phase === 'reveal') setStatus(s.lastResult === 'correct' ? 'i-star' : (s.lastResult === 'burned' ? 'i-fire' : 'i-hourglass'), s.lastResult === 'correct' ? 'إجابة صحيحة!' : (s.lastResult === 'burned' ? 'احترق السؤال' : 'انتقل السؤال'));
   else if (s.phase === 'over') {
     const win = s.winner === team;
-    el('status').textContent = s.winner === 'tie' ? '🤝 تعادل!' : (win ? '🏆 فزتم!' : 'انتهت اللعبة');
+    setStatus(s.winner === 'tie' ? 'i-handshake' : 'i-trophy', s.winner === 'tie' ? 'تعادل!' : (win ? 'فزتم!' : 'انتهت اللعبة'));
     el('buzzBtn').disabled = true;
   }
 });

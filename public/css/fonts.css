@@ -25,5 +25,4 @@
   src:url('../fonts/changa-800.ttf') format('truetype');
 }
 
-/* Tajawal للنصوص — من Google لو متوفّر، وإلا fallback نظامي */
-@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&display=swap');
+/* كل الخطوط محلية (Baloo + Changa) — لا اعتماد على Tajawal */

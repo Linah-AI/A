@@ -129,7 +129,7 @@ socket.on('state', (s) => {
     el('stage').style.display = 'none';
     el('overView').style.display = 'grid';
     const unit = s.prizeMode === 'gift' ? 'صندوق' : 'ريال';
-    el('overText').textContent = s.winner === 'tie' ? '🤝 تعادل!' : `🏆 فاز ${s.teams[s.winner].name} بـ ${s.teams[s.winner].score} ${unit}!`;
+    el('overText').textContent = s.winner === 'tie' ? 'تعادل!' : `فاز ${s.teams[s.winner].name} بـ ${s.teams[s.winner].score} ${unit}!`;
     confetti(el('fx'));
     sfx.correct();
     return;

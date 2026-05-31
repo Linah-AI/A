@@ -66,12 +66,12 @@ body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,25
       <div class="setup">
         <label>نظام الجائزة</label>
         <select id="prizeMode">
-          <option value="eidiya">💰 عيدية بمبلغ محدد</option>
-          <option value="gift">🎁 هدية مجهولة (صناديق)</option>
+          <option value="eidiya">عيدية بمبلغ محدد</option>
+          <option value="gift">هدية مجهولة (صناديق)</option>
         </select>
         <label>الحد الأعلى للعيدية (ريال)</label>
         <input id="prizeCap" type="number" value="100" min="10" />
-        <button class="ck big full" id="createBtn" style="margin-top:1rem">🎬 افتح الجلسة واعرض الباركود</button>
+        <button class="ck big full" id="createBtn" style="margin-top:1rem">افتح الجلسة واعرض الباركود</button>
         <p class="hint" style="margin-top:.6rem">افتح <b>tv.html</b> على شاشة التلفزيون وأدخل الرمز، ثم وجّه اللاعبين لمسح الباركود.</p>
       </div>
       <div>
@@ -104,7 +104,7 @@ body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,25
     </div>
     <div style="margin-top:.8rem" id="wrongOpts" class="ctrls" hidden>
       <button class="ck n" id="btnSteal">↪ ينتقل للفريق الثاني</button>
-      <button class="ck n" id="btnBurn">🔥 لا أحد يكسب</button>
+      <button class="ck n" id="btnBurn">لا أحد يكسب</button>
     </div>
   </div>
 
@@ -184,8 +184,8 @@ socket.on('state', (s) => {
   if (s.phase === 'over') {
     el('play').style.display = 'none';
     const box = el('overBox'); box.style.display = 'block';
-    if (s.winner === 'tie') box.textContent = '🤝 تعادل!';
-    else box.textContent = `🏆 فاز ${s.teams[s.winner].name} برصيد ${s.teams[s.winner].score} ${s.prizeMode === 'gift' ? 'صندوق' : 'ريال'}!`;
+    if (s.winner === 'tie') box.textContent = 'تعادل!';
+    else box.textContent = `فاز ${s.teams[s.winner].name} برصيد ${s.teams[s.winner].score} ${s.prizeMode === 'gift' ? 'صندوق' : 'ريال'}!`;
   }
 });
 
