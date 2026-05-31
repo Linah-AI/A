@@ -76,6 +76,11 @@ body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,25
         <label>عدد اللاعبين في الفريق الواحد</label>
         <input id="teamSize" type="number" value="3" min="1" max="10" />
         <p class="hint" style="margin-top:.3rem">كل لاعب يضيف سؤالاً من كل قسم. مثال: 5 لاعبين × 5 أقسام = 25 سؤالاً.</p>
+        <label>الانتقال بين الأسئلة</label>
+        <select id="autoNextMode">
+          <option value="manual">يدوي — زر «السؤال التالي»</option>
+          <option value="auto">آلي — ينتقل تلقائياً بعد 4 ثوانٍ</option>
+        </select>
         <button class="ck big full" id="createBtn" style="margin-top:1rem">افتح الجلسة</button>
         <button class="ck full" id="openTvBtn" style="margin-top:.6rem;background:var(--teal);color:#fff;display:none">📺 افتح شاشة التلفزيون</button>
         <p class="hint" id="howto" style="margin-top:.8rem;display:none;line-height:1.7">
@@ -111,6 +116,7 @@ body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,25
       <button class="ck no" id="btnWrong" disabled>خطأ ✕</button>
       <button class="ck n" id="btnTimer">⏸ إيقاف/تشغيل العدّاد</button>
       <button class="ck n" id="btnNext">السؤال التالي ←</button>
+      <div id="autoNextHint" class="hint full" style="display:none;grid-column:1/-1;text-align:center;padding:.4rem 0"></div>
     </div>
   </div>
 
@@ -129,6 +135,14 @@ import { socket, el, sfx } from './js/arcado-client.js';
 
 let started = false;
 let sessionCode = null;
+let autoNextEnabled = false;
+let autoNextTimer = null;
+let autoNextCountdown = 0;
+
+function cancelAutoNext() {
+  if (autoNextTimer) { clearInterval(autoNextTimer); autoNextTimer = null; }
+  el('autoNextHint').style.display = 'none';
+}
 
 // إخفاء/إظهار خانة مبلغ العيدية حسب نوع الجائزة
 el('prizeMode').onchange = () => {
@@ -136,6 +150,7 @@ el('prizeMode').onchange = () => {
 };
 
 el('createBtn').onclick = () => {
+  autoNextEnabled = el('autoNextMode').value === 'auto';
   const opts = {
     prizeMode: el('prizeMode').value,
     prizeCap: Number(el('prizeCap').value) || 100,
@@ -163,7 +178,7 @@ el('openTvBtn').onclick = () => {
 el('startBtn').onclick = () => { socket.emit('host:start'); };
 el('btnCorrect').onclick = () => { socket.emit('host:judge', { correct: true }); };
 el('btnWrong').onclick = () => { socket.emit('host:judge', { correct: false, steal: true }); };
-el('btnNext').onclick = () => { socket.emit('host:next'); };
+el('btnNext').onclick = () => { cancelAutoNext(); socket.emit('host:next'); };
 let timerRunning = true;
 el('btnTimer').onclick = () => { timerRunning = !timerRunning; socket.emit('host:timer', { action: timerRunning ? 'start' : 'stop' }); };
 
@@ -201,6 +216,25 @@ socket.on('state', (s) => {
   const canJudge = s.phase === 'buzzed' || s.phase === 'stolen';
   el('btnCorrect').disabled = !canJudge;
   el('btnWrong').disabled = !canJudge;
+
+  // انتقال آلي عند reveal
+  if (s.phase === 'reveal' && autoNextEnabled && autoNextTimer === null) {
+    autoNextCountdown = 4;
+    const hint = el('autoNextHint');
+    hint.style.display = 'block';
+    hint.textContent = `السؤال التالي خلال ${autoNextCountdown}...`;
+    autoNextTimer = setInterval(() => {
+      autoNextCountdown--;
+      if (autoNextCountdown > 0) {
+        hint.textContent = `السؤال التالي خلال ${autoNextCountdown}...`;
+      } else {
+        cancelAutoNext();
+        socket.emit('host:next');
+      }
+    }, 1000);
+  } else if (s.phase !== 'reveal') {
+    cancelAutoNext();
+  }
 
   if (s.phase === 'over') {
     el('play').style.display = 'none';
