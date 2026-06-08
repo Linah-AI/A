@@ -107,7 +107,8 @@ io.on('connection', (socket) => {
     const base = opts?.origin || '';
     const qr = {
       green: await QRCode.toDataURL(`${base}/play.html?s=${code}&t=green`, { margin: 1, width: 240 }),
-      red: await QRCode.toDataURL(`${base}/play.html?s=${code}&t=red`, { margin: 1, width: 240 })
+      red: await QRCode.toDataURL(`${base}/play.html?s=${code}&t=red`, { margin: 1, width: 240 }),
+      tv: await QRCode.toDataURL(`${base}/tv.html?s=${code}`, { margin: 1, width: 240 })
     };
     // إحصاء ذاكرة اللاعب: كم سؤال شاهد، كم متبقٍّ، كم بحاجة مراجعة
     const mem = stats(session.playerId, 'millionaire', millionaireBank.size);

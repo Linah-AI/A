@@ -82,19 +82,26 @@ body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,25
           <option value="auto">آلي — ينتقل تلقائياً بعد 4 ثوانٍ</option>
         </select>
         <button class="ck big full" id="createBtn" style="margin-top:1rem">افتح الجلسة</button>
-        <button class="ck full" id="openTvBtn" style="margin-top:.6rem;background:var(--teal);color:#fff;display:none">📺 افتح شاشة التلفزيون</button>
-        <p class="hint" id="howto" style="margin-top:.8rem;display:none;line-height:1.7">
-          <b>1.</b> اعرض <b>شاشة التلفزيون</b> على الشاشة الكبيرة (الزر فوق).<br>
-          <b>2.</b> كل لاعب يمسح باركود فريقه بكاميرا جواله.<br>
-          <b>3.</b> لما يجهز الفريقان، اضغط «ابدأ اللعبة».
-        </p>
       </div>
       <div>
         <div class="code" id="codeBox">—</div>
-        <div class="qrs" id="qrBox" style="display:none">
-          <div class="qr green"><img id="qrGreen" alt="باركود الأخضر"/><b>الفريق الأخضر</b></div>
-          <div class="qr red"><img id="qrRed" alt="باركود الأحمر"/><b>الفريق الأحمر</b></div>
-        </div>
+      </div>
+    </div>
+
+    <!-- باركود التلفزيون — يظهر بعد إنشاء الجلسة -->
+    <div id="tvQrSection" style="display:none;margin-top:1rem;padding:1rem;background:#1f1a16;border:3px solid var(--teal);border-radius:14px;text-align:center">
+      <p style="font-family:var(--bubble);font-weight:800;color:var(--teal);margin-bottom:.6rem">شاشة التلفزيون</p>
+      <p class="hint" style="margin-bottom:.7rem">الشخص المسؤول عن الشاشة الكبيرة يمسح هذا الباركود</p>
+      <img id="qrTv" alt="باركود التلفزيون" style="width:160px;height:160px;border:3px solid #000;border-radius:12px;background:#fff;padding:6px;display:block;margin:0 auto .6rem"/>
+      <button class="ck full" id="openTvBtn" style="background:var(--teal);color:#fff">افتح على هذا الجهاز</button>
+    </div>
+
+    <!-- باركودات اللاعبين -->
+    <div id="qrBox" style="display:none;margin-top:1rem">
+      <p style="font-family:var(--bubble);font-weight:800;color:var(--mustard);margin-bottom:.6rem">باركودات اللاعبين</p>
+      <div class="qrs">
+        <div class="qr green"><img id="qrGreen" alt="باركود الأخضر"/><b>الفريق الأخضر</b></div>
+        <div class="qr red"><img id="qrRed" alt="باركود الأحمر"/><b>الفريق الأحمر</b></div>
       </div>
     </div>
     <div class="kv" style="margin-top:1rem"><span><span class="dot" style="background:var(--teal)"></span>المتصلون — الأخضر</span><b id="pGreen">0</b></div>
@@ -174,12 +181,12 @@ el('createBtn').onclick = () => {
     if (!res?.ok) return alert(res?.error || 'تعذّر إنشاء الجلسة');
     sessionCode = res.code;
     el('codeBox').textContent = res.code;
+    el('qrTv').src = res.qr.tv;
     el('qrGreen').src = res.qr.green;
     el('qrRed').src = res.qr.red;
-    el('qrBox').style.display = 'flex';
+    el('tvQrSection').style.display = 'block';
+    el('qrBox').style.display = 'block';
     el('createBtn').disabled = true;
-    el('openTvBtn').style.display = 'block';
-    el('howto').style.display = 'block';
   });
 };
 
