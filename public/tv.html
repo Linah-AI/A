@@ -40,6 +40,12 @@ body{ background-color:#F3E7C8; background-image:radial-gradient(rgba(36,30,26,.
 #fx{ position:fixed; inset:0; pointer-events:none; z-index:40 }
 .over{ flex:1; display:grid; place-items:center; text-align:center }
 .over h2{ font-family:var(--bubble); font-weight:800; font-size:clamp(2.5rem,7vw,5rem); color:var(--mustard); -webkit-text-stroke:3px var(--ink); paint-order:stroke fill; text-shadow:4px 4px 0 var(--ink) }
+.lobbyWait{ flex:1; display:none; flex-direction:column; align-items:center; justify-content:center; gap:1.4rem; text-align:center }
+.lobbyWait .code{ font-family:var(--bubble); font-weight:800; font-size:clamp(2.2rem,5vw,3.4rem); letter-spacing:4px; color:var(--mustard); -webkit-text-stroke:2.5px var(--ink); paint-order:stroke fill }
+.lobbyWait .qrs{ display:flex; gap:1.6rem; flex-wrap:wrap; justify-content:center }
+.lobbyWait .qr img{ width:170px; height:170px; border:var(--bw) solid var(--ink); border-radius:12px; background:#fff; padding:6px; box-shadow:var(--shadow) }
+.lobbyWait .qr p{ font-weight:800; margin-top:.5rem }
+.lobbyConn{ display:flex; gap:2rem; font-weight:800; font-size:1.1rem }
 @media(max-width:760px){ .opts{ grid-template-columns:1fr } .bar{ grid-template-columns:1fr } }
 </style>
 </head>
@@ -53,13 +59,15 @@ body{ background-color:#F3E7C8; background-image:radial-gradient(rgba(36,30,26,.
     <polygon points="50,36 53,46 64,46 55,53 58,63 50,57 42,63 45,53 36,46 47,46" fill="#fff" stroke="#241E1A" stroke-width="2" stroke-linejoin="round"/>
   </symbol>
 </defs></svg>
-<!-- إدخال الرمز -->
+<!-- بدء/انضمام -->
 <div class="join" id="joinView">
   <div class="box">
     <h1>شاشة التلفزيون</h1>
-    <p class="muted" style="font-weight:700;color:#7a6a55">أدخل رمز الجلسة من شاشة المضيف</p>
+    <p class="muted" style="font-weight:700;color:#7a6a55">اضغط لبدء جلسة جديدة على هذا الجهاز</p>
+    <button class="pop-btn coral" style="width:100%" id="createBtn">ابدأ جلسة جديدة</button>
+    <p class="hint" style="margin-top:1.2rem">أو إن كانت الجلسة بدأت من جهاز آخر:</p>
     <input id="codeInput" maxlength="5" placeholder="ABCDE" />
-    <button class="pop-btn coral" style="width:100%" id="joinBtn">اتصال بالجلسة</button>
+    <button class="pop-btn" style="width:100%;background:#4a3f35;color:#fff" id="joinBtn">انضمام برمز قائم</button>
   </div>
 </div>
 
@@ -75,16 +83,30 @@ body{ background-color:#F3E7C8; background-image:radial-gradient(rgba(36,30,26,.
     </div>
   </div>
 
-  <div class="bar">
+  <div class="bar" id="bar" style="display:none">
     <div class="team green" id="teamGreen"><span class="nm">الفريق الأخضر</span><span class="pts" id="ptsGreen">0</span></div>
     <div class="sticker mustard" id="roundChip" style="position:relative;z-index:2">بانتظار البدء</div>
     <div class="team red" id="teamRed"><span class="nm">الفريق الأحمر</span><span class="pts" id="ptsRed">0</span></div>
   </div>
 
-  <div class="stage" id="stage">
+  <div class="lobbyWait" id="lobbyWait">
+    <div class="code" id="tvCode">—</div>
+    <p class="hint" style="font-size:1.1rem">امسح الباركود المناسب من جوالك</p>
+    <div class="qrs">
+      <div class="qr"><img id="qrHost" alt="باركود المضيف"/><p style="color:var(--mustard)">المضيف</p></div>
+      <div class="qr"><img id="qrGreen" alt="باركود الأخضر"/><p style="color:var(--green)">الفريق الأخضر</p></div>
+      <div class="qr"><img id="qrRed" alt="باركود الأحمر"/><p style="color:var(--red)">الفريق الأحمر</p></div>
+    </div>
+    <div class="lobbyConn">
+      <span>الأخضر متصل: <b id="connGreen">0</b></span>
+      <span>الأحمر متصل: <b id="connRed">0</b></span>
+    </div>
+  </div>
+
+  <div class="stage" id="stage" style="display:none">
     <div class="qbox">
       <span class="cat sticker teal" id="cat">—</span>
-      <div class="q" id="qText">في انتظار المضيف ليبدأ اللعبة…</div>
+      <div class="q" id="qText">—</div>
     </div>
     <div class="opts" id="opts"></div>
   </div>
@@ -106,11 +128,27 @@ function giftPhrase(n) {
   return `بـ${n} صندوق`;
 }
 
+function enterTv() {
+  el('joinView').style.display = 'none';
+  el('tvView').classList.add('show');
+  el('lobbyWait').style.display = 'flex';
+}
+
+el('createBtn').onclick = () => {
+  socket.emit('tv:create', { origin: location.origin }, (res) => {
+    if (!res?.ok) return alert(res?.error || 'تعذّر إنشاء الجلسة');
+    enterTv();
+    el('tvCode').textContent = res.code;
+    el('qrHost').src = res.qr.host;
+    el('qrGreen').src = res.qr.green;
+    el('qrRed').src = res.qr.red;
+  });
+};
+
 function join(code) {
   socket.emit('tv:join', { code }, (res) => {
     if (!res?.ok) return alert(res?.error || 'تعذّر الاتصال');
-    el('joinView').style.display = 'none';
-    el('tvView').classList.add('show');
+    enterTv();
   });
 }
 el('joinBtn').onclick = () => { const c = el('codeInput').value.trim().toUpperCase(); if (c) join(c); };
@@ -131,7 +169,17 @@ socket.on('state', (s) => {
   el('ptsGreen').textContent = s.teams.green.score;
   el('ptsRed').textContent = s.teams.red.score;
 
-  if (s.phase === 'lobby') { el('roundChip').textContent = 'بانتظار البدء'; return; }
+  if (s.phase === 'lobby') {
+    el('connGreen').textContent = s.teams.green.players;
+    el('connRed').textContent = s.teams.red.players;
+    return;
+  }
+  // أول خروج من lobby: إظهار شريط الفرق والمسرح، إخفاء شاشة الانتظار
+  if (el('lobbyWait').style.display !== 'none') {
+    el('lobbyWait').style.display = 'none';
+    el('bar').style.display = 'grid';
+    el('stage').style.display = 'flex';
+  }
   if (s.phase === 'over') {
     el('stage').style.display = 'none';
     el('overView').style.display = 'grid';

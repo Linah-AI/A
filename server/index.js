@@ -30,15 +30,12 @@ const newCode = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 5);
 const sessions = new Map();
 
 class Session {
-  constructor(code, opts = {}) {
+  constructor(code) {
     this.code = code;
     // مُعرّف اللاعب يربط الجلسة بذاكرته الدائمة (سيصير License Key لاحقاً)
-    this.playerId = opts.playerId || `guest:${code}`;
+    this.playerId = `guest:${code}`;
     const progress = getProgress(this.playerId, 'millionaire');
     this.game = new MillionaireGame({
-      prizeMode: opts.prizeMode,
-      prizeCap: opts.prizeCap,
-      teamSize: opts.teamSize,
       bank: millionaireBank,
       progress,
       // يُسجّل نتيجة كل سؤال في الذاكرة الدائمة
@@ -88,35 +85,27 @@ io.on('connection', (socket) => {
   let myRole = null;   // 'host' | 'tv' | 'player'
   let myTeam = null;   // 'green' | 'red'
 
-  // المضيف ينشئ جلسة جديدة
-  socket.on('host:create', async (opts, cb) => {
+  // شاشة التلفزيون (الجهاز المربوط بالشاشة الكبيرة) تنشئ جلسة جديدة
+  socket.on('tv:create', async (opts, cb) => {
     const code = newCode();
-    // playerId = License Key مستقبلاً؛ الآن مُعرّف اختياري من المضيف أو ضيف
-    const session = new Session(code, {
-      playerId: opts?.playerId,
-      prizeMode: opts?.prizeMode,
-      prizeCap: opts?.prizeCap,
-      teamSize: opts?.teamSize
-    });
+    const session = new Session(code);
     sessions.set(code, session);
 
-    mySession = session; myRole = 'host';
-    session.hostId = socket.id;
+    mySession = session; myRole = 'tv';
+    session.tvIds.add(socket.id);
     socket.join(session.room());
 
     const base = opts?.origin || '';
     const qr = {
+      host: await QRCode.toDataURL(`${base}/host.html?s=${code}`, { margin: 1, width: 240 }),
       green: await QRCode.toDataURL(`${base}/play.html?s=${code}&t=green`, { margin: 1, width: 240 }),
-      red: await QRCode.toDataURL(`${base}/play.html?s=${code}&t=red`, { margin: 1, width: 240 }),
-      tv: await QRCode.toDataURL(`${base}/tv.html?s=${code}`, { margin: 1, width: 240 })
+      red: await QRCode.toDataURL(`${base}/play.html?s=${code}&t=red`, { margin: 1, width: 240 })
     };
-    // إحصاء ذاكرة اللاعب: كم سؤال شاهد، كم متبقٍّ، كم بحاجة مراجعة
-    const mem = stats(session.playerId, 'millionaire', millionaireBank.size);
-    cb?.({ ok: true, code, qr, memory: mem });
+    cb?.({ ok: true, code, qr });
     session.broadcast(io);
   });
 
-  // شاشة التلفزيون تنضم بالرمز
+  // شاشة التلفزيون تنضم لجلسة قائمة (إعادة اتصال أو شاشة ثانية)
   socket.on('tv:join', ({ code }, cb) => {
     const session = sessions.get(code);
     if (!session) return cb?.({ ok: false, error: 'جلسة غير موجودة' });
@@ -124,6 +113,20 @@ io.on('connection', (socket) => {
     session.tvIds.add(socket.id);
     socket.join(session.room());
     cb?.({ ok: true, code });
+    session.broadcast(io);
+  });
+
+  // المضيف يلتحق بجلسة أنشأتها شاشة التلفزيون (بمسح باركوده الخاص)
+  socket.on('host:claim', ({ code }, cb) => {
+    const session = sessions.get(code);
+    if (!session) return cb?.({ ok: false, error: 'جلسة غير موجودة' });
+    if (session.hostId) return cb?.({ ok: false, error: 'يوجد مضيف لهذه الجلسة بالفعل' });
+    mySession = session; myRole = 'host';
+    session.hostId = socket.id;
+    socket.join(session.room());
+    // إحصاء ذاكرة اللاعب: كم سؤال شاهد، كم متبقٍّ، كم بحاجة مراجعة
+    const mem = stats(session.playerId, 'millionaire', millionaireBank.size);
+    cb?.({ ok: true, code: session.code, memory: mem });
     session.broadcast(io);
   });
 
@@ -140,10 +143,14 @@ io.on('connection', (socket) => {
     session.broadcast(io);
   });
 
-  // المضيف يبدأ اللعبة
-  socket.on('host:start', () => {
+  // المضيف يبدأ اللعبة — يطبّق إعدادات الجولة قبل البدء
+  socket.on('host:start', (opts) => {
     if (myRole !== 'host' || !mySession) return;
-    if (mySession.game.start()) {
+    const g = mySession.game;
+    if (opts?.prizeMode) g.prizeMode = opts.prizeMode;
+    if (opts?.prizeCap) g.prizeCap = opts.prizeCap;
+    if (opts?.teamSize) g.teamSize = opts.teamSize;
+    if (g.start()) {
       mySession.startTimer(io);
       mySession.broadcast(io);
     }

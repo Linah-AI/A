@@ -59,50 +59,35 @@ body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,25
     <span class="badge">🔒 شاشة المضيف — مباشر</span>
   </div>
 
-  <!-- إعداد + باركود -->
-  <div class="card" id="lobby">
-    <h4>ابدأ جلسة جديدة</h4>
-    <div class="grid">
-      <div class="setup">
-        <label>نظام الجائزة</label>
-        <select id="prizeMode">
-          <option value="eidiya">عيدية بمبلغ محدد</option>
-          <option value="gift">هدية مجهولة (صناديق)</option>
-        </select>
-        <div id="capWrap">
-          <label>الحد الأعلى للعيدية (ريال)</label>
-          <input id="prizeCap" type="number" value="100" min="10" />
-        </div>
-        <label>عدد اللاعبين في الفريق الواحد</label>
-        <input id="teamSize" type="number" value="3" min="1" max="10" />
-        <p class="hint" style="margin-top:.3rem">كل لاعب يضيف سؤالاً من كل قسم. مثال: 5 لاعبين × 5 أقسام = 25 سؤالاً.</p>
-        <label>الانتقال بين الأسئلة</label>
-        <select id="autoNextMode">
-          <option value="manual">يدوي — زر «السؤال التالي»</option>
-          <option value="auto">آلي — ينتقل تلقائياً بعد 4 ثوانٍ</option>
-        </select>
-        <button class="ck big full" id="createBtn" style="margin-top:1rem">افتح الجلسة</button>
-      </div>
-      <div>
-        <div class="code" id="codeBox">—</div>
-      </div>
-    </div>
+  <!-- الانضمام للجلسة (عبر مسح باركود من شاشة التلفزيون أو رمز يدوي) -->
+  <div class="card" id="joinCard">
+    <h4>انضمام كمضيف</h4>
+    <p class="hint" style="margin-bottom:.8rem">امسح باركود «المضيف» من شاشة التلفزيون، أو أدخل الرمز المعروض عليها.</p>
+    <input id="codeInput" maxlength="5" placeholder="ABCDE" style="width:100%;padding:.7rem;border:3px solid #000;border-radius:10px;background:#1f1a16;color:var(--cream);font-family:var(--bubble);font-weight:800;font-size:1.4rem;text-align:center;letter-spacing:3px;text-transform:uppercase;margin-bottom:.7rem" />
+    <button class="ck big full" id="claimBtn">انضمام</button>
+  </div>
 
-    <!-- باركود التلفزيون — يظهر بعد إنشاء الجلسة -->
-    <div id="tvQrSection" style="display:none;margin-top:1rem;padding:1rem;background:#1f1a16;border:3px solid var(--teal);border-radius:14px;text-align:center">
-      <p style="font-family:var(--bubble);font-weight:800;color:var(--teal);margin-bottom:.6rem">شاشة التلفزيون</p>
-      <p class="hint" style="margin-bottom:.7rem">الشخص المسؤول عن الشاشة الكبيرة يمسح هذا الباركود</p>
-      <img id="qrTv" alt="باركود التلفزيون" style="width:160px;height:160px;border:3px solid #000;border-radius:12px;background:#fff;padding:6px;display:block;margin:0 auto .6rem"/>
-      <button class="ck full" id="openTvBtn" style="background:var(--teal);color:#fff">افتح على هذا الجهاز</button>
-    </div>
-
-    <!-- باركودات اللاعبين -->
-    <div id="qrBox" style="display:none;margin-top:1rem">
-      <p style="font-family:var(--bubble);font-weight:800;color:var(--mustard);margin-bottom:.6rem">باركودات اللاعبين</p>
-      <div class="qrs">
-        <div class="qr green"><img id="qrGreen" alt="باركود الأخضر"/><b>الفريق الأخضر</b></div>
-        <div class="qr red"><img id="qrRed" alt="باركود الأحمر"/><b>الفريق الأحمر</b></div>
+  <!-- إعداد الجولة (بعد الانضمام) -->
+  <div class="card" id="lobby" style="display:none">
+    <h4>إعداد الجولة — الرمز: <span id="codeBox" style="color:var(--mustard)">—</span></h4>
+    <div class="setup">
+      <label>نظام الجائزة</label>
+      <select id="prizeMode">
+        <option value="eidiya">عيدية بمبلغ محدد</option>
+        <option value="gift">هدية مجهولة (صناديق)</option>
+      </select>
+      <div id="capWrap">
+        <label>الحد الأعلى للعيدية (ريال)</label>
+        <input id="prizeCap" type="number" value="100" min="10" />
       </div>
+      <label>عدد اللاعبين في الفريق الواحد</label>
+      <input id="teamSize" type="number" value="3" min="1" max="10" />
+      <p class="hint" style="margin-top:.3rem">كل لاعب يضيف سؤالاً من كل قسم. مثال: 5 لاعبين × 5 أقسام = 25 سؤالاً.</p>
+      <label>الانتقال بين الأسئلة</label>
+      <select id="autoNextMode">
+        <option value="manual">يدوي — زر «السؤال التالي»</option>
+        <option value="auto">آلي — ينتقل تلقائياً بعد 4 ثوانٍ</option>
+      </select>
     </div>
     <div class="kv" style="margin-top:1rem"><span><span class="dot" style="background:var(--teal)"></span>المتصلون — الأخضر</span><b id="pGreen">0</b></div>
     <div class="kv"><span><span class="dot" style="background:var(--coral)"></span>المتصلون — الأحمر</span><b id="pRed">0</b></div>
@@ -142,7 +127,7 @@ body{ background-color:#241E1A; background-image:radial-gradient(rgba(255,255,25
 
 <script src="/socket.io/socket.io.js"></script>
 <script type="module">
-import { socket, el, sfx } from './js/arcado-client.js';
+import { socket, el, qs, sfx } from './js/arcado-client.js';
 
 let started = false;
 let sessionCode = null;
@@ -169,33 +154,29 @@ el('prizeMode').onchange = () => {
   el('capWrap').style.display = el('prizeMode').value === 'gift' ? 'none' : 'block';
 };
 
-el('createBtn').onclick = () => {
-  autoNextEnabled = el('autoNextMode').value === 'auto';
-  const opts = {
-    prizeMode: el('prizeMode').value,
-    prizeCap: Number(el('prizeCap').value) || 100,
-    teamSize: Math.max(1, Math.min(10, Number(el('teamSize').value) || 3)),
-    origin: location.origin
-  };
-  socket.emit('host:create', opts, (res) => {
-    if (!res?.ok) return alert(res?.error || 'تعذّر إنشاء الجلسة');
+function claim(code) {
+  socket.emit('host:claim', { code }, (res) => {
+    if (!res?.ok) return alert(res?.error || 'تعذّر الانضمام');
     sessionCode = res.code;
     el('codeBox').textContent = res.code;
-    el('qrTv').src = res.qr.tv;
-    el('qrGreen').src = res.qr.green;
-    el('qrRed').src = res.qr.red;
-    el('tvQrSection').style.display = 'block';
-    el('qrBox').style.display = 'block';
-    el('createBtn').disabled = true;
+    el('joinCard').style.display = 'none';
+    el('lobby').style.display = 'block';
+  });
+}
+el('claimBtn').onclick = () => {
+  const c = el('codeInput').value.trim().toUpperCase();
+  if (c) claim(c);
+};
+const pre = qs('s'); if (pre) { el('codeInput').value = pre.toUpperCase(); claim(pre.toUpperCase()); }
+
+el('startBtn').onclick = () => {
+  autoNextEnabled = el('autoNextMode').value === 'auto';
+  socket.emit('host:start', {
+    prizeMode: el('prizeMode').value,
+    prizeCap: Number(el('prizeCap').value) || 100,
+    teamSize: Math.max(1, Math.min(10, Number(el('teamSize').value) || 3))
   });
 };
-
-// يفتح شاشة التلفزيون تلقائياً بالرمز — بدون ما يكتب المضيف أي شيء
-el('openTvBtn').onclick = () => {
-  if (sessionCode) window.open('tv.html?s=' + sessionCode, '_blank');
-};
-
-el('startBtn').onclick = () => { socket.emit('host:start'); };
 el('btnCorrect').onclick = () => { socket.emit('host:judge', { correct: true }); };
 el('btnWrong').onclick = () => { socket.emit('host:judge', { correct: false, steal: true }); };
 el('btnNext').onclick = () => { cancelAutoNext(); socket.emit('host:next'); };
