@@ -32,8 +32,9 @@ const sessions = new Map();
 class Session {
   constructor(code) {
     this.code = code;
-    // مُعرّف اللاعب يربط الجلسة بذاكرته الدائمة (سيصير License Key لاحقاً)
-    this.playerId = `guest:${code}`;
+    // مُعرّف ثابت لا يعتمد على رمز الجلسة، لتستمر الذاكرة بين الجلسات
+    // (سيصير License Key لاحقاً — حالياً ضيف واحد مشترك لكل عمليات هذا السيرفر)
+    this.playerId = 'guest';
     const progress = getProgress(this.playerId, 'millionaire');
     this.game = new MillionaireGame({
       bank: millionaireBank,
