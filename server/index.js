@@ -116,14 +116,14 @@ class Session {
     io.to(this.room()).emit('timer', { timeLeft: this.timeLeft });
   }
 
-  startTimer(io) {
+  startTimer(io, onExpire) {
     this.stopTimer();
     this.timeLeft = this.game.timerSeconds;
     io.to(this.room()).emit('timer', { timeLeft: this.timeLeft });
     this.timer = setInterval(() => {
       this.timeLeft--;
       io.to(this.room()).emit('timer', { timeLeft: this.timeLeft });
-      if (this.timeLeft <= 0) this.stopTimer();
+      if (this.timeLeft <= 0) { this.stopTimer(); if (onExpire) onExpire(); }
     }, 1000);
   }
 
@@ -261,11 +261,15 @@ io.on('connection', (socket) => {
     }
   });
 
-  // الوسيط يرسل التلميح
+  // الوسيط يرسل التلميح → يبدأ مؤقّت النقاش (قفل تلقائي عند انتهائه)
   socket.on('taif:clue', ({ text }) => {
     if (myRole !== 'player' || !mySession || mySession.gameType !== 'taif') return;
-    if (socket.id !== mySession.game.mediumId) return; // الوسيط فقط
-    if (mySession.game.submitClue(text)) mySession.broadcast(io);
+    const g = mySession.game;
+    if (socket.id !== g.mediumId) return; // الوسيط فقط
+    if (g.submitClue(text)) {
+      mySession.startTimer(io, () => { if (g.lockNeedle()) mySession.broadcast(io); });
+      mySession.broadcast(io);
+    }
   });
 
   // القائد يحرّك المؤشر (مباشر) — حدث خفيف بلا لقطة كاملة
@@ -281,7 +285,7 @@ io.on('connection', (socket) => {
     if (myRole !== 'player' || !mySession || mySession.gameType !== 'taif') return;
     const g = mySession.game;
     if (!canMoveNeedle(mySession, myTeam, socket.id)) return;
-    if (g.lockNeedle()) mySession.broadcast(io);
+    if (g.lockNeedle()) { mySession.stopTimer(); mySession.broadcast(io); }
   });
 
   // الخصم يخمّن اتجاه الهدف

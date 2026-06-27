@@ -33,6 +33,9 @@ body.t-green .head{ background:var(--tf-green); color:var(--ink) } body.t-red .h
 .btn.pink{ background:var(--tf-pink) } .btn.green{ background:var(--tf-green); color:var(--ink) } .btn.teal{ background:var(--teal) }
 .lr{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; width:100% }
 .score-tag{ font-family:var(--bubble); font-weight:800; font-size:1.5rem }
+.countdown{ font-family:var(--bubble); font-weight:800; font-size:1.1rem; color:#b03e63; background:var(--cream); border:3px solid var(--ink); border-radius:99px; padding:.2rem 1rem; box-shadow:var(--shadow-sm) }
+.countdown b{ font-size:1.4rem }
+.muted-note{ background:#241E1A; color:#FFC92E; border-radius:12px; padding:.7rem 1rem; font-family:var(--bubble); font-weight:800; width:100% }
 /* انضمام */
 .join{ flex:1; display:grid; place-items:center; padding:2rem }
 .join .box{ width:min(380px,100%); text-align:center; background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:1.6rem }
@@ -75,6 +78,7 @@ body.t-green .head{ background:var(--tf-green); color:var(--ink) } body.t-red .h
   <div class="body">
     <p class="lead" id="lead">في انتظار بدء اللعبة…</p>
     <p class="sub" id="sub"></p>
+    <div class="countdown hide" id="countdown">الوقت: <b id="cdNum">—</b></div>
 
     <!-- تلميح الوسيط (يظهر للقائد/الخصم) -->
     <div class="cluebox hide" id="clueBox"><div class="lbl">تلميح الوسيط</div><div class="v" id="clueVal">—</div></div>
@@ -83,6 +87,9 @@ body.t-green .head{ background:var(--tf-green); color:var(--ink) } body.t-red .h
     <div class="gauge hide" id="gaugeWrap">
       <svg viewBox="0 0 400 215">
         <use href="#tf-band"/>
+        <path id="band2" d="" fill="none" stroke="#C9E3A8" stroke-width="46" style="display:none"/>
+        <path id="band3" d="" fill="none" stroke="#F2C744" stroke-width="46" style="display:none"/>
+        <path id="band4" d="" fill="none" stroke="#FF7AA2" stroke-width="46" style="display:none"/>
         <!-- علامة الهدف السرّية (للوسيط/عند الكشف) -->
         <g class="ndl hide" id="targetMark"><polygon points="200,8 207,40 193,40" fill="#3C6CA0" stroke="#241E1A" stroke-width="4" stroke-linejoin="round"/></g>
         <!-- إبرة القائد -->
@@ -120,6 +127,18 @@ let team = null;
 const deg = p => (Math.max(0, Math.min(100, p)) / 100) * 150 - 75;
 const setNeedle = (id, pos) => el(id).setAttribute('transform', `rotate(${deg(pos)} 200 175)`);
 const show = (id, on) => el(id).classList.toggle('hide', !on);
+const cl = p => Math.max(0, Math.min(100, p));
+const arcPt = (p, r = 172) => { const a = Math.PI * (1 - cl(p) / 100); return [200 + r * Math.cos(a), 175 - r * Math.sin(a)]; };
+const arcPath = (p1, p2) => { const [x1, y1] = arcPt(p1), [x2, y2] = arcPt(p2); return `M ${x1.toFixed(1)} ${y1.toFixed(1)} A 172 172 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}`; };
+function showBands(t) {
+  el('band2').setAttribute('d', arcPath(cl(t - 20), cl(t + 20)));
+  el('band3').setAttribute('d', arcPath(cl(t - 12), cl(t + 12)));
+  el('band4').setAttribute('d', arcPath(cl(t - 5), cl(t + 5)));
+  ['band2', 'band3', 'band4'].forEach(id => el(id).style.display = 'block');
+}
+const hideBands = () => ['band2', 'band3', 'band4'].forEach(id => el(id).style.display = 'none');
+
+socket.on('timer', ({ timeLeft }) => { el('cdNum').textContent = String(Math.max(0, timeLeft)); });
 
 function join(code, t) {
   socket.emit('player:join', { code, team: t }, (res) => {
@@ -155,7 +174,8 @@ document.querySelectorAll('#oppCtrl button').forEach(b => {
 socket.on('taif:needle', ({ needle }) => { setNeedle('ndl', needle); });
 
 function hideAll() {
-  ['clueBox','gaugeWrap','poles','mediumCtrl','captainCtrl','oppCtrl','targetMark'].forEach(id => show(id, false));
+  ['clueBox','gaugeWrap','poles','mediumCtrl','captainCtrl','oppCtrl','targetMark','countdown'].forEach(id => show(id, false));
+  hideBands();
 }
 
 socket.on('state', (s) => {
@@ -193,7 +213,7 @@ socket.on('state', (s) => {
     // الكشف: الجميع يرى الهدف والمؤشر والنتيجة
     el('roleTag').textContent = 'الكشف';
     show('gaugeWrap', true); show('poles', true); show('targetMark', true);
-    setNeedle('ndl', s.needle); setNeedle('targetMark', s.target);
+    setNeedle('ndl', s.needle); setNeedle('targetMark', s.target); showBands(s.target);
     const sc = s.lastScore;
     if (sc) {
       const mine = sc.activeTeam === team ? sc.activePts : sc.oppPts;
@@ -212,8 +232,8 @@ socket.on('state', (s) => {
       el('lead').textContent = 'ترى الهدف — أعطِ تلميحاً واحداً';
       show('mediumCtrl', true);
     } else {
-      el('lead').textContent = 'أرسلت التلميح — راقب فريقك';
-      el('sub').textContent = 'لا تتكلم! دع القائد يخمّن';
+      el('lead').textContent = 'صمتاً — لا تتكلم!';
+      el('sub').textContent = 'أرسلت التلميح. دع القائد والفريق يقرّرون';
     }
     return;
   }
@@ -226,7 +246,7 @@ socket.on('state', (s) => {
     setNeedle('ndl', s.needle);
     if (s.phase === 'guess') {
       el('lead').textContent = 'حرّك المؤشر حسب التلميح';
-      show('captainCtrl', true);
+      show('captainCtrl', true); show('countdown', true);
       el('slider').value = s.needle;
     } else {
       el('lead').textContent = 'ثبّتم — الخصم يخمّن الآن';
