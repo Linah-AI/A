@@ -36,6 +36,15 @@ const newCode = customAlphabet('ABCDEFGHJKLMNPQRSTUVWXYZ23456789', 5);
 /** @type {Map<string, Session>} */
 const sessions = new Map();
 
+// طيف: من يحقّ له تحريك/تثبيت المؤشر؟ الفريق الأساسي عدا الوسيط — إلا إن كان
+// الوسيط هو اللاعب الوحيد في فريقه (يصبح قائداً أيضاً، تفادياً للجمود).
+function canMoveNeedle(session, team, socketId) {
+  const g = session.game;
+  if (team !== g.activeTeam) return false;
+  if (socketId !== g.mediumId) return true;
+  return (session.players[g.activeTeam]?.length || 0) <= 1;
+}
+
 // صفحات اللاعب/المضيف الحيّة لكل لعبة (لتوليد الباركودات الصحيحة)
 const PAGES = {
   millionaire: { host: 'host.html', play: 'play.html' },
@@ -263,7 +272,7 @@ io.on('connection', (socket) => {
   socket.on('taif:needle', ({ pos }) => {
     if (myRole !== 'player' || !mySession || mySession.gameType !== 'taif') return;
     const g = mySession.game;
-    if (myTeam !== g.activeTeam || socket.id === g.mediumId) return; // الفريق الأساسي عدا الوسيط
+    if (!canMoveNeedle(mySession, myTeam, socket.id)) return;
     if (g.moveNeedle(pos)) io.to(mySession.room()).emit('taif:needle', { needle: g.needle });
   });
 
@@ -271,7 +280,7 @@ io.on('connection', (socket) => {
   socket.on('taif:lock', () => {
     if (myRole !== 'player' || !mySession || mySession.gameType !== 'taif') return;
     const g = mySession.game;
-    if (myTeam !== g.activeTeam || socket.id === g.mediumId) return;
+    if (!canMoveNeedle(mySession, myTeam, socket.id)) return;
     if (g.lockNeedle()) mySession.broadcast(io);
   });
 

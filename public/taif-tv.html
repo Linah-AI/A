@@ -3,96 +3,218 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>طيف — شاشة التلفزيون</title>
+<title>طيف — التلفزيون (مباشر)</title>
+<link rel="stylesheet" href="css/fonts.css" />
 <link rel="stylesheet" href="css/pop.css" />
 <style>
-/* لعبة "طيف" — نكهة ناعمة: وردي + أخضر فاتح + مقياس قوسي */
-:root{ --tf-pink:#E58BA6; --tf-green:#9FCB7E; --tf-bg:#F7E9EC; }
-body{ background-color:#F7E9EC;
-  background-image:radial-gradient(rgba(180,90,120,.10) 2px,transparent 2.5px); background-size:28px 28px }
-.tv{ min-height:100vh; display:flex; flex-direction:column; padding:1.3rem 1.6rem 1.8rem; gap:1.1rem }
+:root{ --tf-pink:#E58BA6; --tf-green:#9FCB7E; }
+body{ background-color:#F7E9EC; background-image:radial-gradient(rgba(180,90,120,.10) 2px,transparent 2.5px); background-size:28px 28px }
+.join{ min-height:100vh; display:grid; place-items:center; padding:2rem }
+.join .box{ background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:2rem; text-align:center; width:min(440px,100%) }
+.join h1{ font-family:var(--bubble); font-weight:800; font-size:2rem; color:var(--tf-pink); margin-bottom:.4rem }
+.join input{ width:100%; text-align:center; font-family:var(--bubble); font-weight:800; font-size:1.8rem; letter-spacing:4px; text-transform:uppercase; padding:.7rem; border:var(--bw) solid var(--ink); border-radius:12px; margin:1rem 0; background:var(--paper) }
+.tv{ min-height:100vh; display:none; flex-direction:column; padding:1.3rem 1.6rem 1.8rem; gap:1rem }
+.tv.show{ display:flex }
 .tv-top{ display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap }
-.brand{ display:flex; align-items:center; gap:.55rem; font-family:var(--bubble); font-size:1.4rem }
-.brand .m{ width:2.2rem;height:2.2rem;background:var(--tf-pink);border:var(--bw) solid var(--ink);border-radius:8px;
-  display:grid;place-items:center;color:var(--cream);box-shadow:var(--shadow-sm);transform:rotate(-5deg);font-family:var(--bubble) }
-.show-name{ font-family:var(--display); font-weight:800; font-size:clamp(2.2rem,5.5vw,3.6rem); color:var(--tf-pink);
-  -webkit-text-stroke:2.5px var(--ink); paint-order:stroke fill; text-shadow:3px 3px 0 var(--ink) }
+.brand{ display:flex; align-items:center; gap:.55rem; font-family:var(--bubble); font-weight:800; font-size:1.4rem }
+.brand .m{ width:2.4rem;height:2.4rem;display:block }
+.show-name{ font-family:var(--bubble); font-weight:800; font-size:clamp(2.2rem,5.5vw,3.6rem); color:var(--tf-pink); -webkit-text-stroke:2.5px var(--ink); paint-order:stroke fill; text-shadow:3px 3px 0 var(--ink) }
 .bar{ display:grid; grid-template-columns:1fr auto 1fr; gap:1rem; align-items:center }
-.team{ border:var(--bw-lg) solid var(--ink); border-radius:14px; padding:.55rem 1.1rem; box-shadow:var(--shadow);
-  display:flex; align-items:center; justify-content:space-between; gap:.7rem; font-family:var(--bubble) }
-.team.green{ background:var(--tf-green); color:var(--ink) }
-.team.red{ background:var(--tf-pink); color:var(--cream); flex-direction:row-reverse }
-.team .nm{ font-size:1.2rem } .team .pts{ font-size:2rem; background:var(--cream); color:var(--ink);
-  border:var(--bw) solid var(--ink); border-radius:10px; padding:0 .6rem; box-shadow:var(--shadow-sm) }
-
-.stage{ flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:1.4rem; max-width:820px; margin:0 auto; width:100% }
-/* بطاقة التلميح */
-.clue{ background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:var(--radius); box-shadow:var(--shadow-lg);
-  padding:1.4rem 2rem; text-align:center; position:relative; min-width:min(560px,90%) }
+.team{ border:var(--bw-lg) solid var(--ink); border-radius:14px; padding:.6rem 1.1rem; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:space-between; gap:.7rem; font-family:var(--bubble); font-weight:800; transition:transform .15s }
+.team.green{ background:var(--tf-green); color:var(--ink) } .team.red{ background:var(--tf-pink); color:var(--cream); flex-direction:row-reverse }
+.team.lit{ transform:scale(1.04); box-shadow:var(--shadow-lg) }
+.team .nm{ font-size:1.2rem } .team .pts{ font-size:2rem; background:var(--cream); color:var(--ink); border:var(--bw) solid var(--ink); border-radius:10px; padding:0 .6rem; box-shadow:var(--shadow-sm) }
+.stage{ flex:1; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:1.2rem; max-width:820px; margin:0 auto; width:100% }
+.clue{ background:var(--cream); border:var(--bw-lg) solid var(--ink); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:1.2rem 2rem; text-align:center; position:relative; min-width:min(560px,90%) }
 .clue .lbl{ position:absolute; top:-15px; right:50%; transform:translateX(50%) }
-.clue .txt{ font-family:var(--bubble); font-size:2.2rem; color:var(--ink) }
-
-/* المقياس القوسي */
+.clue .txt{ font-family:var(--bubble); font-weight:800; font-size:2.2rem; color:var(--ink) }
 .gauge-wrap{ width:min(620px,100%) }
 .gauge-wrap svg{ width:100%; height:auto; display:block; overflow:visible }
-#needle{ transition:transform .5s cubic-bezier(.34,1.4,.5,1); transform-origin:200px 175px }
-.poles{ display:flex; justify-content:space-between; width:min(620px,100%) }
+.ndl{ transition:transform .4s cubic-bezier(.34,1.4,.5,1); }
+.poles{ display:flex; justify-content:space-between; width:min(620px,100%); font-family:var(--bubble); font-weight:800; font-size:1.05rem }
+.poles .l{ color:#4f7a2e } .poles .r{ color:#b03e63 }
 .note{ text-align:center }
+.over{ flex:1; display:grid; place-items:center; text-align:center }
+.over h2{ font-family:var(--bubble); font-weight:800; font-size:clamp(2.5rem,7vw,5rem); color:var(--tf-pink); -webkit-text-stroke:3px var(--ink); paint-order:stroke fill; text-shadow:4px 4px 0 var(--ink) }
+.lobbyWait{ flex:1; display:none; flex-direction:column; align-items:center; justify-content:center; gap:1.3rem; text-align:center }
+.lobbyWait .code{ font-family:var(--bubble); font-weight:800; font-size:clamp(2.2rem,5vw,3.4rem); letter-spacing:4px; color:var(--tf-pink); -webkit-text-stroke:2.5px var(--ink); paint-order:stroke fill }
+.lobbyWait .qrs{ display:flex; gap:1.6rem; flex-wrap:wrap; justify-content:center }
+.lobbyWait .qr img{ width:170px; height:170px; border:var(--bw) solid var(--ink); border-radius:12px; background:#fff; padding:6px; box-shadow:var(--shadow) }
+.lobbyWait .qr p{ font-family:var(--bubble); font-weight:800; margin-top:.5rem }
+.lobbyConn{ display:flex; gap:2rem; font-family:var(--bubble); font-weight:800; font-size:1.1rem }
+#fx{ position:fixed; inset:0; pointer-events:none; z-index:40 }
 @media(max-width:760px){ .bar{ grid-template-columns:1fr } .clue .txt{ font-size:1.6rem } }
 </style>
 </head>
 <body>
-<main class="tv">
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="arcado-mark" viewBox="0 0 100 100">
+    <circle cx="38" cy="38" r="32" fill="#59B292" stroke="#241E1A" stroke-width="4"/>
+    <circle cx="62" cy="38" r="32" fill="#FFC94D" stroke="#241E1A" stroke-width="4"/>
+    <circle cx="38" cy="62" r="32" fill="#FA6781" stroke="#241E1A" stroke-width="4"/>
+    <circle cx="62" cy="62" r="32" fill="#075B5E" stroke="#241E1A" stroke-width="4"/>
+    <polygon points="50,36 53,46 64,46 55,53 58,63 50,57 42,63 45,53 36,46 47,46" fill="#fff" stroke="#241E1A" stroke-width="2" stroke-linejoin="round"/>
+  </symbol>
+  <g id="tf-band">
+    <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="#241E1A" stroke-width="56" stroke-linecap="round"/>
+    <path d="M28 175 A172 172 0 0 1 78.4 53.4"   fill="none" stroke="#9FCB7E" stroke-width="44"/>
+    <path d="M78.4 53.4 A172 172 0 0 1 200 3"    fill="none" stroke="#F2C744" stroke-width="44"/>
+    <path d="M200 3 A172 172 0 0 1 321.6 53.4"   fill="none" stroke="#EFA85C" stroke-width="44"/>
+    <path d="M321.6 53.4 A172 172 0 0 1 372 175" fill="none" stroke="#E58BA6" stroke-width="44"/>
+  </g>
+</defs></svg>
+
+<!-- بدء/انضمام -->
+<div class="join" id="joinView">
+  <div class="box">
+    <h1>طيف — التلفزيون</h1>
+    <p class="hint" style="font-weight:700;color:#9a6a78">اضغط لبدء جلسة طيف على هذا الجهاز</p>
+    <button class="pop-btn" style="width:100%;background:var(--tf-pink);color:var(--cream)" id="createBtn">ابدأ جلسة جديدة</button>
+    <p class="hint" style="margin-top:1.2rem">أو إن كانت الجلسة بدأت من جهاز آخر:</p>
+    <input id="codeInput" maxlength="5" placeholder="ABCDE" />
+    <button class="pop-btn" style="width:100%;background:#4a3f35;color:#fff" id="joinBtn">انضمام برمز قائم</button>
+  </div>
+</div>
+
+<!-- اللعبة -->
+<main class="tv" id="tvView">
   <div class="tv-top">
-    <div class="brand"><span class="m">A</span> أركيدو</div>
+    <div class="brand"><span class="m"><svg viewBox="0 0 100 100" style="width:100%;height:100%;overflow:visible"><use href="#arcado-mark"/></svg></span> أركيدو</div>
     <div class="show-name">طيف</div>
-    <span class="sticker" style="background:var(--tf-pink);color:var(--cream)">الجولة 3</span>
+    <span class="sticker" id="roundChip" style="background:var(--tf-pink);color:var(--cream)">—</span>
   </div>
 
-  <div class="bar">
-    <div class="team green"><span class="nm">الأخضر</span><span class="pts">6</span></div>
-    <div class="sticker" style="background:var(--cream);color:var(--ink)">دور الأخضر — الخصم يخمّن الاتجاه</div>
-    <div class="team red"><span class="nm">الأحمر</span><span class="pts">4</span></div>
+  <div class="bar" id="bar" style="display:none">
+    <div class="team green" id="teamGreen"><span class="nm">الأخضر</span><span class="pts" id="ptsGreen">0</span></div>
+    <div class="sticker" id="turnChip" style="background:var(--cream);color:var(--ink);position:relative;z-index:2">—</div>
+    <div class="team red" id="teamRed"><span class="nm">الأحمر</span><span class="pts" id="ptsRed">0</span></div>
   </div>
 
-  <div class="stage">
-    <div class="clue">
-      <span class="lbl sticker" style="background:var(--tf-green);color:var(--ink)">💬 تلميح الوسيط</span>
-      <div class="txt">«قهوة الصباح»</div>
+  <div class="lobbyWait" id="lobbyWait">
+    <div class="code" id="tvCode">—</div>
+    <p class="hint" style="font-size:1.1rem">امسح الباركود المناسب من جوالك</p>
+    <div class="qrs">
+      <div class="qr"><img id="qrHost" alt="باركود المضيف"/><p style="color:var(--tf-pink)">المضيف</p></div>
+      <div class="qr"><img id="qrGreen" alt="باركود الأخضر"/><p style="color:#4f7a2e">الفريق الأخضر</p></div>
+      <div class="qr"><img id="qrRed" alt="باركود الأحمر"/><p style="color:#b03e63">الفريق الأحمر</p></div>
     </div>
+    <div class="lobbyConn">
+      <span>الأخضر متصل: <b id="connGreen">0</b></span>
+      <span>الأحمر متصل: <b id="connRed">0</b></span>
+    </div>
+  </div>
 
+  <div class="stage" id="stage" style="display:none">
+    <div class="clue">
+      <span class="lbl sticker" id="clueLbl" style="background:var(--tf-green);color:var(--ink)">تلميح الوسيط</span>
+      <div class="txt" id="clueTxt">…</div>
+    </div>
     <div class="gauge-wrap">
-      <!-- عدّاد سرعة بوب: ألوان فلات صريحة (بلا تدرّج) + إبرة سميكة متّسقة -->
       <svg viewBox="0 0 400 215">
-        <!-- خلفية القوس (حدّ أسود سميك) -->
-        <path d="M28 175 A172 172 0 0 1 372 175" fill="none" stroke="#241E1A" stroke-width="56" stroke-linecap="round"/>
-        <!-- 4 أقسام فلات -->
-        <path d="M28 175 A172 172 0 0 1 78.4 53.4"   fill="none" stroke="#9FCB7E" stroke-width="44"/>
-        <path d="M78.4 53.4 A172 172 0 0 1 200 3"    fill="none" stroke="#F2C744" stroke-width="44"/>
-        <path d="M200 3 A172 172 0 0 1 321.6 53.4"   fill="none" stroke="#EFA85C" stroke-width="44"/>
-        <path d="M321.6 53.4 A172 172 0 0 1 372 175" fill="none" stroke="#E58BA6" stroke-width="44"/>
-        <!-- الإبرة: مثلّث سميك بحدّ أسود وقلب أصفر -->
-        <g id="needle" transform="rotate(-55 200 175)">
-          <polygon points="200,44 210,172 190,172" fill="#FFC92E" stroke="#241E1A" stroke-width="6" stroke-linejoin="round"/>
-        </g>
-        <!-- محور الإبرة -->
+        <use href="#tf-band"/>
+        <g class="ndl" id="targetMark" style="display:none"><polygon points="200,2 209,42 191,42" fill="#3C6CA0" stroke="#241E1A" stroke-width="5" stroke-linejoin="round"/></g>
+        <g class="ndl" id="ndl" transform="rotate(0 200 175)"><polygon points="200,44 210,172 190,172" fill="#FFC92E" stroke="#241E1A" stroke-width="6" stroke-linejoin="round"/></g>
         <circle cx="200" cy="175" r="28" fill="#241E1A"/>
         <circle cx="200" cy="175" r="15" fill="#FFC92E" stroke="#241E1A" stroke-width="4"/>
       </svg>
     </div>
-    <div class="poles">
-      <span class="sticker" style="background:var(--tf-green);color:var(--ink)">❄️ بارد جداً</span>
-      <span class="sticker" style="background:var(--tf-pink);color:var(--cream)">🔥 حار جداً</span>
-    </div>
-
-    <p class="note sticker" style="background:var(--cream);color:var(--ink)">المؤشر يتحرك مباشرة أثناء نقاش الفريق · العجلة مغلقة لا تكشف الهدف</p>
+    <div class="poles"><span class="l" id="poleL">—</span><span class="r" id="poleR">—</span></div>
+    <p class="note sticker" id="noteChip" style="background:var(--cream);color:var(--ink)">—</p>
   </div>
+
+  <div class="over" id="overView" style="display:none"><div><h2 id="overText"></h2></div></div>
 </main>
 
-<script>
-// الإبرة تتأرجح بين -75° و +75° (يسار=بارد، يمين=حار)
-let dir=1, deg=-20; const n=document.getElementById('needle');
-setInterval(()=>{ deg+=dir*12; if(deg>72||deg<-72) dir*=-1; n.setAttribute('transform',`rotate(${deg} 200 175)`); },500);
+<canvas id="fx"></canvas>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module">
+import { socket, el, qs, sfx, confetti } from './js/arcado-client.js';
+
+const deg = p => (Math.max(0, Math.min(100, p)) / 100) * 150 - 75;
+const setNeedle = (id, pos) => el(id).setAttribute('transform', `rotate(${deg(pos)} 200 175)`);
+
+function enterTv() {
+  el('joinView').style.display = 'none';
+  el('tvView').classList.add('show');
+  el('lobbyWait').style.display = 'flex';
+}
+
+el('createBtn').onclick = () => {
+  socket.emit('tv:create', { game: 'taif', origin: location.origin }, (res) => {
+    if (!res?.ok) return alert(res?.error || 'تعذّر إنشاء الجلسة');
+    enterTv();
+    el('tvCode').textContent = res.code;
+    el('qrHost').src = res.qr.host; el('qrGreen').src = res.qr.green; el('qrRed').src = res.qr.red;
+  });
+};
+function join(code) {
+  socket.emit('tv:join', { code }, (res) => {
+    if (!res?.ok) return alert(res?.error || 'تعذّر الاتصال');
+    if (res.game !== 'taif') return alert('هذه جلسة لعبة أخرى');
+    enterTv();
+  });
+}
+el('joinBtn').onclick = () => { const c = el('codeInput').value.trim().toUpperCase(); if (c) join(c); };
+const pre = qs('s'); if (pre) { el('codeInput').value = pre.toUpperCase(); join(pre.toUpperCase()); }
+
+const tName = { green: 'الأخضر', red: 'الأحمر' };
+
+// تحريك الإبرة مباشرة أثناء تحريك القائد
+socket.on('taif:needle', ({ needle }) => setNeedle('ndl', needle));
+
+socket.on('state', (s) => {
+  if (s.game !== 'taif') return;
+  el('ptsGreen').textContent = s.teams.green.score;
+  el('ptsRed').textContent = s.teams.red.score;
+
+  if (s.phase === 'lobby') {
+    el('connGreen').textContent = s.teams.green.players;
+    el('connRed').textContent = s.teams.red.players;
+    return;
+  }
+  if (el('lobbyWait').style.display !== 'none') {
+    el('lobbyWait').style.display = 'none';
+    el('bar').style.display = 'grid';
+    el('stage').style.display = 'flex';
+  }
+  if (s.phase === 'over') {
+    el('stage').style.display = 'none';
+    el('overView').style.display = 'grid';
+    el('overText').textContent = s.winner === 'tie' ? 'تعادل!'
+      : `فاز الفريق ${tName[s.winner]}!`;
+    confetti(el('fx')); sfx.correct();
+    return;
+  }
+
+  el('roundChip').textContent = `الجولة ${s.round} من ${s.totalRounds}`;
+  el('turnChip').textContent = `دور الفريق ${tName[s.activeTeam]}`;
+  if (s.card) { el('poleL').textContent = s.card.left; el('poleR').textContent = s.card.right; }
+  el('clueTxt').textContent = s.clue ? '«' + s.clue + '»' : '…';
+  setNeedle('ndl', s.needle);
+
+  // إضاءة الفريق الأساسي
+  el('teamGreen').classList.toggle('lit', s.activeTeam === 'green');
+  el('teamRed').classList.toggle('lit', s.activeTeam === 'red');
+
+  const reveal = s.phase === 'reveal';
+  el('targetMark').style.display = reveal ? 'block' : 'none';
+  if (reveal) setNeedle('targetMark', s.target);
+
+  // نص الحالة
+  let note = '';
+  if (s.phase === 'clue') note = 'الوسيط يفكّر في تلميح…';
+  else if (s.phase === 'guess') note = 'الفريق الأساسي يحرّك المؤشر · العجلة مغلقة لا تكشف الهدف';
+  else if (s.phase === 'intercept') note = 'الفريق الخصم يخمّن: يمين أم يسار المؤشر';
+  else if (reveal && s.lastScore) {
+    const sc = s.lastScore;
+    note = `الفريق ${tName[sc.activeTeam]} +${sc.activePts} · الاعتراض +${sc.oppPts}`;
+  }
+  el('noteChip').textContent = note;
+});
+
+socket.on('taif:result', (r) => { r.activePts >= 3 ? (sfx.correct(), confetti(el('fx'), 80)) : sfx.wrong(); });
+socket.on('session:ended', () => { alert('انتهت الجلسة'); location.reload(); });
 </script>
 </body>
 </html>

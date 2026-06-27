@@ -3,61 +3,166 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>طيف — شاشة المضيف</title>
+<title>طيف — المضيف (مباشر)</title>
+<link rel="stylesheet" href="css/fonts.css" />
 <link rel="stylesheet" href="css/pop.css" />
 <style>
-/* مضيف طيف — داكن بنكهة وردية (سري) */
-body{ background-color:#3a2230;
-  background-image:radial-gradient(rgba(255,255,255,.05) 2px,transparent 2.5px); background-size:26px 26px; color:var(--cream) }
-.host{ max-width:760px; margin:0 auto; padding:1.4rem 1.5rem 2rem }
-.host-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:1.2rem; flex-wrap:wrap; gap:.6rem }
-.host-top .brand{ display:flex; align-items:center; gap:.5rem; font-family:var(--bubble); font-size:1.4rem; color:var(--cream) }
-.host-top .brand .m{ width:2.1rem;height:2.1rem;background:#E58BA6;border:3px solid #000;border-radius:8px;display:grid;place-items:center;color:var(--cream);transform:rotate(-5deg) }
-.secret-badge{ background:#000;color:#E58BA6;border:3px solid #E58BA6;border-radius:99px;padding:.35rem 1rem;font-family:var(--heavy);font-weight:900;font-size:.85rem }
-.card{ background:#4a2c3d; border:var(--bw-lg) solid #000; border-radius:var(--radius); box-shadow:6px 6px 0 #000; padding:1.3rem; margin-bottom:1.2rem }
-.card h4{ font-family:var(--bubble); font-size:1.3rem; color:#9FCB7E; margin-bottom:.9rem }
-.target{ background:linear-gradient(135deg,#E58BA6,#9FCB7E); color:#3a1320; border:var(--bw) solid #000; border-radius:12px;
-  padding:1rem 1.2rem; font-weight:900; box-shadow:var(--shadow-sm) }
-.ctrls{ display:grid; grid-template-columns:1fr 1fr; gap:.7rem; margin-top:1rem }
-.ck{ padding:.95rem; border-radius:12px; font-family:var(--bubble); font-size:1.15rem; border:var(--bw) solid #000; box-shadow:var(--shadow-sm); transition:transform .08s }
-.ck:active{ transform:translate(2px,2px); box-shadow:2px 2px 0 #000 }
-.ck.start{ background:#9FCB7E;color:var(--ink) } .ck.reveal{ background:#E58BA6;color:var(--cream) }
-.ck.timer{ background:#5e3a4d;color:var(--cream) } .ck.add{ background:var(--teal);color:var(--cream) }
+body{ background-color:#3a2230; background-image:radial-gradient(rgba(255,255,255,.05) 2px,transparent 2.5px); background-size:26px 26px; color:var(--cream) }
+.host{ max-width:760px; margin:0 auto; padding:1.2rem 1.4rem 2rem }
+.top{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:.6rem; margin-bottom:1rem }
+.brand{ display:flex; align-items:center; gap:.5rem; font-family:var(--bubble); font-weight:800; font-size:1.3rem; text-decoration:none; color:inherit }
+.brand .m{ width:2.3rem;height:2.3rem;display:block }
+.badge{ background:#000;color:#E58BA6;border:3px solid #E58BA6;border-radius:99px;padding:.3rem 1rem;font-family:var(--heavy);font-weight:800;font-size:.85rem }
+.card{ background:#4a2c3d; border:var(--bw-lg) solid #000; border-radius:var(--radius); box-shadow:6px 6px 0 #000; padding:1.3rem; margin-bottom:1.1rem }
+.card h4{ font-family:var(--bubble); font-weight:800; font-size:1.25rem; color:#9FCB7E; margin-bottom:.8rem }
+.setup label{ display:block; font-weight:700; margin:.5rem 0 .3rem }
+.setup select,.setup input{ width:100%; padding:.6rem; border:3px solid #000; border-radius:10px; background:#33202c; color:var(--cream); font-family:inherit; font-weight:700 }
 .kv{ display:flex; justify-content:space-between; padding:.5rem 0; border-bottom:2px dashed #5e3a4d; font-weight:700 }
 .kv:last-child{ border:none }
+.dot{ width:.7rem;height:.7rem;border-radius:50%;display:inline-block;margin-left:.4rem }
+.hint{ color:#d3b3c1; font-size:.85rem; font-weight:700 }
+.phase-line{ font-family:var(--bubble); font-weight:800; font-size:1.4rem; color:#FFC92E; min-height:1.5em; margin-bottom:.5rem }
+.cluebox{ background:#33202c; border:3px solid #000; border-radius:12px; padding:.7rem 1rem; margin-bottom:.8rem; font-weight:700 }
+.cluebox b{ color:#9FCB7E }
+.ctrls{ display:grid; grid-template-columns:1fr 1fr; gap:.6rem }
+.ck{ padding:.95rem; border-radius:12px; font-family:var(--bubble); font-weight:800; font-size:1.1rem; border:var(--bw) solid #000; box-shadow:var(--shadow-sm); transition:transform .08s; color:#fff }
+.ck:active{ transform:translate(2px,2px); box-shadow:2px 2px 0 #000 }
+.ck:disabled{ opacity:.4 }
+.ck.start{ background:#9FCB7E;color:var(--ink) } .ck.next{ background:#E58BA6 } .ck.timer{ background:#5e3a4d } .ck.full{ grid-column:1/-1 }
+.ck.big{ background:#FFC92E; color:var(--ink); font-size:1.25rem; padding:1.05rem }
+.over{ text-align:center; font-family:var(--bubble); font-weight:800; font-size:1.6rem; color:#FFC92E }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <symbol id="arcado-mark" viewBox="0 0 100 100">
+    <circle cx="38" cy="38" r="32" fill="#59B292" stroke="#241E1A" stroke-width="4"/>
+    <circle cx="62" cy="38" r="32" fill="#FFC94D" stroke="#241E1A" stroke-width="4"/>
+    <circle cx="38" cy="62" r="32" fill="#FA6781" stroke="#241E1A" stroke-width="4"/>
+    <circle cx="62" cy="62" r="32" fill="#075B5E" stroke="#241E1A" stroke-width="4"/>
+    <polygon points="50,36 53,46 64,46 55,53 58,63 50,57 42,63 45,53 36,46 47,46" fill="#fff" stroke="#241E1A" stroke-width="2" stroke-linejoin="round"/>
+  </symbol>
+</defs></svg>
 <div class="host">
-  <div class="host-top">
-    <div class="brand"><span class="m">A</span> أركيدو · طيف</div>
-    <span class="secret-badge">🔒 شاشة المضيف — سري</span>
+  <div class="top">
+    <a class="brand" href="index.html"><span class="m"><svg viewBox="0 0 100 100" style="width:100%;height:100%;overflow:visible"><use href="#arcado-mark"/></svg></span> أركيدو · طيف</a>
+    <span class="badge">شاشة المضيف — مباشر</span>
   </div>
 
-  <div class="card">
-    <span class="sticker" style="background:#E58BA6;color:var(--cream);margin-bottom:.8rem">الجولة 3 · دور الأخضر</span>
-    <div class="target">🎯 الهدف الحقيقي (سري): يقع عند <b>72%</b> ناحية «حار جداً» — تلميح الوسيط: «قهوة الصباح»</div>
+  <!-- الانضمام -->
+  <div class="card" id="joinCard">
+    <h4>انضمام كمضيف</h4>
+    <p class="hint" style="margin-bottom:.8rem">امسح باركود «المضيف» من شاشة التلفزيون، أو أدخل الرمز المعروض عليها.</p>
+    <input id="codeInput" maxlength="5" placeholder="ABCDE" style="width:100%;padding:.7rem;border:3px solid #000;border-radius:10px;background:#33202c;color:var(--cream);font-family:var(--bubble);font-weight:800;font-size:1.4rem;text-align:center;letter-spacing:3px;text-transform:uppercase;margin-bottom:.7rem" />
+    <button class="ck big full" id="claimBtn">انضمام</button>
+  </div>
+
+  <!-- إعداد -->
+  <div class="card" id="lobby" style="display:none">
+    <h4>إعداد اللعبة — الرمز: <span id="codeBox" style="color:#FFC92E">—</span></h4>
+    <div class="setup">
+      <label>عدد الجولات (تنقلب الأدوار كل جولة)</label>
+      <select id="rounds">
+        <option value="4">4 جولات (سريعة)</option>
+        <option value="6" selected>6 جولات</option>
+        <option value="8">8 جولات</option>
+        <option value="10">10 جولات</option>
+      </select>
+    </div>
+    <div class="kv" style="margin-top:1rem"><span><span class="dot" style="background:#9FCB7E"></span>المتصلون — الأخضر</span><b id="pGreen">0</b></div>
+    <div class="kv"><span><span class="dot" style="background:#E58BA6"></span>المتصلون — الأحمر</span><b id="pRed">0</b></div>
+    <p class="hint" style="margin-top:.6rem">يحتاج كل فريق لاعباً واحداً على الأقل (الوسيط دور دائري داخل الفريق).</p>
+    <button class="ck start full" id="startBtn" style="margin-top:1rem" disabled>الكل جاهز — ابدأ اللعبة</button>
+  </div>
+
+  <!-- التحكم -->
+  <div class="card" id="play" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;flex-wrap:wrap;gap:.4rem">
+      <span class="sticker" id="roundMeta" style="background:#FFC92E;color:var(--ink)">—</span>
+      <span class="hint">مؤقّت النقاش: <b id="timer">—</b></span>
+    </div>
+    <div class="phase-line" id="phaseLine">—</div>
+    <div class="cluebox" id="clueBox" style="display:none">الأقطاب: <b id="poles">—</b> · التلميح: <b id="clue">—</b></div>
+    <p class="hint" style="margin-bottom:.8rem">أنت مقدّم محايد: تدير التدفّق والمؤقّت. التهديف آلي. الهدف السرّي يظهر للوسيط فقط.</p>
     <div class="ctrls">
-      <button class="ck start">▶ بدء الجولة</button>
-      <button class="ck timer">⏱ مؤقّت النقاش</button>
-      <button class="ck reveal">👁 كشف الهدف وإعلان النتيجة</button>
-      <button class="ck add">➕ إضافة النقاط للفائز</button>
+      <button class="ck timer full" id="btnTimer">إيقاف/تشغيل مؤقّت النقاش</button>
+      <button class="ck next full" id="btnNext" disabled>الجولة التالية ←</button>
     </div>
   </div>
 
+  <!-- الرصيد -->
   <div class="card">
-    <h4>كيف توزّع النقاط</h4>
-    <div class="kv"><span>الفريق الأساسي — أصاب المركز</span><b style="color:#9FCB7E">4 نقاط</b></div>
-    <div class="kv"><span>الفريق الأساسي — قريب من الأطراف</span><b style="color:#9FCB7E">3 أو 2</b></div>
-    <div class="kv"><span>الفريق الخصم — خمّن الاتجاه صح</span><b style="color:#E58BA6">نقطة اعتراض 1</b></div>
-  </div>
-
-  <div class="card">
-    <h4>حالة الأجهزة</h4>
-    <div class="kv"><span>📱 الوسيط (أخضر)</span><b style="color:#9FCB7E">أرسل التلميح ✓</b></div>
-    <div class="kv"><span>📱 قائد الأخضر</span><b style="color:#9FCB7E">ثبّت المؤشر ✓</b></div>
-    <div class="kv"><span>📱 الفريق الأحمر</span><b style="color:#E58BA6">بانتظار التخمين…</b></div>
+    <h4>الرصيد</h4>
+    <div class="kv"><span>الأخضر</span><b id="sGreen" style="color:#9FCB7E">0</b></div>
+    <div class="kv"><span>الأحمر</span><b id="sRed" style="color:#E58BA6">0</b></div>
+    <div class="over" id="overBox" style="display:none;margin-top:1rem"></div>
   </div>
 </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module">
+import { socket, el, qs, sfx } from './js/arcado-client.js';
+
+let started = false;
+let timerRunning = false;
+const tName = { green: 'الأخضر', red: 'الأحمر' };
+
+function claim(code) {
+  socket.emit('host:claim', { code }, (res) => {
+    if (!res?.ok) return alert(res?.error || 'تعذّر الانضمام');
+    if (res.game !== 'taif') return alert('هذه جلسة لعبة أخرى (ليست طيف)');
+    el('codeBox').textContent = res.code;
+    el('joinCard').style.display = 'none';
+    el('lobby').style.display = 'block';
+  });
+}
+el('claimBtn').onclick = () => { const c = el('codeInput').value.trim().toUpperCase(); if (c) claim(c); };
+const pre = qs('s'); if (pre) { el('codeInput').value = pre.toUpperCase(); claim(pre.toUpperCase()); }
+
+el('startBtn').onclick = () => { socket.emit('taif:start', { rounds: Number(el('rounds').value) || 6 }); };
+el('btnNext').onclick = () => { socket.emit('taif:next'); };
+el('btnTimer').onclick = () => { timerRunning = !timerRunning; socket.emit('host:timer', { action: timerRunning ? 'start' : 'stop' }); };
+
+socket.on('timer', ({ timeLeft }) => { el('timer').textContent = String(Math.max(0, timeLeft)).padStart(2, '0'); });
+
+socket.on('state', (s) => {
+  if (s.game !== 'taif') return;
+  el('pGreen').textContent = s.teams.green.players;
+  el('pRed').textContent = s.teams.red.players;
+  el('sGreen').textContent = s.teams.green.score;
+  el('sRed').textContent = s.teams.red.score;
+  el('startBtn').disabled = !(s.teams.green.players > 0 && s.teams.red.players > 0) || s.phase !== 'lobby';
+
+  if (s.phase !== 'lobby' && !started) { started = true; el('lobby').style.display = 'none'; el('play').style.display = 'block'; }
+
+  if (s.phase === 'over') {
+    el('play').style.display = 'none';
+    const box = el('overBox'); box.style.display = 'block';
+    box.textContent = s.winner === 'tie' ? 'تعادل!' : `فاز الفريق ${tName[s.winner]}!`;
+    return;
+  }
+  if (s.phase === 'lobby') return;
+
+  el('roundMeta').textContent = `الجولة ${s.round} من ${s.totalRounds} · دور ${tName[s.activeTeam]}`;
+  if (s.card) { el('poles').textContent = `${s.card.left} ↔ ${s.card.right}`; el('clueBox').style.display = 'block'; }
+  el('clue').textContent = s.clue ? '«' + s.clue + '»' : '— (لم يُرسل بعد)';
+
+  let line = '';
+  if (s.phase === 'clue') line = `وسيط ${tName[s.activeTeam]} يكتب التلميح…`;
+  else if (s.phase === 'guess') line = `${tName[s.activeTeam]} يحرّك المؤشر`;
+  else if (s.phase === 'intercept') line = `الخصم يخمّن الاتجاه`;
+  else if (s.phase === 'reveal') {
+    const sc = s.lastScore;
+    line = sc ? `كُشف الهدف · ${tName[sc.activeTeam]} +${sc.activePts} · الاعتراض +${sc.oppPts}` : 'كُشف الهدف';
+  }
+  el('phaseLine').textContent = line;
+
+  // الجولة التالية متاحة بعد الكشف فقط
+  el('btnNext').disabled = s.phase !== 'reveal';
+});
+
+socket.on('taif:result', (r) => { r.activePts >= 3 ? sfx.correct() : sfx.wrong(); timerRunning = false; });
+socket.on('session:ended', () => {});
+</script>
 </body>
 </html>
